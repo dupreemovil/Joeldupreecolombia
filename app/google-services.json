@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "625076487360",
+    "firebase_url": "https://dupreeapp-e6ab6.firebaseio.com",
+    "project_id": "dupreeapp-e6ab6",
+    "storage_bucket": "dupreeapp-e6ab6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:625076487360:android:213f3d82d4afee5a",
+        "android_client_info": {
+          "package_name": "com.dupreinca.dupree"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "625076487360-pmlevi806ivgor0n2bqh2tpvsjnetr21.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dupreinca.dupree",
+            "certificate_hash": "d8871ac618217c5dcdcfc131d7bae8133eff456e"
+          }
+        },
+        {
+          "client_id": "625076487360-sejj8g1gfpb726bhssida0co5bpd3bdh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBff4pSlHTMeXhmkkhQz7CBDpmp-Y3W9eY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "625076487360-sejj8g1gfpb726bhssida0co5bpd3bdh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

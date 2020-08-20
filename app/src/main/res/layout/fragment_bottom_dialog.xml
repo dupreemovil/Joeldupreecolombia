@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/bottom_sheet"
+    android:layout_gravity="bottom"
+    android:layout_width="match_parent"
+    android:layout_height="180dp"
+    android:background="@drawable/button_round_1"
+    android:orientation="vertical"
+    app:behavior_hideable="true"
+
+
+    app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@drawable/round_header"
+
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        >
+        
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10sp"
+            android:text="No se tiene datos para mostrar"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:fontFamily="monospace"
+            android:textColor="#FFF"
+            ></TextView>
+        
+        
+    </LinearLayout>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+
+        android:gravity="center">
+
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cancelar"
+            android:layout_margin="20sp"
+            android:background="@color/transparent"
+            android:drawableTop="@drawable/cancelicon"
+            android:id="@+id/bscancel"
+            android:textStyle="bold"
+            android:fontFamily="monospace"
+            ></Button>
+
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="INICIO"
+            android:id="@+id/bshome"
+            android:layout_margin="20sp"
+            android:background="@color/transparent"
+            android:drawableTop="@drawable/homeicon"
+            android:textStyle="bold"
+            android:fontFamily="monospace"
+            ></Button>
+
+    </LinearLayout>
+
+
+
+</LinearLayout>
