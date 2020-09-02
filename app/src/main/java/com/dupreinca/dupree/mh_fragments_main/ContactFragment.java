@@ -2,7 +2,7 @@ package com.dupreinca.dupree.mh_fragments_main;
 
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +11,8 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.dupreinca.dupree.R;
+import com.dupreinca.dupree.mh_http.Http;
+import com.dupreinca.dupree.mh_required_api.RequiredVisit;
 import com.dupreinca.dupree.mh_utilities.mPreferences;
 
 
@@ -24,7 +26,9 @@ public class ContactFragment extends Fragment {
     public ContactFragment() {
         // Required empty public constructor
     }
-
+    public long timeinit=0;
+    public long timeend=0;
+    public String userid="";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -34,6 +38,7 @@ public class ContactFragment extends Fragment {
         WebView webView = (WebView) v.findViewById(R.id.webView);
         //webView.loadUrl("https://azzorti.bo");
 
+        timeinit =System.currentTimeMillis();
 
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setLoadWithOverviewMode(true);
@@ -70,6 +75,23 @@ public class ContactFragment extends Fragment {
         ContactFragment fragment = new ContactFragment();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onDestroy() {
+
+        Log.i(TAG,"onDestroy()");
+
+        timeend = System.currentTimeMillis();
+        long finaltime= timeend-timeinit;
+        int timesec = (int)finaltime/1000;
+
+        RequiredVisit req = new RequiredVisit("",Integer.toString(timesec),"contacto");
+        //   System.out.println("Se destruyo bandeja"+Long.toString(finaltime) + " para "+perfil.getValor());
+
+        new Http(getActivity()).Visit(req);
+
+        super.onDestroy();
     }
 
 }

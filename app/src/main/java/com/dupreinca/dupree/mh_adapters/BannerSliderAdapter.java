@@ -10,6 +10,7 @@ import com.daimajia.slider.library.R.id;
 import com.daimajia.slider.library.R.layout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.Tricks.ViewPagerEx;
+import com.squareup.picasso.Picasso;
 
 /**
  * Created by Epica on 9/3/2017.
@@ -31,7 +32,9 @@ public class BannerSliderAdapter extends BaseSliderView{
 //      if you need description
 //      description.setText(this.getDescription());
 
-        this.bindEventAndShow(v, target);
+        //this.bindEventAndShow(v, target);
+
+        //thi
 
         return v;
     }

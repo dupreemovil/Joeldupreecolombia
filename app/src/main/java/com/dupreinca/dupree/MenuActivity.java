@@ -5,23 +5,23 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.databinding.DataBindingUtil;
+import androidx.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomSheetBehavior;
-import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.view.GravityCompat;
-import android.support.v7.app.ActionBarDrawerToggle;
+import androidx.annotation.NonNull;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.core.content.ContextCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.core.view.GravityCompat;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -50,7 +50,6 @@ import com.dupreinca.dupree.mh_fragments_menu.PanelGerenteFragment;
 import com.dupreinca.dupree.mh_fragments_menu.PedidosEdoPedidoFragment;
 import com.dupreinca.dupree.mh_fragments_menu.PedidosFaltantesFragment;
 import com.dupreinca.dupree.mh_fragments_menu.ReporteRetenidosFragment;
-import com.dupreinca.dupree.mh_fragments_menu.Servicios_PagosOnLine_Fragment;
 import com.dupreinca.dupree.mh_fragments_menu.UbicacionFragment;
 import com.dupreinca.dupree.mh_fragments_menu.incorporaciones.Incorp_Nuevas_Fragment;
 import com.dupreinca.dupree.mh_fragments_menu.incorporaciones.Incorp_Todos_Fragment;
@@ -570,9 +569,9 @@ public class MenuActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     private void showMessageGPSNoEnabled(String message) {
-        android.support.v7.app.AlertDialog alert = null;
-        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
-        new android.support.v7.app.AlertDialog.Builder(this)
+        AlertDialog alert = null;
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        new AlertDialog.Builder(this)
                 .setTitle(getString(R.string.text_alert_tittle_gps_enable))
                 .setMessage(message)
                 .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {

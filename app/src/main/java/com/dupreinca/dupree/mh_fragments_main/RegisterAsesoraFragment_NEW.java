@@ -7,8 +7,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.LocalBroadcastManager;
+import androidx.fragment.app.Fragment;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -31,6 +31,7 @@ import com.dupreinca.dupree.mh_dialogs.ListDpto;
 import com.dupreinca.dupree.mh_dialogs.ListString;
 import com.dupreinca.dupree.mh_http.Http;
 import com.dupreinca.dupree.mh_required_api.RequiredRegister_NEW_2018;
+import com.dupreinca.dupree.mh_required_api.RequiredVisit;
 import com.dupreinca.dupree.mh_utilities.Validate;
 import com.dupreinca.dupree.mh_utilities.mPreferences;
 import com.google.gson.Gson;
@@ -53,6 +54,11 @@ public class RegisterAsesoraFragment_NEW extends Fragment{
 
     Button btnRegister;
 
+    public long timeinit=0;
+    public long timeend=0;
+    public String userid="";
+
+
     public RegisterAsesoraFragment_NEW() {
         // Required empty public constructor
     }
@@ -72,6 +78,8 @@ public class RegisterAsesoraFragment_NEW extends Fragment{
 
         txtName = (EditText) v.findViewById(R.id.txtName);
         txtLastname = (EditText) v.findViewById(R.id.txtLastname);
+
+        timeinit = System.currentTimeMillis();
 
         //Direccion residencia
         txtSpnDpto = (EditText) v.findViewById(R.id.txt_spn_departamento);
@@ -291,8 +299,18 @@ public class RegisterAsesoraFragment_NEW extends Fragment{
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
+
         Log.i(TAG,"onDestroy()");
+
+        timeend = System.currentTimeMillis();
+        long finaltime= timeend-timeinit;
+        int timesec = (int)finaltime/1000;
+
+        RequiredVisit req = new RequiredVisit("",Integer.toString(timesec),"registro");
+     //   System.out.println("Se destruyo bandeja"+Long.toString(finaltime) + " para "+perfil.getValor());
+
+        new Http(getActivity()).Visit(req);
+        super.onDestroy();
         unregisterBroadcat();
     }
 

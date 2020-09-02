@@ -1,12 +1,11 @@
 package com.dupreinca.dupree.mh_adapters;
 
-import android.databinding.DataBindingUtil;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import androidx.databinding.DataBindingUtil;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import com.dupreeinca.lib_api_rest.model.dto.response.ListItemPanelGte;
 import com.dupreinca.dupree.R;
 import com.dupreeinca.lib_api_rest.model.dto.response.ItemPanelGte;
 import com.dupreinca.dupree.databinding.ItemCircleprogressBinding;

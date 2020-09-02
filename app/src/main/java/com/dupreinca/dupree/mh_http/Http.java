@@ -6,7 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Environment;
-import android.support.v4.content.LocalBroadcastManager;
+import 	androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -15,6 +15,7 @@ import com.dupreeinca.lib_api_rest.interceptors.ConnectivityInterceptor;
 import com.dupreeinca.lib_api_rest.interceptors.NoConnectivityException;
 import com.dupreeinca.lib_api_rest.interceptors.ReceivedCookiesInterceptor;
 import com.dupreeinca.lib_api_rest.model.dto.request.LiquidarSend;
+import com.dupreeinca.lib_api_rest.model.dto.response.DataVisit;
 import com.dupreeinca.lib_api_rest.model.dto.response.LiquidarDTO;
 import com.dupreinca.dupree.MainActivity;
 import com.dupreinca.dupree.MenuActivity;
@@ -57,6 +58,7 @@ import com.dupreinca.dupree.mh_required_api.RequiredTerminsGerente;
 import com.dupreeinca.lib_api_rest.model.dto.response.DataAuth;
 import com.dupreeinca.lib_api_rest.model.dto.response.GenericDTO;
 import com.dupreeinca.lib_api_rest.util.alert.DownloadFileAsyncTask;
+import com.dupreinca.dupree.mh_required_api.RequiredVisit;
 import com.dupreinca.dupree.mh_utilities.MyDialoges;
 import com.dupreeinca.lib_api_rest.util.alert.ProgressDialogHorizontal;
 import com.dupreinca.dupree.mh_utilities.mPreferences;
@@ -503,6 +505,8 @@ public class Http {
         final iAuth service = retrofit.create(iAuth.class);
 
         Log.e(TAG+"JSON Auth", "Params: "+new Gson().toJson(requiredAuth));
+
+        System.out.println("El Json params "+new Gson().toJson(requiredAuth));
         Call<DataAuth> call = service.auth(
                 new Gson().toJson(requiredAuth)
         );
@@ -550,6 +554,69 @@ public class Http {
         });
 
     }
+
+
+    public void Visit(final RequiredVisit requiredVisit)
+    {
+        final iAuth service = retrofit.create(iAuth.class);
+
+        Log.e(TAG+"JSON Auth", "Params: "+new Gson().toJson(requiredVisit));
+
+        System.out.println("El Json params "+new Gson().toJson(requiredVisit));
+        Call<DataVisit> call = service.visit(
+                new Gson().toJson(requiredVisit)
+        );
+
+       // showDialogWait();
+        call.enqueue(new Callback<DataVisit>() {
+            @Override
+            public void onResponse(Call<DataVisit> call, Response<DataVisit> response) {
+//                stopDialogoWait();
+                Log.e(TAG+"onResponse", call.request().url().toString());
+
+                System.out.println("Respuesta visit"+response.body().getCode() +" result "+response.body().getResult());
+                String msgError=null;
+                int code=response.code();
+                Log.e("code", String.valueOf(code) );
+                if(code==200 || code==400 || code==401 || code==404 || code==501) {
+                    if (!response.isSuccessful()) {
+                        try {
+                            String jsonInString = response.errorBody().string();
+                            Log.e(TAG, "Retrofit Response : " + jsonInString);
+                            DataVisit resp = new Gson().fromJson(jsonInString, DataVisit.class);
+
+                            msgError = resp.getResult();
+                        } catch (IOException e) {
+                            msgError = myContext.getResources().getString(R.string.http_error_desconocido);
+                        }
+                    } else {
+                        Log.e(TAG+"onResponse", "-> " + new Gson().toJson(response.body()));
+                      //  ((MainActivity) myContext).successfulAuth(response.body());
+                    }
+                } else {
+                    msgError = myContext.getResources().getString(R.string.http_error_desconocido);
+                }
+
+             //   if(msgError!=null)
+             //       msgToast(msgError);
+            }
+
+            @Override
+            public void onFailure(Call<DataVisit> call, Throwable t) {
+                //stopDialogoWait();
+                if(checkIdDataMovileAvailable(call.request().url().toString(), t)){
+              //      toastMSG(myContext.getResources().getString(R.string.http_error_desconocido));
+                }
+            }
+
+
+        });
+
+    }
+
+
+
+
 
     public void notifyForgot(Identy requiredIdenty)
     {

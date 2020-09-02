@@ -1,28 +1,23 @@
 package com.dupreinca.dupree.view.activity;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.BottomSheetBehavior;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.view.View;
+import androidx.annotation.Nullable;
+import androidx.annotation.NonNull;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import 	androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.LinearLayout;
 
 import com.dupreeinca.lib_api_rest.R;
 import com.dupreeinca.lib_api_rest.model.base.TTError;
 import com.dupreeinca.lib_api_rest.util.TTApp;
-import com.dupreinca.dupree.mh_fragments_menu.panel_asesoras.PanelAsesoraFragment;
 
 import io.realm.Realm;
 //import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
@@ -75,6 +70,12 @@ public class BaseActivity extends AppCompatActivity implements BaseActivityListe
         overridePendingTransition(R.anim.pull_in_left, R.anim.push_out_right);
     }
 
+
+
+    public Fragment replaceFragmentWithBackStack(Class myNewFragmentClass, Boolean withBackstack) {
+        return this.replaceFragmentWithBackStack(myNewFragmentClass, withBackstack, null);
+    }
+
     public Fragment addFragmentWithBackStack(Class myNewFragmentClass, Boolean withBackstack) {
         Fragment myNewFragment = Fragment.instantiate(getApplicationContext(), myNewFragmentClass.getName());
         String newFragment = myNewFragment.getClass().getName();
@@ -86,10 +87,6 @@ public class BaseActivity extends AppCompatActivity implements BaseActivityListe
         t.add(getFragmentLayout(), myNewFragment, newFragment);
         t.commit();
         return myNewFragment;
-    }
-
-    public Fragment replaceFragmentWithBackStack(Class myNewFragmentClass, Boolean withBackstack) {
-        return this.replaceFragmentWithBackStack(myNewFragmentClass, withBackstack, null);
     }
 
     public Fragment replaceFragmentWithBackStack(Class myNewFragmentClass, Boolean withBackstack, Bundle bundle) {

@@ -1,11 +1,11 @@
 package com.dupreinca.dupree.mh_fragments_menu.pedidos.historial;
 
 import android.content.Intent;
-import android.databinding.ViewDataBinding;
+import androidx.databinding.ViewDataBinding;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.GridLayoutManager;
+import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.recyclerview.widget.GridLayoutManager;
 import android.util.Log;
 
 import com.dupreeinca.lib_api_rest.controller.ReportesController;
@@ -21,7 +21,11 @@ import com.dupreinca.dupree.mh_adapters.FacturasListAdapter;
 import com.dupreinca.dupree.mh_fragments_menu.pedidos.BasePedido;
 import com.dupreinca.dupree.mh_fragments_menu.pedidos.historial.detalle_factura.DetalleFacturaActivity;
 import com.dupreinca.dupree.mh_holders.FacturasHolder;
+import com.dupreinca.dupree.mh_http.Http;
+import com.dupreinca.dupree.mh_required_api.RequiredVisit;
+import com.dupreinca.dupree.mh_utilities.mPreferences;
 import com.dupreinca.dupree.view.fragment.BaseFragment;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +40,14 @@ public class FacturasFragment extends BaseFragment implements FacturasHolder.Eve
 
     private List<ItemFacturaDTO> list;
     private FacturasListAdapter adapterList;
+
+    private String userName;
+    public long timeinit=0;
+    public long timeend=0;
+    public String userid="";
+
+    private Profile perfil;
+
 
     public FacturasFragment() {
         // Required empty public constructor
@@ -61,6 +73,8 @@ public class FacturasFragment extends BaseFragment implements FacturasHolder.Eve
 
         binding = (FragmentProductsBinding) view;
 
+        timeinit = System.currentTimeMillis();
+
         binding.refresh.setEnabled(true);
         binding.recycler.setLayoutManager(new GridLayoutManager(getActivity(),1));
         binding.recycler.setHasFixedSize(true);
@@ -68,6 +82,9 @@ public class FacturasFragment extends BaseFragment implements FacturasHolder.Eve
         list = new ArrayList<>();
         adapterList = new FacturasListAdapter(list, this);
         binding.recycler.setAdapter(adapterList);
+
+        timeinit =  System.currentTimeMillis();
+        perfil = getPerfil();
 
         binding.refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -118,6 +135,32 @@ public class FacturasFragment extends BaseFragment implements FacturasHolder.Eve
                 checkSession(error);
             }
         });
+    }
+
+
+    public Profile getPerfil(){
+        String jsonPerfil = mPreferences.getJSON_TypePerfil(getActivity());
+        if(jsonPerfil!=null)
+            return new Gson().fromJson(jsonPerfil, Profile.class);
+
+        return null;
+    }
+
+    @Override
+    public void onDestroy(){
+
+        if(perfil!=null){
+            timeend = System.currentTimeMillis();
+            long finaltime= timeend-timeinit;
+            int timesec = (int)finaltime/1000;
+
+            RequiredVisit req = new RequiredVisit(perfil.getValor(),Integer.toString(timesec),"facturas");
+            System.out.println("Se destruyo bandeja"+Long.toString(finaltime) + " para "+perfil.getValor());
+
+            new Http(getActivity()).Visit(req);
+        }
+
+        super.onDestroy();
     }
 
     public void updateView(List<ItemFacturaDTO> data){

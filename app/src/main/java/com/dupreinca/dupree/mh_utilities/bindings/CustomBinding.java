@@ -1,8 +1,8 @@
 package com.dupreinca.dupree.mh_utilities.bindings;
 
-import android.databinding.BindingAdapter;
+import androidx.databinding.BindingAdapter;
 import android.net.Uri;
-import android.support.v4.content.ContextCompat;
+import androidx.core.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -21,7 +21,7 @@ public class CustomBinding {
     @BindingAdapter({"bind:picassoUrl"})
     public static void loadImage(ImageView view, String imageUrl) {
         if(imageUrl!=null && !imageUrl.isEmpty()) {
-            Picasso.with(view.getContext())
+            Picasso.get()
 //            Picasso.get()
                     .load(imageUrl)
                     .placeholder(R.drawable.ph_add_image2)
@@ -42,7 +42,7 @@ public class CustomBinding {
         ///data/user/0/com.dupreinca.dupree/cachedupree_documents_temporary_file0.jpg
         if(!TextUtils.isEmpty(imageUrl) && !imageUrl.contains("android.resource://") && !imageUrl.contains("/storage/emulated/") && !imageUrl.contains("/user/0/com.dupreinca.dupree/")) {
             Log.e(TAG, "Picasso A(URL: "+imageUrl);
-            Picasso.with(view.getContext())
+            Picasso.get()
 //            Picasso.get()
                     .load(imageUrl)
                     .placeholder(R.drawable.ph_add_image2)

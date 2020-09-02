@@ -7,14 +7,14 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.databinding.ViewDataBinding;
+import androidx.databinding.ViewDataBinding;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.FileProvider;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.core.content.FileProvider;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -39,6 +39,7 @@ import com.dupreinca.dupree.mh_dialogs.SimpleDialog_01Button;
 import com.dupreinca.dupree.mh_dialogs.SingleListDialog;
 import com.dupreinca.dupree.mh_http.Http;
 import com.dupreinca.dupree.mh_required_api.ListBoolean;
+import com.dupreinca.dupree.mh_required_api.RequiredVisit;
 import com.dupreinca.dupree.mh_utilities.PinchZoomImageView;
 import com.dupreinca.dupree.view.fragment.BaseFragment;
 import com.google.gson.Gson;
@@ -65,6 +66,11 @@ public class CatalogosAdvanceFragment extends BaseFragment {
         // Required empty public constructor
     }
 
+    public long timeinit=0;
+    public long timeend=0;
+    public String userid="";
+
+
     private UrlCatalogoDTO urlCatalogo;
     Profile perfil;
     UrlsCatalogosDTO responseUrlCatalogos;
@@ -85,6 +91,8 @@ public class CatalogosAdvanceFragment extends BaseFragment {
 
         binding.appBar.toolbar.setNavigationIcon(null);
         binding.appBar.toolbar.setTitle("");
+
+        timeinit = System.currentTimeMillis();
 
         if(menuListener == null) {
             ((AppCompatActivity) getActivity()).setSupportActionBar(binding.appBar.toolbar);//en main, tiene tootlbar propia
@@ -117,6 +125,39 @@ public class CatalogosAdvanceFragment extends BaseFragment {
     @Override
     protected void onLoadedView() {
 
+    }
+
+    @Override
+    public void onDestroy() {
+
+        Log.i(TAG,"onDestroy()");
+
+        if(perfil!=null){
+            timeend = System.currentTimeMillis();
+            long finaltime= timeend-timeinit;
+            int timesec = (int)finaltime/1000;
+
+            RequiredVisit req = new RequiredVisit(perfil.getValor(),Integer.toString(timesec),"contacto");
+            //   System.out.println("Se destruyo bandeja"+Long.toString(finaltime) + " para "+perfil.getValor());
+
+            new Http(getActivity()).Visit(req);
+
+        }
+        else{
+            timeend = System.currentTimeMillis();
+            long finaltime= timeend-timeinit;
+            int timesec = (int)finaltime/1000;
+
+            RequiredVisit req = new RequiredVisit("",Integer.toString(timesec),"contacto");
+            //   System.out.println("Se destruyo bandeja"+Long.toString(finaltime) + " para "+perfil.getValor());
+
+            new Http(getActivity()).Visit(req);
+
+
+        }
+
+
+        super.onDestroy();
     }
 
     public static CatalogosAdvanceFragment newInstance() {

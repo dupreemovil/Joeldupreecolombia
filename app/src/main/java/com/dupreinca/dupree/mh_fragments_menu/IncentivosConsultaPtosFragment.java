@@ -2,10 +2,10 @@ package com.dupreinca.dupree.mh_fragments_menu;
 
 
 import android.content.Context;
-import android.databinding.ViewDataBinding;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.SearchView;
+import androidx.databinding.ViewDataBinding;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import 	androidx.appcompat.widget.SearchView;
 import android.text.InputType;
 import android.util.Log;
 import android.view.Menu;
@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.dupreeinca.lib_api_rest.controller.ReportesController;
+import com.dupreeinca.lib_api_rest.controller.UserController;
 import com.dupreeinca.lib_api_rest.model.base.TTError;
 import com.dupreeinca.lib_api_rest.model.base.TTResultListener;
 import com.dupreeinca.lib_api_rest.model.dto.request.Identy;
@@ -27,7 +28,11 @@ import com.dupreinca.dupree.R;
 import com.dupreinca.dupree.databinding.FragmentIncentConsultaPtosBinding;
 import com.dupreinca.dupree.mh_adapters.PuntosAsesoraListAdapter;
 import com.dupreinca.dupree.mh_holders.PuntosAsesoraHolder;
+import com.dupreinca.dupree.mh_http.Http;
+import com.dupreinca.dupree.mh_required_api.RequiredVisit;
+import com.dupreinca.dupree.mh_utilities.mPreferences;
 import com.dupreinca.dupree.view.fragment.BaseFragment;
+import com.google.gson.Gson;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -45,11 +50,19 @@ public class IncentivosConsultaPtosFragment extends BaseFragment implements Punt
     private PuntosAsesoraListAdapter listAdapter;
     private List<PtosByCamp> list, listFilter;
 
+    private UserController userController;
+    private String userName;
+    public long timeinit=0;
+    public long timeend=0;
+    public String userid="";
+
+    private Profile perfil;
+
     public IncentivosConsultaPtosFragment() {
         // Required empty public constructor
     }
 
-    private Profile perfil;
+
     public void loadData(Profile perfil){
         this.perfil=perfil;
     }
@@ -70,6 +83,10 @@ public class IncentivosConsultaPtosFragment extends BaseFragment implements Punt
 
         list = new ArrayList<>();
         listFilter = new ArrayList<>();
+
+        timeinit = System.currentTimeMillis();
+
+        perfil = getPerfil();
 
         //listPtosAsesora = getPuntosAsesora();
         listFilter.addAll(list);
@@ -183,7 +200,7 @@ public class IncentivosConsultaPtosFragment extends BaseFragment implements Punt
         SearchView searchView = (SearchView) searchItem.getActionView();
         searchView.setQueryHint(getString(R.string.cedula_asesora));
 
-        EditText txtSearch = searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+        EditText txtSearch = searchView.findViewById(R.id.search_src_text);
         txtSearch.setInputType(InputType.TYPE_CLASS_NUMBER);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -214,6 +231,31 @@ public class IncentivosConsultaPtosFragment extends BaseFragment implements Punt
 
     public void searchViewTextChange(String newText) {
 
+    }
+
+    public Profile getPerfil(){
+        String jsonPerfil = mPreferences.getJSON_TypePerfil(getActivity());
+        if(jsonPerfil!=null)
+            return new Gson().fromJson(jsonPerfil, Profile.class);
+
+        return null;
+    }
+
+    @Override
+    public void onDestroy(){
+
+        if(perfil!=null){
+            timeend = System.currentTimeMillis();
+            long finaltime= timeend-timeinit;
+            int timesec = (int)finaltime/1000;
+
+            RequiredVisit req = new RequiredVisit(perfil.getValor(),Integer.toString(timesec),"incentivoscon");
+            System.out.println("Se destruyo bandeja"+Long.toString(finaltime) + " para "+perfil.getValor());
+
+            new Http(getActivity()).Visit(req);
+        }
+
+        super.onDestroy();
     }
 
     @Override

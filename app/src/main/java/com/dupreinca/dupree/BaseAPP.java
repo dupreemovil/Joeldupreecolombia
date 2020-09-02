@@ -2,9 +2,13 @@ package com.dupreinca.dupree;
 
 import android.app.Application;
 import android.content.Context;
-import android.support.multidex.MultiDex;
+
+import androidx.multidex.*;
 
 import com.crashlytics.android.Crashlytics;
+import com.firebase.client.Firebase;
+import com.indigitall.android.Indigitall;
+
 import io.fabric.sdk.android.Fabric;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -18,6 +22,10 @@ public class BaseAPP extends Application {
     private static final String TAG = BaseAPP.class.getName();
     private static Context context;
     private static String campana;
+
+    public String fcm = "625076487360";
+
+    public String appkey = "1cddb358-b37b-46b3-b295-074f36172b41";
 
     public String getCampana() {
 
@@ -42,6 +50,12 @@ public class BaseAPP extends Application {
         super.onCreate();
         Fabric.with(this, new Crashlytics());
         context = getApplicationContext();
+
+
+
+        System.out.println("Se inicio indigital");
+
+        Indigitall.init(this, appkey, fcm);
 
         // The default Realm file is "default.realm" in Context.getFilesDir();
         // we'll change it to "myrealm.realm"

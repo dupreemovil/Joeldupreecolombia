@@ -6,7 +6,7 @@
         android:background="@color/gray_1"
         tools:context="com.dupreinca.dupree.mh_fragments_menu.ReporteRetenidosFragment">
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler"
 
             android:padding="5dp"

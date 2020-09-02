@@ -1,11 +1,20 @@
 package com.dupreinca.dupree.mh_fragments_main;
 
 
+import android.graphics.Color;
 import android.os.Bundle;
-import android.support.design.widget.AppBarLayout;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+
+import com.dupreeinca.lib_api_rest.model.dto.response.ListaOfertas;
+import com.dupreinca.dupree.mh_adapters.SliderAdapter;
+import com.dupreinca.dupree.mh_http.Http;
+import com.dupreinca.dupree.mh_required_api.RequiredVisit;
+import com.dupreinca.dupree.model_view.Slideritem;
+import com.google.android.material.appbar.AppBarLayout;
+
+
+import androidx.fragment.app.Fragment;
+import androidx.appcompat.app.AppCompatActivity;
+import 	androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,20 +34,29 @@ import com.dupreinca.dupree.mh_utilities.PinchZoomImageView;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType;
+import com.smarteist.autoimageslider.SliderAnimations;
+import com.smarteist.autoimageslider.SliderView;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class MainFragment extends Fragment {
     private String TAG="MainFragment";
-
+    SliderView slider1;
 
     ImageLoader img;
     public MainFragment() {
         // Required empty public constructor
     }
+
+    public long timeinit=0;
+    public long timeend=0;
+    public String userid="";
 
     Toolbar toolbar;
     @Override
@@ -53,9 +71,11 @@ public class MainFragment extends Fragment {
         toolbar.setTitle("");
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
 
-        SliderLayout slider = (SliderLayout) v.findViewById(R.id.mh_slider);
+        //SliderLayout slider = (SliderLayout) v.findViewById(R.id.mh_slider);
 
-        SlidePresentacion(slider);
+        slider1 = (SliderView)v.findViewById(R.id.imageSlider);
+
+        SlidePresentacion1(slider1);
 
         ImageView imgVuelveteAsesora, imgSolicitaAsesora, imgCatalogos, imgLogin;
         imgVuelveteAsesora = (ImageView) v.findViewById(R.id.imgVuelveteAsesora);
@@ -108,6 +128,23 @@ public class MainFragment extends Fragment {
         }
     };
 
+    @Override
+    public void onDestroy() {
+
+        Log.i(TAG,"onDestroy()");
+
+        timeend = System.currentTimeMillis();
+        long finaltime= timeend-timeinit;
+        int timesec = (int)finaltime/1000;
+
+        RequiredVisit req = new RequiredVisit("",Integer.toString(timesec),"inicio");
+        //   System.out.println("Se destruyo bandeja"+Long.toString(finaltime) + " para "+perfil.getValor());
+
+        new Http(getActivity()).Visit(req);
+
+        super.onDestroy();
+    }
+
     public void SlidePresentacion(SliderLayout slider) {
         try{
             String objetcImge = mPreferences.getJSONImageBanner(getActivity());
@@ -142,12 +179,53 @@ public class MainFragment extends Fragment {
                 slider.setPresetTransformer(SliderLayout.Transformer.Accordion);
                 slider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
                 slider.setCustomAnimation(new DescriptionAnimation());
-                slider.setDuration(4000);
+                slider.setDuration(400000);
                 slider.addOnPageChangeListener(SliderView.getListenerSlider());
             }
         }catch (Exception ex){
 
         }
+
+
+    }
+
+
+    public void SlidePresentacion1(SliderView slider) {
+
+            String objetcImge = mPreferences.getJSONImageBanner(getActivity());
+            ImgBannerDTO.Resolution list_image = new Gson().fromJson(objetcImge, ImgBannerDTO.Resolution.class);
+
+            List<Slideritem> lista = new ArrayList<>();
+
+            if(list_image != null){
+                HashMap<String, String> file_maps = new HashMap<String, String>();
+                file_maps.put("1", list_image.getImg1());
+                file_maps.put("2", list_image.getImg2());
+                file_maps.put("3", list_image.getImg3());
+
+
+                lista.add(new Slideritem(list_image.getImg1()));
+                lista.add(new Slideritem(list_image.getImg2()));
+                lista.add(new Slideritem(list_image.getImg3()));
+
+
+                SliderAdapter adapter = new SliderAdapter(getActivity(),lista);
+
+
+                slider.setSliderAdapter(adapter);
+
+
+          //      slider.setIndicatorAnimation(IndicatorAnimationType.WORM); //set indicator animation by using IndicatorAnimationType. :WORM or THIN_WORM or COLOR or DROP or FILL or NONE or SCALE or SCALE_DOWN or SLIDE and SWAP!!
+
+
+                slider.setSliderAnimationDuration(1000);
+                slider.setScrollTimeInSec(6); //set scroll delay in seconds :
+                slider.startAutoCycle();
+
+
+
+            }
+
 
 
     }

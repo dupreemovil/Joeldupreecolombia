@@ -1,9 +1,9 @@
 package com.dupreinca.dupree.mh_fragments_menu;
 
 
-import android.databinding.ViewDataBinding;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
+import androidx.databinding.ViewDataBinding;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import android.util.Log;
 import android.view.View;
 
@@ -12,13 +12,17 @@ import com.dupreeinca.lib_api_rest.model.base.TTError;
 import com.dupreeinca.lib_api_rest.model.base.TTResultListener;
 import com.dupreeinca.lib_api_rest.model.dto.response.Faltante;
 import com.dupreeinca.lib_api_rest.model.dto.response.FaltantesDTO;
+import com.dupreeinca.lib_api_rest.model.view.Profile;
 import com.dupreinca.dupree.MenuActivity;
 import com.dupreinca.dupree.R;
 import com.dupreinca.dupree.databinding.FragmentPedidosFaltantesBinding;
 import com.dupreinca.dupree.mh_adapters.FaltantesListAdapter;
-import com.dupreinca.dupree.mh_fragments_menu.reportes.ReportesActivity;
 import com.dupreinca.dupree.mh_holders.FaltantesHolder;
+import com.dupreinca.dupree.mh_http.Http;
+import com.dupreinca.dupree.mh_required_api.RequiredVisit;
+import com.dupreinca.dupree.mh_utilities.mPreferences;
 import com.dupreinca.dupree.view.fragment.BaseFragment;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +37,14 @@ public class PedidosFaltantesFragment extends BaseFragment implements FaltantesH
 
     private FaltantesListAdapter listAdapter;
     private List<Faltante> list, listFilter;
+
+    private Profile perfil;
+
+
+    private String userName;
+    public long timeinit=0;
+    public long timeend=0;
+    public String userid="";
 
     public PedidosFaltantesFragment() {
         // Required empty public constructor
@@ -55,6 +67,8 @@ public class PedidosFaltantesFragment extends BaseFragment implements FaltantesH
         list = new ArrayList<>();
         listFilter = new ArrayList<>();
 
+        perfil = getPerfil();
+        timeinit = System.currentTimeMillis();
         //listFaltante = faltantesHttp.getResult();
         listFilter.addAll(list);
 
@@ -63,6 +77,32 @@ public class PedidosFaltantesFragment extends BaseFragment implements FaltantesH
         binding.recycler.setAdapter(listAdapter);
 
         setData(false, null);
+    }
+
+
+    public Profile getPerfil(){
+        String jsonPerfil = mPreferences.getJSON_TypePerfil(getActivity());
+        if(jsonPerfil!=null)
+            return new Gson().fromJson(jsonPerfil, Profile.class);
+
+        return null;
+    }
+
+    @Override
+    public void onDestroy(){
+
+        if(perfil!=null){
+            timeend = System.currentTimeMillis();
+            long finaltime= timeend-timeinit;
+            int timesec = (int)finaltime/1000;
+
+            RequiredVisit req = new RequiredVisit(perfil.getValor(),Integer.toString(timesec),"pedidosfal");
+            System.out.println("Se destruyo bandeja"+Long.toString(finaltime) + " para "+perfil.getValor());
+
+            new Http(getActivity()).Visit(req);
+        }
+
+        super.onDestroy();
     }
 
     @Override

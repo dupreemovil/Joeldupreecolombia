@@ -2,12 +2,12 @@ package com.dupreinca.dupree.mh_fragments_menu;
 
 
 import android.content.Context;
-import android.databinding.ViewDataBinding;
-import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.SimpleItemAnimator;
+import androidx.databinding.ViewDataBinding;
+import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.SimpleItemAnimator;
 import android.text.TextUtils;
 import android.view.View;
 
@@ -15,6 +15,7 @@ import com.dupreeinca.lib_api_rest.controller.CampanaController;
 import com.dupreeinca.lib_api_rest.controller.ReportesController;
 import com.dupreeinca.lib_api_rest.model.base.TTError;
 import com.dupreeinca.lib_api_rest.model.base.TTResultListener;
+import com.dupreeinca.lib_api_rest.model.view.Profile;
 import com.dupreeinca.lib_api_rest.util.preferences.DataStore;
 import com.dupreeinca.lib_api_rest.model.dto.response.ItemCampana;
 import com.dupreeinca.lib_api_rest.model.dto.response.ItemPanelGte;
@@ -28,7 +29,11 @@ import com.dupreinca.dupree.databinding.FragmentPanelGerenteBinding;
 import com.dupreinca.dupree.mh_adapters.PanelGteListAdapter;
 import com.dupreinca.dupree.mh_dialogs.SingleListDialog;
 import com.dupreinca.dupree.mh_holders.PanelGteHolder;
+import com.dupreinca.dupree.mh_http.Http;
+import com.dupreinca.dupree.mh_required_api.RequiredVisit;
+import com.dupreinca.dupree.mh_utilities.mPreferences;
 import com.dupreinca.dupree.view.fragment.BaseFragment;
+import com.google.gson.Gson;
 
 
 import java.util.ArrayList;
@@ -53,6 +58,13 @@ public class PanelGerenteFragment extends BaseFragment implements PanelGteHolder
     public PanelGerenteFragment() {
         // Required empty public constructor
     }
+
+    private Profile perfil;
+
+    private String userName;
+    public long timeinit=0;
+    public long timeend=0;
+    public String userid="";
 
     @Override
     protected int getMainLayout() {
@@ -81,7 +93,8 @@ public class PanelGerenteFragment extends BaseFragment implements PanelGteHolder
         });
         campHttp = new ArrayList<>();
         panelGteDetails =new ArrayList<>();
-
+        perfil = getPerfil();
+        timeinit = System.currentTimeMillis();
         adapter_panelGte = new PanelGteListAdapter(panelGteDetails, this);
         binding.rcvPanelGrnte.setAdapter(adapter_panelGte);
 
@@ -127,6 +140,32 @@ public class PanelGerenteFragment extends BaseFragment implements PanelGteHolder
             }
         });
         d.show(getActivity().getSupportFragmentManager(),"mDialog");
+    }
+
+
+    public Profile getPerfil(){
+        String jsonPerfil = mPreferences.getJSON_TypePerfil(getActivity());
+        if(jsonPerfil!=null)
+            return new Gson().fromJson(jsonPerfil, Profile.class);
+
+        return null;
+    }
+
+    @Override
+    public void onDestroy(){
+
+        if(perfil!=null){
+            timeend = System.currentTimeMillis();
+            long finaltime= timeend-timeinit;
+            int timesec = (int)finaltime/1000;
+
+            RequiredVisit req = new RequiredVisit(perfil.getValor(),Integer.toString(timesec),"panelge");
+            System.out.println("Se destruyo bandeja"+Long.toString(finaltime) + " para "+perfil.getValor());
+
+            new Http(getActivity()).Visit(req);
+        }
+
+        super.onDestroy();
     }
 
     private void addDetailCampana(ListItemPanelGte items){

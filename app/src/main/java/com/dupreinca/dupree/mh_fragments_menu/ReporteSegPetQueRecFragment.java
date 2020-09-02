@@ -1,14 +1,15 @@
 package com.dupreinca.dupree.mh_fragments_menu;
 
-import android.databinding.ViewDataBinding;
+import androidx.databinding.ViewDataBinding;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
+import androidx.fragment.app.Fragment;
+import 	androidx.recyclerview.widget.GridLayoutManager;
 import android.view.View;
 
 import com.dupreeinca.lib_api_rest.controller.ReportesController;
 import com.dupreeinca.lib_api_rest.model.base.TTError;
 import com.dupreeinca.lib_api_rest.model.base.TTResultListener;
+import com.dupreeinca.lib_api_rest.model.view.Profile;
 import com.dupreinca.dupree.R;
 import com.dupreinca.dupree.databinding.FragmentReporteSegPetQueRecBinding;
 import com.dupreinca.dupree.mh_fragments_menu.reportes.ReportesActivity;
@@ -31,6 +32,13 @@ public class ReporteSegPetQueRecFragment extends BaseFragment implements PQRHold
     private ReportesController reportesController;
     private SeguimientoPQRListAdapter listAdapter;
     private List<ItemPQR> listPQR, listFilter;
+
+    private String userName;
+    public long timeinit=0;
+    public long timeend=0;
+    public String userid="";
+
+    private Profile perfil;
 
     public ReporteSegPetQueRecFragment() {
         // Required empty public constructor

@@ -16,7 +16,7 @@
         android:layout_height="match_parent"
         android:id="@+id/ctnInscription">
 
-        <android.support.v4.widget.NestedScrollView
+        <androidx.core.widget.NestedScrollView
             android:fillViewport="true"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -68,7 +68,7 @@
                         android:orientation="horizontal"
                         android:weightSum="1">
 
-                        <android.support.design.widget.TextInputLayout
+                        <com.google.android.material.textfield.TextInputLayout
                             android:layout_marginTop="8dp"
                             android:layout_marginStart="4dp"
                             android:layout_marginEnd="4dp"
@@ -85,9 +85,9 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="@string/tipo_via"/>
-                        </android.support.design.widget.TextInputLayout>
+                        </com.google.android.material.textfield.TextInputLayout>
 
-                        <android.support.design.widget.TextInputLayout
+                        <com.google.android.material.textfield.TextInputLayout
                             android:layout_marginTop="8dp"
                             android:layout_marginStart="4dp"
                             android:layout_marginEnd="4dp"
@@ -104,9 +104,9 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="@string/numero"/>
-                        </android.support.design.widget.TextInputLayout>
+                        </com.google.android.material.textfield.TextInputLayout>
 
-                        <android.support.design.widget.TextInputLayout
+                        <com.google.android.material.textfield.TextInputLayout
                             android:layout_marginTop="8dp"
                             android:layout_marginStart="4dp"
                             android:layout_marginEnd="4dp"
@@ -123,7 +123,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="@string/letra"/>
-                        </android.support.design.widget.TextInputLayout>
+                        </com.google.android.material.textfield.TextInputLayout>
                     </LinearLayout>
 
 
@@ -136,7 +136,7 @@
                         android:orientation="horizontal"
                         android:weightSum="1">
 
-                        <android.support.design.widget.TextInputLayout
+                        <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="4dp"
@@ -154,9 +154,9 @@
                                 android:layout_marginTop="8dp"
                                 android:focusableInTouchMode="false"
                                 android:hint="@string/sur_este" />
-                        </android.support.design.widget.TextInputLayout>
+                        </com.google.android.material.textfield.TextInputLayout>
 
-                        <android.support.design.widget.TextInputLayout
+                        <com.google.android.material.textfield.TextInputLayout
                             android:layout_marginTop="8dp"
                             android:layout_marginStart="4dp"
                             android:layout_marginEnd="4dp"
@@ -173,9 +173,9 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="@string/tipo_via"/>
-                        </android.support.design.widget.TextInputLayout>
+                        </com.google.android.material.textfield.TextInputLayout>
 
-                        <android.support.design.widget.TextInputLayout
+                        <com.google.android.material.textfield.TextInputLayout
                             android:layout_marginTop="8dp"
                             android:layout_marginStart="4dp"
                             android:layout_marginEnd="4dp"
@@ -193,7 +193,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="@string/numero"/>
-                        </android.support.design.widget.TextInputLayout>
+                        </com.google.android.material.textfield.TextInputLayout>
 
                     </LinearLayout>
                     <LinearLayout
@@ -205,7 +205,7 @@
                         android:paddingStart="12dp"
                         android:weightSum="1">
 
-                        <android.support.design.widget.TextInputLayout
+                        <com.google.android.material.textfield.TextInputLayout
                             android:layout_marginTop="8dp"
                             android:layout_marginStart="4dp"
                             android:layout_marginEnd="4dp"
@@ -222,9 +222,9 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="@string/letra"/>
-                        </android.support.design.widget.TextInputLayout>
+                        </com.google.android.material.textfield.TextInputLayout>
 
-                        <android.support.design.widget.TextInputLayout
+                        <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="4dp"
@@ -242,9 +242,9 @@
                                 android:layout_marginTop="8dp"
                                 android:focusableInTouchMode="false"
                                 android:hint="@string/sur_este" />
-                        </android.support.design.widget.TextInputLayout>
+                        </com.google.android.material.textfield.TextInputLayout>
 
-                        <android.support.design.widget.TextInputLayout
+                        <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="4dp"
@@ -261,11 +261,11 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="8dp"
                                 android:hint="@string/datos_adicionales" />
-                        </android.support.design.widget.TextInputLayout>
+                        </com.google.android.material.textfield.TextInputLayout>
                     </LinearLayout>
 
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_marginTop="8dp"
                         android:layout_marginStart="16dp"
                         android:layout_marginEnd="16dp"
@@ -281,8 +281,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/departamento"/>
-                    </android.support.design.widget.TextInputLayout>
-                    <android.support.design.widget.TextInputLayout
+                    </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_marginTop="8dp"
                         android:layout_marginStart="16dp"
                         android:layout_marginEnd="16dp"
@@ -298,8 +298,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/ciudad"/>
-                    </android.support.design.widget.TextInputLayout>
-                    <android.support.design.widget.TextInputLayout
+                    </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_marginTop="8dp"
                         android:layout_marginStart="16dp"
                         android:layout_marginEnd="16dp"
@@ -315,7 +315,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/barrio"/>
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
                     <LinearLayout
                         android:layout_marginTop="24dp"
@@ -342,7 +342,7 @@
                             android:layout_weight="0.4"
                             android:layout_height="wrap_content"
                             android:hint="@string/dir_residencia"/>
-                        <!--/android.support.design.widget.TextInputLayout-->
+                        <!--/com.google.android.material.textfield.TextInputLayout-->
                     </LinearLayout>
 
                     <LinearLayout
@@ -379,7 +379,7 @@
                             android:orientation="horizontal"
                             android:weightSum="1">
 
-                            <android.support.design.widget.TextInputLayout
+                            <com.google.android.material.textfield.TextInputLayout
                                 android:layout_marginTop="8dp"
                                 android:layout_marginStart="4dp"
                                 android:layout_marginEnd="4dp"
@@ -396,9 +396,9 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:hint="@string/tipo_via"/>
-                            </android.support.design.widget.TextInputLayout>
+                            </com.google.android.material.textfield.TextInputLayout>
 
-                            <android.support.design.widget.TextInputLayout
+                            <com.google.android.material.textfield.TextInputLayout
                                 android:layout_marginTop="8dp"
                                 android:layout_marginStart="4dp"
                                 android:layout_marginEnd="4dp"
@@ -415,9 +415,9 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:hint="@string/numero"/>
-                            </android.support.design.widget.TextInputLayout>
+                            </com.google.android.material.textfield.TextInputLayout>
 
-                            <android.support.design.widget.TextInputLayout
+                            <com.google.android.material.textfield.TextInputLayout
                                 android:layout_marginTop="8dp"
                                 android:layout_marginStart="4dp"
                                 android:layout_marginEnd="4dp"
@@ -434,7 +434,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:hint="@string/letra"/>
-                            </android.support.design.widget.TextInputLayout>
+                            </com.google.android.material.textfield.TextInputLayout>
                         </LinearLayout>
 
 
@@ -447,7 +447,7 @@
                             android:orientation="horizontal"
                             android:weightSum="1">
 
-                            <android.support.design.widget.TextInputLayout
+                            <com.google.android.material.textfield.TextInputLayout
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginEnd="4dp"
@@ -465,9 +465,9 @@
                                     android:layout_marginTop="8dp"
                                     android:focusableInTouchMode="false"
                                     android:hint="@string/sur_este" />
-                            </android.support.design.widget.TextInputLayout>
+                            </com.google.android.material.textfield.TextInputLayout>
 
-                            <android.support.design.widget.TextInputLayout
+                            <com.google.android.material.textfield.TextInputLayout
                                 android:layout_marginTop="8dp"
                                 android:layout_marginStart="4dp"
                                 android:layout_marginEnd="4dp"
@@ -484,9 +484,9 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:hint="@string/tipo_via"/>
-                            </android.support.design.widget.TextInputLayout>
+                            </com.google.android.material.textfield.TextInputLayout>
 
-                            <android.support.design.widget.TextInputLayout
+                            <com.google.android.material.textfield.TextInputLayout
                                 android:layout_marginTop="8dp"
                                 android:layout_marginStart="4dp"
                                 android:layout_marginEnd="4dp"
@@ -504,7 +504,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:hint="@string/numero"/>
-                            </android.support.design.widget.TextInputLayout>
+                            </com.google.android.material.textfield.TextInputLayout>
 
                         </LinearLayout>
                         <LinearLayout
@@ -516,7 +516,7 @@
                             android:paddingStart="12dp"
                             android:weightSum="1">
 
-                            <android.support.design.widget.TextInputLayout
+                            <com.google.android.material.textfield.TextInputLayout
                                 android:layout_marginTop="8dp"
                                 android:layout_marginStart="4dp"
                                 android:layout_marginEnd="4dp"
@@ -533,9 +533,9 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:hint="@string/letra"/>
-                            </android.support.design.widget.TextInputLayout>
+                            </com.google.android.material.textfield.TextInputLayout>
 
-                            <android.support.design.widget.TextInputLayout
+                            <com.google.android.material.textfield.TextInputLayout
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginEnd="4dp"
@@ -553,9 +553,9 @@
                                     android:layout_marginTop="8dp"
                                     android:focusableInTouchMode="false"
                                     android:hint="@string/sur_este" />
-                            </android.support.design.widget.TextInputLayout>
+                            </com.google.android.material.textfield.TextInputLayout>
 
-                            <android.support.design.widget.TextInputLayout
+                            <com.google.android.material.textfield.TextInputLayout
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginEnd="4dp"
@@ -572,10 +572,10 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="8dp"
                                     android:hint="@string/datos_adicionales" />
-                            </android.support.design.widget.TextInputLayout>
+                            </com.google.android.material.textfield.TextInputLayout>
                         </LinearLayout>
 
-                        <android.support.design.widget.TextInputLayout
+                        <com.google.android.material.textfield.TextInputLayout
                             android:layout_marginTop="8dp"
                             android:layout_marginStart="16dp"
                             android:layout_marginEnd="16dp"
@@ -591,8 +591,8 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="@string/departamento"/>
-                        </android.support.design.widget.TextInputLayout>
-                        <android.support.design.widget.TextInputLayout
+                        </com.google.android.material.textfield.TextInputLayout>
+                        <com.google.android.material.textfield.TextInputLayout
                             android:layout_marginTop="8dp"
                             android:layout_marginStart="16dp"
                             android:layout_marginEnd="16dp"
@@ -608,8 +608,8 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="@string/ciudad"/>
-                        </android.support.design.widget.TextInputLayout>
-                        <android.support.design.widget.TextInputLayout
+                        </com.google.android.material.textfield.TextInputLayout>
+                        <com.google.android.material.textfield.TextInputLayout
                             android:layout_marginTop="8dp"
                             android:layout_marginStart="16dp"
                             android:layout_marginEnd="16dp"
@@ -625,7 +625,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="@string/barrio"/>
-                        </android.support.design.widget.TextInputLayout>
+                        </com.google.android.material.textfield.TextInputLayout>
                     </LinearLayout>
                 </LinearLayout>
 
@@ -646,7 +646,7 @@
 
             </LinearLayout>
 
-        </android.support.v4.widget.NestedScrollView>
+        </androidx.core.widget.NestedScrollView>
 
     </LinearLayout>
 </layout>

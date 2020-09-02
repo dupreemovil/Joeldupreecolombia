@@ -8,24 +8,24 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.databinding.ViewDataBinding;
+import androidx.databinding.ViewDataBinding;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.FileProvider;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.core.content.FileProvider;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -50,6 +50,7 @@ import com.dupreinca.dupree.mh_dialogs.SingleListDialog;
 import com.dupreinca.dupree.mh_http.Http;
 import com.dupreinca.dupree.mh_required_api.ListBoolean;
 import com.dupreeinca.lib_api_rest.util.alert.DownloadFileAsyncTask;
+import com.dupreinca.dupree.mh_required_api.RequiredVisit;
 import com.dupreinca.dupree.mh_utilities.PinchZoomImageView;
 import com.dupreinca.dupree.view.fragment.BaseFragment;
 import com.google.gson.Gson;
@@ -68,6 +69,8 @@ import java.util.List;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
+import static com.dupreinca.dupree.BaseAPP.getContext;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -83,6 +86,10 @@ public class CatalogosFragment extends BaseFragment {
     private FragmentCatalogosBinding binding;
 
     private UploadFileController fileController;
+
+    public long timeinit=0;
+    public long timeend=0;
+    public String userid="";
 
     RequestQueue request;
     JsonArrayRequest jsonArrayRequest;
@@ -107,6 +114,8 @@ public class CatalogosFragment extends BaseFragment {
         carga_catalogo();
 
         String jsonUrlCatalogos = dataStore.getJSON_UrlCatalodos();
+
+
 
         binding.appBar.toolbar.setNavigationIcon(null);
         binding.appBar.toolbar.setTitle("");
@@ -171,6 +180,25 @@ public class CatalogosFragment extends BaseFragment {
         CatalogosFragment fragment = new CatalogosFragment();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onDestroy() {
+
+        Log.i(TAG,"onDestroy()");
+
+
+
+        timeend = System.currentTimeMillis();
+        long finaltime= timeend-timeinit;
+        int timesec = (int)finaltime/1000;
+
+        RequiredVisit req = new RequiredVisit("",Integer.toString(timesec),"catalogos");
+        //   System.out.println("Se destruyo bandeja"+Long.toString(finaltime) + " para "+perfil.getValor());
+
+        new Http(getActivity()).Visit(req);
+
+        super.onDestroy();
     }
 
     public void showList(String title, List<String> data, String[] itemsSelected){
@@ -401,6 +429,8 @@ public class CatalogosFragment extends BaseFragment {
         }
     }
 
+
+
     private void downloadPDF(ModelList item){
         switch (item.getId()){
             case 0:
@@ -547,8 +577,11 @@ public class CatalogosFragment extends BaseFragment {
 
                     img.displayImage(urls_port_prim, binding.imgCampA);
                     img.displayImage(urls_port_segu, binding.imgCampB);
-                    Picasso.with(getContext()).load(urls_port_prim).into(binding.imgCampA);
-                    Picasso.with(getContext()).load(urls_port_segu).into(binding.imgCampB);
+
+
+
+                    Picasso.get().load(urls_port_prim).into(binding.imgCampA);
+                    Picasso.get().load(urls_port_segu).into(binding.imgCampB);
 
                 } catch (JSONException e) {
                     e.printStackTrace();

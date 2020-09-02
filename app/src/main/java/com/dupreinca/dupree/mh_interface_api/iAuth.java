@@ -1,6 +1,8 @@
 package com.dupreinca.dupree.mh_interface_api;
 
 import com.dupreeinca.lib_api_rest.model.dto.response.DataAuth;
+
+import com.dupreeinca.lib_api_rest.model.dto.response.DataVisit;
 import com.dupreeinca.lib_api_rest.model.dto.response.GenericDTO;
 
 import retrofit2.Call;
@@ -17,6 +19,12 @@ public interface iAuth {
     @FormUrlEncoded
     @POST("login/authenticate")
     Call<DataAuth> auth(@Field("Params") String dataAuth);
+
+
+    @FormUrlEncoded
+    @POST("reportes/visitas")
+    Call<DataVisit> visit(@Field("Params") String dataVisit);
+
 
     @FormUrlEncoded
     @POST("panel/olvido_contrasena")

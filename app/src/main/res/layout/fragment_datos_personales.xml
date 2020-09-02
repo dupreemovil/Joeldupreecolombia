@@ -15,7 +15,7 @@
         android:layout_height="match_parent"
         android:id="@+id/ctnInscription">
 
-        <android.support.v4.widget.NestedScrollView
+        <androidx.core.widget.NestedScrollView
             android:fillViewport="true"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -49,7 +49,7 @@
                         android:layout_marginEnd="16dp"
                         android:weightSum="1">
 
-                        <android.support.design.widget.TextInputLayout
+                        <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/txtInputNameReferido"
                             android:layout_width="0dp"
                             android:layout_weight="0.8"
@@ -68,7 +68,7 @@
                                 android:digits="@string/only_number_basic"
 
                                 />
-                        </android.support.design.widget.TextInputLayout>
+                        </com.google.android.material.textfield.TextInputLayout>
 
                         <ImageButton
                             android:onClick="@{(v) -> callback.onClick(v)}"
@@ -145,7 +145,7 @@
                         android:textColor="@color/azulDupree"
                         android:text="@string/datos_personales"/>
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_marginTop="8dp"
                         android:layout_marginStart="16dp"
                         android:layout_marginEnd="16dp"
@@ -161,9 +161,9 @@
                             android:layout_height="wrap_content"
                             android:digits="@string/only_number_basic"
                             android:hint="@string/cedula"/>
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/layoutTxtNameIncrip"
                         android:layout_marginTop="8dp"
                         android:layout_marginStart="16dp"
@@ -180,10 +180,10 @@
                             android:layout_height="wrap_content"
                             android:digits="@string/only_letter_basic"
                             android:hint="@string/nombre_s"/>
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/layoutTxtNamePre"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -200,9 +200,9 @@
                             android:layout_marginTop="8dp"
                             android:digits="@string/only_letter_basic"
                             android:hint="@string/nombre_s" />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/layoutTxtLastnamePre"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -219,9 +219,9 @@
                             android:layout_marginTop="8dp"
                             android:digits="@string/only_letter_basic"
                             android:hint="@string/apellido_s" />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_marginTop="8dp"
                         android:layout_marginStart="16dp"
                         android:layout_marginEnd="16dp"
@@ -239,9 +239,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/fecha_de_nacimiento"/>
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_marginTop="8dp"
                         android:layout_marginStart="16dp"
                         android:layout_marginEnd="16dp"
@@ -258,7 +258,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/zona_seccion"/>
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
 
                 <LinearLayout
@@ -278,7 +278,7 @@
 
             </LinearLayout>
 
-        </android.support.v4.widget.NestedScrollView>
+        </androidx.core.widget.NestedScrollView>
 
     </LinearLayout>
 </layout>

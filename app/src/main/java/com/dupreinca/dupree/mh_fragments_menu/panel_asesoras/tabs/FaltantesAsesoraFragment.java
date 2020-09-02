@@ -1,12 +1,11 @@
 package com.dupreinca.dupree.mh_fragments_menu.panel_asesoras.tabs;
 
 
-import android.databinding.ViewDataBinding;
+import androidx.databinding.ViewDataBinding;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 
-import com.dupreinca.dupree.MenuActivity;
 import com.dupreinca.dupree.R;
 import com.dupreinca.dupree.databinding.FragmentFaltantesAsesoraBinding;
 import com.dupreinca.dupree.mh_adapters.FaltantesListAdapter;

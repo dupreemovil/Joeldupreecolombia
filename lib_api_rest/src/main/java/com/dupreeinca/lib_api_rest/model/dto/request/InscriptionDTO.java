@@ -1,12 +1,12 @@
 package com.dupreeinca.lib_api_rest.model.dto.request;
 
-import android.databinding.BaseObservable;
-import android.databinding.Bindable;
+import androidx.databinding.BaseObservable;
+import androidx.databinding.Bindable;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.text.TextUtils;
 
-import com.dupreeinca.lib_api_rest.BR;
+import androidx.databinding.library.baseAdapters.BR;
+
 import com.dupreeinca.lib_api_rest.enums.EnumFormatDireccion;
 import com.dupreeinca.lib_api_rest.model.dto.response.RaiseDTO;
 import com.dupreeinca.lib_api_rest.util.models.ModelList;
@@ -26,6 +26,7 @@ public class InscriptionDTO extends BaseObservable implements Parcelable {
     //solo para edicion de inscrip rechazada
     private transient String referenciado_hint = "";//
     private transient String referenciado_nombre = "";//
+
 
     //DATOS PERSONALES
     private String cedula = "";//
@@ -143,6 +144,8 @@ public class InscriptionDTO extends BaseObservable implements Parcelable {
         img_cedula = new ArrayList<>();
         img_cedula.add("");
         img_cedula.add("");
+
+
 
         pagare = new ArrayList<>();
         pagare.add("");
@@ -750,14 +753,15 @@ public class InscriptionDTO extends BaseObservable implements Parcelable {
     }
 
     @Bindable
+    public String getTipo_via_env_2() {
+        return tipo_via_env_2;
+    }
+
+    @Bindable
     public String getTipo_via_env_1() {
         return tipo_via_env_1;
     }
 
-    @Bindable
-    public String getTipo_via_env_2() {
-        return tipo_via_env_2;
-    }
 
 
     @Bindable
@@ -1118,6 +1122,7 @@ public class InscriptionDTO extends BaseObservable implements Parcelable {
 
     public void setNumero5(String numero5) {
         this.numero5 = numero5;
+
         notifyPropertyChanged(BR.numero5);
         notifyPropertyChanged(BR.direccion_concatenada);
     }
@@ -1164,33 +1169,33 @@ public class InscriptionDTO extends BaseObservable implements Parcelable {
 
     public void setTipo_via_env_1(String tipo_via_env_1) {
         this.tipo_via_env_1 = tipo_via_env_1;
-        notifyPropertyChanged(BR.tipo_via_env_1);
-        notifyPropertyChanged(BR.direccion_concatenada_env);
+       notifyPropertyChanged(BR.tipo_via_env_1);
+      notifyPropertyChanged(BR.direccion_concatenada_env);
     }
 
     public void setTipo_via_env_2(String tipo_via_env_2) {
         this.tipo_via_env_2 = tipo_via_env_2;
-        notifyPropertyChanged(BR.tipo_via_env_2);
-        notifyPropertyChanged(BR.direccion_concatenada_env);
+     notifyPropertyChanged(BR.tipo_via_env_2);
+     notifyPropertyChanged(BR.direccion_concatenada_env);
     }
 
     public void setNumero_env_1(String numero_env_1) {
         this.numero_env_1 = numero_env_1;
-        notifyPropertyChanged(BR.numero_env_1);
-        notifyPropertyChanged(BR.enableLetra_env_1);
-        notifyPropertyChanged(BR.direccion_concatenada_env);
+   notifyPropertyChanged(BR.numero_env_1);
+  notifyPropertyChanged(BR.enableLetra_env_1);
+    notifyPropertyChanged(BR.direccion_concatenada_env);
     }
 
     public void setLetra_env_1(String letra_env_1) {
         this.letra_env_1 = letra_env_1;
-        notifyPropertyChanged(BR.letra_env_1);
-        notifyPropertyChanged(BR.direccion_concatenada_env);
+  notifyPropertyChanged(BR.letra_env_1);
+    notifyPropertyChanged(BR.direccion_concatenada_env);
     }
 
     public void setBis_env_1(String bis_env_1) {
         this.bis_env_1 = bis_env_1;
-        notifyPropertyChanged(BR.bis_env_1);
-        notifyPropertyChanged(BR.direccion_concatenada_env);
+   notifyPropertyChanged(BR.bis_env_1);
+     notifyPropertyChanged(BR.direccion_concatenada_env);
     }
 
     public void setBis_env_2(String bis_env_2) {

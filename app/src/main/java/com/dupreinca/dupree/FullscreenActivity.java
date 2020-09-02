@@ -2,8 +2,10 @@ package com.dupreinca.dupree;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -27,9 +29,14 @@ import com.dupreeinca.lib_api_rest.model.dto.response.realm.Oferta;
 import com.dupreeinca.lib_api_rest.model.dto.response.UrlsCatalogosDTO;
 import com.dupreinca.dupree.mh_utilities.mPreferences;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+import com.indigitall.android.Indigitall;
 
 import io.realm.Realm;
 
@@ -117,9 +124,7 @@ public class FullscreenActivity extends AppCompatActivity  {
     boolean updateOnlyBannerAndPDF=false;
     private BannerController bannerController;
 
-    public String fcm = "AAAAkYl2RMA:APA91bHgDg3Q6qnlDx0cjVHn8mdWyYA2XvUrrlq-XgxgusMTctb7Dqskn3HBuserhjgZ0kMvinZl7Or_r7wjI9SYgldebubr59q3NjRtz5RcdIqXl50WBHfw1pqHOmNM7vPqVpx5i0Ia";
 
-    public String appkey = "625076487360";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,7 +136,25 @@ public class FullscreenActivity extends AppCompatActivity  {
             campanaActual = campana;
          }
 
-      //  Indigitall.init(this, appkey, fcm);
+
+
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w(TAG, "getInstanceId failed", task.getException());
+                            return;
+                        }
+
+                        // Get new Instance ID token
+                        String token = task.getResult().getToken();
+
+                        System.out.println("El token "+token);
+                        // Log and toast
+
+                    }
+                });
 
         //API rest
         bannerController =  new BannerController(FullscreenActivity.this);

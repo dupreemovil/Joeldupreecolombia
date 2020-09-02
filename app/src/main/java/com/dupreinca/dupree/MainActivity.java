@@ -3,42 +3,37 @@ package com.dupreinca.dupree;
 import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.view.ViewPager;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.annotation.NonNull;
+
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.viewpager.widget.ViewPager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.appcompat.app.AppCompatActivity;
+
+import androidx.appcompat.app.AlertDialog;
+
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import com.dupreinca.dupree.mh_adapters.MainPagerAdapter;
 import com.dupreinca.dupree.mh_adapters.AuthenticatePagerAdapter;
-import com.dupreinca.dupree.mh_dial_peru.actualizarApp;
 import com.dupreinca.dupree.mh_dialogs.MH_Dialogs_Login;
 import com.dupreeinca.lib_api_rest.model.dto.response.DataAuth;
 import com.dupreeinca.lib_api_rest.model.dto.response.GenericDTO;
 import com.dupreinca.dupree.mh_utilities.mPreferences;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
-import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
-
-import java.security.Permission;
-import java.util.HashMap;
 
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static android.Manifest.permission_group.CAMERA;
-import static com.dupreinca.dupree.BaseAPP.getContext;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -290,6 +285,8 @@ public class MainActivity extends AppCompatActivity {
     public void successfulAuth(DataAuth responseAuth){
 
         msgToast(responseAuth.getStatus());
+
+        System.out.println("Mi informacion "+responseAuth.getPerfil().get(0).getValor());
         mPreferences.setJSON_TypePerfil(MainActivity.this, responseAuth.getPerfil().get(0));
         mPreferences.setLoggedIn(MainActivity.this, true);
 

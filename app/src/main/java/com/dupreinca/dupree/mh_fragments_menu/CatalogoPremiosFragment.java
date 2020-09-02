@@ -7,27 +7,28 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.databinding.ViewDataBinding;
+import androidx.databinding.ViewDataBinding;
 import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomSheetBehavior;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.FileProvider;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.StaggeredGridLayoutManager;
+import androidx.annotation.NonNull;
+
+import androidx.fragment.app.Fragment;
+import androidx.core.content.FileProvider;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import 	androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.LinearLayout;
 
 import com.cloudemotion.lib_image.MyProviderImage;
 import com.dupreeinca.lib_api_rest.controller.CatalogosController;
+import com.dupreeinca.lib_api_rest.controller.UserController;
 import com.dupreeinca.lib_api_rest.model.base.TTError;
 import com.dupreeinca.lib_api_rest.model.base.TTResultListener;
 import com.dupreeinca.lib_api_rest.model.dto.response.ItemFolleto;
+import com.dupreeinca.lib_api_rest.model.view.Profile;
 import com.dupreeinca.lib_api_rest.util.models.ModelList;
 import com.dupreinca.dupree.CatalogoViewerActivity;
 import com.dupreinca.dupree.MenuActivity;
@@ -45,6 +46,8 @@ import com.dupreinca.dupree.mh_http.Http;
 import com.dupreinca.dupree.mh_required_api.ListBoolean;
 import com.dupreeinca.lib_api_rest.model.dto.response.CatalogoPremiosList;
 import com.dupreeinca.lib_api_rest.util.alert.DownloadFileAsyncTask;
+import com.dupreinca.dupree.mh_required_api.RequiredVisit;
+import com.dupreinca.dupree.mh_utilities.mPreferences;
 import com.dupreinca.dupree.view.fragment.BaseFragment;
 import com.google.gson.Gson;
 
@@ -75,6 +78,16 @@ public class CatalogoPremiosFragment extends BaseFragment implements CatalogoPre
     private CatalogoPremiosListAdapter listAdapter;
     private StaggeredGridLayoutManager mLayoutManager;
 
+
+    private UserController userController;
+    private String userName;
+    public long timeinit=0;
+    public long timeend=0;
+    public String userid="";
+
+    private Profile perfil;
+
+
     @Override
     protected int getMainLayout() {
         return R.layout.fragment_catalogo_premios;
@@ -87,6 +100,8 @@ public class CatalogoPremiosFragment extends BaseFragment implements CatalogoPre
         binding.appBar.toolbar.setNavigationIcon(null);
         binding.appBar.toolbar.setTitle("");
 
+        perfil = getPerfil();
+        timeinit = System.currentTimeMillis();
         if(menuListener == null) {
             ((AppCompatActivity) getActivity()).setSupportActionBar(binding.appBar.toolbar);//en main, tiene tootlbar propia
         }
@@ -109,6 +124,14 @@ public class CatalogoPremiosFragment extends BaseFragment implements CatalogoPre
 
 
 
+    }
+
+    public Profile getPerfil(){
+        String jsonPerfil = mPreferences.getJSON_TypePerfil(getActivity());
+        if(jsonPerfil!=null)
+            return new Gson().fromJson(jsonPerfil, Profile.class);
+
+        return null;
     }
 
     @Override
@@ -181,6 +204,22 @@ public class CatalogoPremiosFragment extends BaseFragment implements CatalogoPre
             }
         });
     }
+    @Override
+    public void onDestroy(){
+
+        if(perfil!=null){
+            timeend = System.currentTimeMillis();
+            long finaltime= timeend-timeinit;
+            int timesec = (int)finaltime/1000;
+
+            RequiredVisit req = new RequiredVisit(perfil.getValor(),Integer.toString(timesec),"catalogo");
+            System.out.println("Se destruyo bandeja"+Long.toString(finaltime) + " para "+perfil.getValor());
+            new Http(getActivity()).Visit(req);
+        }
+
+        super.onDestroy();
+    }
+
 
     public void sharedCatalog(){
         List<String> data = new ArrayList<>();

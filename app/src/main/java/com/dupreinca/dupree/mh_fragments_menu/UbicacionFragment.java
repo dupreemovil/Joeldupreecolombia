@@ -1,9 +1,12 @@
 package com.dupreinca.dupree.mh_fragments_menu;
 
-import android.databinding.ViewDataBinding;
+import androidx.databinding.ViewDataBinding;
 import android.os.Bundle;
-import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.Fragment;
+
+import com.dupreinca.dupree.mh_http.Http;
+import com.dupreinca.dupree.mh_required_api.RequiredVisit;
+import com.google.android.material.textfield.TextInputLayout;
+import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,6 +43,13 @@ public class UbicacionFragment extends BaseFragment implements View.OnClickListe
     private Profile perfil;
     private TextInputLayout txtIdUser;
 
+
+    public long timeinit=0;
+    public long timeend=0;
+    public String userid="";
+
+
+
     public UbicacionFragment() {
         // Required empty public constructor
     }
@@ -56,6 +66,11 @@ public class UbicacionFragment extends BaseFragment implements View.OnClickListe
         txtIdUser = view.findViewById(R.id.txtIdUser);
         btnLocation.setOnClickListener(this);
         localizationInit();
+
+        timeinit = System.currentTimeMillis();
+
+        perfil = getPerfil();
+
         return view;
     }
 
@@ -136,6 +151,7 @@ public class UbicacionFragment extends BaseFragment implements View.OnClickListe
 
     private RequeridUbicacion obtenerDatosUsuario() {
         DataUser user = checkPerfil(new Identy(this.perfil.getValor()));
+
         String idUserSend = null;
         if(user!=null){
             this.userName = user.getNombre()+"-"+user.getApellido();
@@ -163,6 +179,25 @@ public class UbicacionFragment extends BaseFragment implements View.OnClickListe
                 idUserSend
         );
 
+    }
+
+
+
+    @Override
+    public void onDestroy(){
+
+        if(perfil!=null){
+            timeend = System.currentTimeMillis();
+            long finaltime= timeend-timeinit;
+            int timesec = (int)finaltime/1000;
+
+            RequiredVisit req = new RequiredVisit(perfil.getValor(),Integer.toString(timesec),"ubicacion");
+            System.out.println("Se destruyo bandeja"+Long.toString(finaltime) + " para "+perfil.getValor());
+
+            new Http(getActivity()).Visit(req);
+        }
+
+        super.onDestroy();
     }
 
     private DataUser checkPerfil(Identy identy){

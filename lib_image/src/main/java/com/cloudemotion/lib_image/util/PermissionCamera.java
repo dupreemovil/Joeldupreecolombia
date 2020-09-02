@@ -10,21 +10,15 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.FileProvider;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.core.content.FileProvider;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.cloudemotion.lib_image.BuildConfig;
 import com.cloudemotion.lib_image.view.dialogs.CropImageImage;
 import com.isseiaoki.simplecropview.CropImageView;
-import com.microblink.MicroblinkSDK;
-import com.microblink.entities.recognizers.RecognizerBundle;
-import com.microblink.entities.recognizers.blinkbarcode.barcode.BarcodeRecognizer;
-import com.microblink.intent.IntentDataTransferMode;
-import com.microblink.uisettings.ActivityRunner;
-import com.microblink.uisettings.BarcodeUISettings;
 
 import java.io.File;
 import java.util.List;

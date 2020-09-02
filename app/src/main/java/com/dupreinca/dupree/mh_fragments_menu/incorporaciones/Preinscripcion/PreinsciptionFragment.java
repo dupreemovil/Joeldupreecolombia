@@ -1,13 +1,9 @@
 package com.dupreinca.dupree.mh_fragments_menu.incorporaciones.Preinscripcion;
 
 
-import android.Manifest;
-import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.databinding.ViewDataBinding;
+
+import androidx.databinding.ViewDataBinding;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -16,12 +12,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.FileProvider;
-import android.telephony.TelephonyManager;
+import androidx.annotation.NonNull;
+
+import androidx.fragment.app.Fragment;
+import androidx.core.content.FileProvider;
+
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;

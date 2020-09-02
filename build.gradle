@@ -2,13 +2,15 @@
 
 buildscript {
     repositories {
-        google()
         jcenter()
+        google()
+        mavenCentral()
+
 
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:4.0.0'
-        classpath 'com.google.gms:google-services:3.2.0'
+        classpath 'com.google.gms:google-services:4.0.0'
         classpath "io.realm:realm-gradle-plugin:2.2.1"
     }
 }
@@ -19,14 +21,14 @@ ext {
     minSdkVersion = 19
     minSdkVersion_modern = 21
     minSdkVersion_legacy = 15
-    buildToolsVersion = "28.0.3"
+    buildToolsVersion = "29.0.1"
     //buildToolsVersion = "30.0.0 rc4"
 
 
-    androidSupportVersion = '28.0.0'
+    androidSupportVersion = '29.0.0'
 //    firebaseSupportVersion = '9.6.1'
     firebaseSupportVersion = '11.0.4'
-    googleVersion = '11.0.4'
+    googleVersion = '17.0.0'
 }
 
 allprojects {

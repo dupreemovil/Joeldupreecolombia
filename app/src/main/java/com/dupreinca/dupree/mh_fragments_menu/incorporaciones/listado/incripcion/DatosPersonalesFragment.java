@@ -2,7 +2,7 @@ package com.dupreinca.dupree.mh_fragments_menu.incorporaciones.listado.incripcio
 
 import android.content.Context;
 import android.content.Intent;
-import android.databinding.ViewDataBinding;
+import androidx.databinding.ViewDataBinding;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -11,9 +11,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.FileProvider;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.core.content.FileProvider;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -42,7 +42,6 @@ import com.dupreinca.dupree.mh_utilities.Validate;
 import com.dupreinca.dupree.view.activity.BaseActivityListener;
 import com.dupreinca.dupree.view.fragment.BaseFragment;
 import com.google.gson.Gson;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.io.File;

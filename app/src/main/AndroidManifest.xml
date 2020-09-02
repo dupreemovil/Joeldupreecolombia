@@ -17,6 +17,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.media.action.IMAGE_CAPTURE"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <uses-feature android:name="android.hardware.camera.autofocus" />
     <uses-feature
@@ -31,20 +32,66 @@
         android:roundIcon="@mipmap/ic_launcher_dupree"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".mh_bar_scann.ScanBarcodeActivity"></activity>
+
+
+
+        <!--INDIGITAL-->
+
+        <!-- Para que cuando el usuario pulse una push, se guarde la métrica -->
+        <service android:name="com.indigitall.android.services.StatisticService"/>
+
+        <!-- Sincronización diaria de los datos del dispositivo -->
+        <service android:name="com.indigitall.android.services.NightService"/>
+
+        <!-- Para iniciar los servicios cuando reinicias el dispositivo -->
+        <receiver android:name="com.indigitall.android.receivers.BootReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <!-- OPCIONALES -->
+
+        <!-- Para que cuando el usuario pulse un mensaje InApp, se guarde la métrica.
+        Solo es necesario si usas la funcionalidad de mensajes InApp -->
+        <service android:name="com.indigitall.android.inapp.services.StatisticInAppService" />
+
         <!-- FIREBASE -->
+
+
+
+
+
+
+
+        <!-- Para obtener la localización del dispositivo.
+        Solo es necesario si vas a pedir permiso de localización
+        para segmentar las pushes por la ubicación del dispositivo -->
+        <receiver android:name="com.indigitall.android.receivers.LocationReceiver">
+            <intent-filter>
+                <action android:name="LocationReceiver.Action.LOCATION_UPDATE" />
+            </intent-filter>
+        </receiver>
+
+
+
+
+
+
+
         <service android:name=".mh_firebase.MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
 
-
         <service android:name=".mh_firebase.MyFirebaseInstanceIDService">
             <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+
+
         <!--
         provider
             android:name="android.support.v4.content.FileProvider"
@@ -59,7 +106,7 @@
         -->
 
         <provider
-            android:name="android.support.v4.content.FileProvider"
+            android:name="androidx.core.content.FileProvider"
             android:authorities="com.cloudemotion.lib_image.provider"
             android:exported="false"
             android:grantUriPermissions="true"
@@ -79,7 +126,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_image_paths" />
         </provider>-->
-
+        <activity android:name=".mh_bar_scann.ScanBarcodeActivity"></activity>
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation"

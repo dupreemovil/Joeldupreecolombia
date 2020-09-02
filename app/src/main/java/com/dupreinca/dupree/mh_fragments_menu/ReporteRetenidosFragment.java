@@ -4,12 +4,12 @@ package com.dupreinca.dupree.mh_fragments_menu;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
-import android.databinding.ViewDataBinding;
+import androidx.databinding.ViewDataBinding;
 import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.SearchView;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import 	androidx.recyclerview.widget.GridLayoutManager;
+import androidx.appcompat.widget.SearchView;
 import android.text.InputType;
 import android.util.Log;
 import android.view.Menu;
@@ -21,6 +21,7 @@ import com.dupreeinca.lib_api_rest.controller.ReportesController;
 import com.dupreeinca.lib_api_rest.model.base.TTError;
 import com.dupreeinca.lib_api_rest.model.base.TTResultListener;
 import com.dupreeinca.lib_api_rest.model.dto.response.RetenidosDTO;
+import com.dupreeinca.lib_api_rest.model.view.Profile;
 import com.dupreinca.dupree.R;
 import com.dupreinca.dupree.databinding.FragmentReporteRetenidosBinding;
 import com.dupreinca.dupree.mh_holders.RetenidosHolder;
@@ -28,7 +29,11 @@ import com.dupreeinca.lib_api_rest.model.dto.response.ItemRetenido;
 import com.dupreinca.dupree.mh_adapters.RetenidosListAdapter;
 import com.dupreinca.dupree.mh_dialogs.SimpleDialog;
 import com.dupreeinca.lib_api_rest.model.dto.request.Identy;
+import com.dupreinca.dupree.mh_http.Http;
+import com.dupreinca.dupree.mh_required_api.RequiredVisit;
+import com.dupreinca.dupree.mh_utilities.mPreferences;
 import com.dupreinca.dupree.view.fragment.BaseFragment;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,6 +56,13 @@ public class ReporteRetenidosFragment extends BaseFragment implements RetenidosH
     private List<ItemRetenido> list, listFilter;//, listSelected;
     private RetenidosListAdapter listAdapter;
 
+    private String userName;
+    public long timeinit=0;
+    public long timeend=0;
+    public String userid="";
+
+    private Profile perfil;
+
     String phone;
     public ReporteRetenidosFragment() {
         // Required empty public constructor
@@ -71,6 +83,8 @@ public class ReporteRetenidosFragment extends BaseFragment implements RetenidosH
         list = new ArrayList<>();
         listFilter = new ArrayList<>();
 
+        perfil = getPerfil();
+        timeinit = System.currentTimeMillis();
         //listRetenidos = getRetenidos();
         listFilter.addAll(list);
         listAdapter = new RetenidosListAdapter(list, listFilter, this);
@@ -148,6 +162,31 @@ public class ReporteRetenidosFragment extends BaseFragment implements RetenidosH
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
     }
 
+    public Profile getPerfil(){
+        String jsonPerfil = mPreferences.getJSON_TypePerfil(getActivity());
+        if(jsonPerfil!=null)
+            return new Gson().fromJson(jsonPerfil, Profile.class);
+
+        return null;
+    }
+
+    @Override
+    public void onDestroy(){
+
+        if(perfil!=null){
+            timeend = System.currentTimeMillis();
+            long finaltime= timeend-timeinit;
+            int timesec = (int)finaltime/1000;
+
+            RequiredVisit req = new RequiredVisit(perfil.getValor(),Integer.toString(timesec),"reporteret");
+            System.out.println("Se destruyo bandeja"+Long.toString(finaltime) + " para "+perfil.getValor());
+
+            new Http(getActivity()).Visit(req);
+        }
+
+        super.onDestroy();
+    }
+
 
     private void makeCall(){
         Intent intent = new Intent(Intent.ACTION_CALL);
@@ -166,6 +205,8 @@ public class ReporteRetenidosFragment extends BaseFragment implements RetenidosH
         }
     }
 
+
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_search, menu);
@@ -173,7 +214,7 @@ public class ReporteRetenidosFragment extends BaseFragment implements RetenidosH
         SearchView searchView = (SearchView) searchItem.getActionView();
         searchView.setQueryHint(getString(R.string.cedula_asesora));
 
-        EditText txtSearch = searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+        EditText txtSearch = searchView.findViewById(R.id.search_src_text);
         txtSearch.setInputType(InputType.TYPE_CLASS_NUMBER);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {

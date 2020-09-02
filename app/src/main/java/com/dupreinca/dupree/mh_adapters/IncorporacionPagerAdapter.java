@@ -1,8 +1,11 @@
 package com.dupreinca.dupree.mh_adapters;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentStatePagerAdapter;
 
 import com.dupreeinca.lib_api_rest.model.dto.request.PosiblesNuevas;
 import com.dupreinca.dupree.mh_fragments_menu.incorporaciones.Preinscripcion.PreinsciptionFragment;

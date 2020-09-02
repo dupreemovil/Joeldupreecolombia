@@ -1,30 +1,40 @@
 package com.dupreinca.dupree.mh_fragments_menu;
 
 import android.content.Intent;
-import android.databinding.ViewDataBinding;
-import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.SimpleItemAnimator;
+import androidx.databinding.ViewDataBinding;
+import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.SimpleItemAnimator;
 import android.util.Log;
 import android.view.View;
 
+import com.dupreeinca.lib_api_rest.controller.UserController;
 import com.dupreeinca.lib_api_rest.controller.MensajesController;
 import com.dupreeinca.lib_api_rest.model.base.TTError;
 import com.dupreeinca.lib_api_rest.model.base.TTResultListener;
+import com.dupreeinca.lib_api_rest.model.dto.request.Identy;
+import com.dupreeinca.lib_api_rest.model.dto.response.DataUser;
 import com.dupreeinca.lib_api_rest.model.dto.response.GenericDTO;
 import com.dupreeinca.lib_api_rest.model.dto.response.ItemBandeja;
+import com.dupreeinca.lib_api_rest.model.dto.response.PerfilDTO;
+import com.dupreeinca.lib_api_rest.model.view.Profile;
 import com.dupreinca.dupree.MenuActivity;
 import com.dupreinca.dupree.R;
 import com.dupreinca.dupree.databinding.LayoutRecyclerFabBinding;
 import com.dupreinca.dupree.mh_adapters.MensajesListAdapter;
 import com.dupreinca.dupree.mh_dialogs.SimpleDialog;
 import com.dupreinca.dupree.mh_holders.MensajesHolder;
+import com.dupreinca.dupree.mh_http.Http;
 import com.dupreinca.dupree.mh_local_data.Data;
 import com.dupreeinca.lib_api_rest.model.dto.request.IdMessages;
 import com.dupreeinca.lib_api_rest.model.dto.response.BandejaDTO;
+import com.dupreinca.dupree.mh_required_api.RequiredAuth;
+import com.dupreinca.dupree.mh_required_api.RequiredVisit;
 import com.dupreinca.dupree.mh_utilities.ImageZoomActivity_Scroll;
+import com.dupreinca.dupree.mh_utilities.mPreferences;
 import com.dupreinca.dupree.view.fragment.BaseFragment;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +47,13 @@ public class BandejaEntradaFragment extends BaseFragment implements MensajesHold
     private LayoutRecyclerFabBinding binding;
     private MensajesController mensajesController;
     private MensajesListAdapter listAdapter;
+    private UserController userController;
+    private String userName;
+    public long timeinit=0;
+    public long timeend=0;
+    public String userid="";
+
+    private Profile perfil;
 
     public BandejaEntradaFragment() {
         // Required empty public constructor
@@ -50,6 +67,11 @@ public class BandejaEntradaFragment extends BaseFragment implements MensajesHold
     @Override
     protected void initViews(ViewDataBinding view) {
         binding = (LayoutRecyclerFabBinding) view;
+
+        timeinit = System.currentTimeMillis();
+
+        perfil = getPerfil();
+        timeinit = System.currentTimeMillis();
 
         binding.recycler.recycler.setHasFixedSize(true);
         //QUITA ANIMACIONES AL ACTUALIZAR VISTA.... POR TSNTO NO SE VE PARPADEO AL ACTUALIZAR PROGRESSBAR
@@ -81,6 +103,49 @@ public class BandejaEntradaFragment extends BaseFragment implements MensajesHold
         mensajesController = new MensajesController(getContext());
 
         obtainFilesFolder();
+    }
+
+    private DataUser checkPerfil(Identy identy){
+        String jsonPerfil = mPreferences.getJSON_PerfilUser(getActivity());
+        DataUser perfilUser = null;
+
+        if(jsonPerfil!=null){
+            perfilUser = new Gson().fromJson(jsonPerfil, DataUser.class);
+            if(perfilUser!=null) {
+                return perfilUser;
+            }
+        } else {
+            getDataUser(identy);
+        }
+        return perfilUser;
+    }
+
+    private void getDataUser(Identy data){
+        showProgress();
+        userController.getPerfilUser(data,new TTResultListener<PerfilDTO>() {
+            @Override
+            public void success(PerfilDTO result) {
+                dismissProgress();
+                setData(result.getPerfilList().get(0));
+            }
+
+            @Override
+            public void error(TTError error) {
+                dismissProgress();
+                checkSession(error);
+            }
+        });
+    }
+    public Profile getPerfil(){
+        String jsonPerfil = mPreferences.getJSON_TypePerfil(getActivity());
+        if(jsonPerfil!=null)
+            return new Gson().fromJson(jsonPerfil, Profile.class);
+
+        return null;
+    }
+
+    private void setData(DataUser dataUser){
+        this.userName = dataUser.getNombre()+"-"+dataUser.getApellido();
     }
 
     @Override
@@ -117,6 +182,23 @@ public class BandejaEntradaFragment extends BaseFragment implements MensajesHold
             array_images[0] = Data.msg.get(row).getImagen();
             gotoZoomImage_Scroll(array_images);
         }
+    }
+
+
+    @Override
+    public void onDestroy(){
+
+        if(perfil!=null){
+            timeend = System.currentTimeMillis();
+            long finaltime= timeend-timeinit;
+            int timesec = (int)finaltime/1000;
+
+            RequiredVisit req = new RequiredVisit(perfil.getValor(),Integer.toString(timesec),"bandeja");
+            System.out.println("Se destruyo bandeja"+Long.toString(finaltime) + " para "+perfil.getValor());
+            new Http(getActivity()).Visit(req);
+        }
+
+        super.onDestroy();
     }
 
     private void gotoZoomImage_Scroll(String[] images_array){

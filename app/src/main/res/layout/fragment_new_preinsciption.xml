@@ -71,7 +71,7 @@
                     android:weightSum="1">
 
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.8">
@@ -84,7 +84,7 @@
                             android:focusableInTouchMode="false"
                             android:hint="@string/tipo_de_documento" />
 
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
                     <ImageButton
                         android:id="@+id/bt_Camera"
@@ -108,7 +108,7 @@
                     android:orientation="horizontal"
                     android:weightSum="1">
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/txtInputRiesgo"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -125,7 +125,7 @@
                             android:hint="@string/cedula"
                             android:inputType="number"
                             android:text="" />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
                     <ImageButton
                         android:id="@+id/imgB_Searchref"
@@ -152,7 +152,7 @@
                 </LinearLayout>
 
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -166,9 +166,9 @@
                         android:layout_marginTop="8dp"
                         android:digits="@string/only_letter_basic"
                         android:hint="@string/nombre_s" />
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -182,7 +182,7 @@
                         android:layout_marginTop="8dp"
                         android:digits="@string/only_letter_basic"
                         android:hint="@string/apellido_s" />
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
 
                 <LinearLayout

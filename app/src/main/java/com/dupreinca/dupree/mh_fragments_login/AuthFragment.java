@@ -3,8 +3,8 @@ package com.dupreinca.dupree.mh_fragments_login;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.LocalBroadcastManager;
+import androidx.fragment.app.Fragment;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +21,7 @@ import com.dupreinca.dupree.mh_required_api.RequiredAuth;
 import com.dupreinca.dupree.mh_utilities.Validate;
 import com.dupreinca.dupree.mh_utilities.mPreferences;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.installations.FirebaseInstallations;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -101,13 +102,17 @@ public class AuthFragment extends Fragment {
 
     private void httpAuth(){
         tokenDevice = mPreferences.getTokenFirebase(getActivity());
+
+        String fid = FirebaseInstallations.getInstance().getId().getResult().toString();
         if(tokenDevice==null) {//si no se ha generado un token nuevo
             tokenDevice = FirebaseInstanceId.getInstance().getToken();//se  obtiene el anterior
             Log.e("last tokenDevice","> "+tokenDevice);
         } else {
             Log.e("obtained tokenDevice","> "+tokenDevice);
         }
-        new Http(getActivity()).Auth(new RequiredAuth(txtUsername.getText().toString(), txtPwd.getText().toString(), tokenDevice));
+
+        System.out.println("El fid es "+fid);
+        new Http(getActivity()).Auth(new RequiredAuth(txtUsername.getText().toString(), txtPwd.getText().toString(), tokenDevice,fid));
     }
 
     private void publishResult(String object){

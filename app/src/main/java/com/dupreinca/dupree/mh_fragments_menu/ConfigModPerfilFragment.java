@@ -1,8 +1,8 @@
 package com.dupreinca.dupree.mh_fragments_menu;
 
 
-import android.databinding.ViewDataBinding;
-import android.support.v4.app.Fragment;
+import androidx.databinding.ViewDataBinding;
+import androidx.fragment.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;

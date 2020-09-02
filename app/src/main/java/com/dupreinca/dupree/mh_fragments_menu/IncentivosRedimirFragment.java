@@ -2,17 +2,19 @@ package com.dupreinca.dupree.mh_fragments_menu;
 
 
 import android.content.Intent;
-import android.databinding.ViewDataBinding;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
+import androidx.databinding.ViewDataBinding;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import android.util.Log;
 import android.view.View;
 
 import com.dupreeinca.lib_api_rest.controller.PedidosController;
+import com.dupreeinca.lib_api_rest.controller.UserController;
 import com.dupreeinca.lib_api_rest.model.base.TTError;
 import com.dupreeinca.lib_api_rest.model.base.TTResultListener;
 import com.dupreeinca.lib_api_rest.model.dto.response.GenericDTO;
 import com.dupreeinca.lib_api_rest.model.dto.response.RedimirDTO;
+import com.dupreeinca.lib_api_rest.model.view.Profile;
 import com.dupreinca.dupree.ImageZoomActivity;
 import com.dupreinca.dupree.MenuActivity;
 import com.dupreinca.dupree.R;
@@ -24,7 +26,11 @@ import com.dupreeinca.lib_api_rest.model.dto.response.ListPremios;
 import com.dupreeinca.lib_api_rest.model.dto.response.ItemPremios;
 import com.dupreeinca.lib_api_rest.model.dto.request.RedimirPremios;
 import com.dupreeinca.lib_api_rest.model.dto.request.SendPremios;
+import com.dupreinca.dupree.mh_http.Http;
+import com.dupreinca.dupree.mh_required_api.RequiredVisit;
+import com.dupreinca.dupree.mh_utilities.mPreferences;
 import com.dupreinca.dupree.view.fragment.BaseFragment;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,10 +52,21 @@ public class IncentivosRedimirFragment extends BaseFragment implements RedimirHo
     private List<ItemPremios> list, listFilter;
     private RedimirListAdapter adapter_redimir;
 
+    private UserController userController;
+    private String userName;
+    public long timeinit=0;
+    public long timeend=0;
+    public String userid="";
+
+    private Profile perfil;
+
+
     private int oldPuntos=0;
     public IncentivosRedimirFragment() {
         // Required empty public constructor
     }
+
+
 
     ListPremios resultPremios;
     List<SendPremios> sendPremiosList;
@@ -72,6 +89,8 @@ public class IncentivosRedimirFragment extends BaseFragment implements RedimirHo
         adapter_redimir = new RedimirListAdapter(list, listFilter, this);
         binding.recycler.setAdapter(adapter_redimir);
 
+        perfil = getPerfil();
+        timeinit = System.currentTimeMillis();
         binding.tvTotalPuntos.setText("");
         binding.btnRedimir.setOnClickListener(mListenerClick);
 
@@ -194,6 +213,32 @@ public class IncentivosRedimirFragment extends BaseFragment implements RedimirHo
             }
         });
         simpleDialog.show(getActivity().getSupportFragmentManager(),"mDialog");
+    }
+
+
+    public Profile getPerfil(){
+        String jsonPerfil = mPreferences.getJSON_TypePerfil(getActivity());
+        if(jsonPerfil!=null)
+            return new Gson().fromJson(jsonPerfil, Profile.class);
+
+        return null;
+    }
+
+    @Override
+    public void onDestroy(){
+
+        if(perfil!=null){
+            timeend = System.currentTimeMillis();
+            long finaltime= timeend-timeinit;
+            int timesec = (int)finaltime/1000;
+
+            RequiredVisit req = new RequiredVisit(perfil.getValor(),Integer.toString(timesec),"incentivosred");
+            System.out.println("Se destruyo bandeja"+Long.toString(finaltime) + " para "+perfil.getValor());
+
+            new Http(getActivity()).Visit(req);
+        }
+
+        super.onDestroy();
     }
 
 

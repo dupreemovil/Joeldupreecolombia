@@ -2,14 +2,18 @@ package com.dupreinca.dupree.mh_fragments_menu.pedidos;
 
 import android.content.Context;
 import android.content.Intent;
-import android.databinding.ViewDataBinding;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.SearchView;
+import androidx.databinding.ViewDataBinding;
+
+import com.dupreinca.dupree.mh_http.Http;
+import com.dupreinca.dupree.mh_required_api.RequiredVisit;
+import com.dupreinca.dupree.mh_utilities.mPreferences;
+import 	com.google.android.material.tabs.TabLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.appcompat.widget.SearchView;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
@@ -86,6 +90,11 @@ public class HacerPedidoFragment extends TabManagerFragment implements BasePedid
     //FILTRO CONTROL
 
     private Profile perfil;
+    private String userName;
+    public long timeinit=0;
+    public long timeend=0;
+    public String userid="";
+
     public void loadData(Profile perfil){
         this.perfil=perfil;
     }
@@ -140,6 +149,9 @@ public class HacerPedidoFragment extends TabManagerFragment implements BasePedid
         binding = (FragmentPedidosHacerBinding) view;
         Log.e(TAG, "initViews()");
 
+        timeinit = System.currentTimeMillis();
+
+
         pedidosPagerAdapter = new PedidosPagerAdapter(getChildFragmentManager());
         binding.pagerView.addOnPageChangeListener(mOnPageChangeListener);
         binding.pagerView.setOffscreenPageLimit(3);
@@ -174,6 +186,7 @@ public class HacerPedidoFragment extends TabManagerFragment implements BasePedid
         binding.rcvFilterPedido.setLayoutManager(new GridLayoutManager(getActivity(), 1));
         binding.rcvFilterPedido.setHasFixedSize(true);
 
+        timeinit = System.currentTimeMillis();
         //listPremios = new ArrayList<>();
         listFilter = new ArrayList<>();
         adapter_catalogo = new CatalogoListAdapter(listFilter, this);
@@ -204,7 +217,7 @@ public class HacerPedidoFragment extends TabManagerFragment implements BasePedid
         searchView = (SearchView) searchItem.getActionView();
         searchView.setQueryHint(getString(R.string.ingresar_codigo));
 
-        EditText txtSearch = searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+        EditText txtSearch = searchView.findViewById(R.id.search_src_text);
         txtSearch.setInputType(InputType.TYPE_CLASS_NUMBER);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -249,6 +262,17 @@ public class HacerPedidoFragment extends TabManagerFragment implements BasePedid
         Log.e(TAG, "searchQuery() -> query: " + query);
 
     }
+
+
+    public Profile getPerfil(){
+        String jsonPerfil = mPreferences.getJSON_TypePerfil(getActivity());
+        if(jsonPerfil!=null)
+            return new Gson().fromJson(jsonPerfil, Profile.class);
+
+        return null;
+    }
+
+
 
     //MARK CatalogoHolder.Events
     @Override
@@ -811,7 +835,20 @@ public class HacerPedidoFragment extends TabManagerFragment implements BasePedid
 
     @Override
     public void onDestroy() {
+
+        if(perfil!=null){
+            timeend = System.currentTimeMillis();
+            long finaltime= timeend-timeinit;
+            int timesec = (int)finaltime/1000;
+
+            RequiredVisit req = new RequiredVisit(perfil.getValor(),Integer.toString(timesec),"hacerpedidos");
+            System.out.println("Se destruyo bandeja"+Long.toString(finaltime) + " para "+perfil.getValor());
+
+            new Http(getActivity()).Visit(req);
+        }
+
         super.onDestroy();
+
         realm.close();
     }
 

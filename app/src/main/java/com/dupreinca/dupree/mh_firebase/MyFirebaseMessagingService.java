@@ -28,7 +28,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
-import android.support.v4.app.NotificationCompat;
+import androidx.core.app.NotificationCompat;
 import android.util.Log;
 
 import com.dupreinca.dupree.FullscreenActivity;
@@ -69,6 +69,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         // TODO(developer): Handle FCM messages here.
         // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
+
+        System.out.println("Mensaje recibido de "+remoteMessage.getFrom());
+
+        System.out.println("Mensaje Contenido "+remoteMessage.getNotification().getBody());
         Log.d(TAG, "From: " + remoteMessage.getFrom());
 
         // Check if message contains a data payload.
@@ -132,6 +136,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
      * Handle time allotted to BroadcastReceivers.
      */
     private void handleNow() {
+
+        System.out.println("Se inicio firebasemessage");
         Log.d(TAG, "Short lived task is done.");
     }
 

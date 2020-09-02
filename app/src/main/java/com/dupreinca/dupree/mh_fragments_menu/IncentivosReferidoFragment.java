@@ -2,12 +2,12 @@ package com.dupreinca.dupree.mh_fragments_menu;
 
 
 import android.content.Context;
-import android.databinding.ViewDataBinding;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomSheetBehavior;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.SearchView;
+import androidx.databinding.ViewDataBinding;
+import androidx.annotation.NonNull;
+
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.appcompat.widget.SearchView;
 import android.text.InputType;
 import android.util.Log;
 import android.view.Menu;
@@ -29,7 +29,11 @@ import com.dupreeinca.lib_api_rest.model.dto.response.IncentivoRef;
 import com.dupreinca.dupree.mh_adapters.IncentivoRefListAdapter;
 import com.dupreeinca.lib_api_rest.model.dto.response.ListaReferidos;
 import com.dupreeinca.lib_api_rest.model.view.Profile;
+import com.dupreinca.dupree.mh_http.Http;
+import com.dupreinca.dupree.mh_required_api.RequiredVisit;
+import com.dupreinca.dupree.mh_utilities.mPreferences;
 import com.dupreinca.dupree.view.fragment.BaseFragment;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +53,14 @@ public class IncentivosReferidoFragment extends BaseFragment implements Incentiv
     }
 
     private Profile perfil;
+
+    private String userName;
+    public long timeinit=0;
+    public long timeend=0;
+    public String userid="";
+
+
+
     public void loadData(Profile perfil){
         this.perfil=perfil;
     }
@@ -71,6 +83,8 @@ public class IncentivosReferidoFragment extends BaseFragment implements Incentiv
         listFilter = new ArrayList<>();
         //incentivoRefs = getResult();
 
+        perfil = getPerfil();
+        timeinit = System.currentTimeMillis();
         listFilter.addAll(list);
 
         adapter_incentivo_referido = new IncentivoRefListAdapter(list, listFilter, this);
@@ -179,7 +193,7 @@ public class IncentivosReferidoFragment extends BaseFragment implements Incentiv
         SearchView searchView = (SearchView) searchItem.getActionView();
         searchView.setQueryHint(getString(R.string.cedula_asesora));
 
-        EditText txtSearch = searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+        EditText txtSearch = searchView.findViewById(R.id.search_src_text);
         txtSearch.setInputType(InputType.TYPE_CLASS_NUMBER);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -210,6 +224,32 @@ public class IncentivosReferidoFragment extends BaseFragment implements Incentiv
 
     public void searchViewTextChange(String newText) {
 
+    }
+
+
+    public Profile getPerfil(){
+        String jsonPerfil = mPreferences.getJSON_TypePerfil(getActivity());
+        if(jsonPerfil!=null)
+            return new Gson().fromJson(jsonPerfil, Profile.class);
+
+        return null;
+    }
+
+    @Override
+    public void onDestroy(){
+
+        if(perfil!=null){
+            timeend = System.currentTimeMillis();
+            long finaltime= timeend-timeinit;
+            int timesec = (int)finaltime/1000;
+
+            RequiredVisit req = new RequiredVisit(perfil.getValor(),Integer.toString(timesec),"incentivosref");
+            System.out.println("Se destruyo bandeja"+Long.toString(finaltime) + " para "+perfil.getValor());
+
+            new Http(getActivity()).Visit(req);
+        }
+
+        super.onDestroy();
     }
 
     @Override
