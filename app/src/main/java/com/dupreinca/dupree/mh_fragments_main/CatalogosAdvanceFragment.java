@@ -137,7 +137,7 @@ public class CatalogosAdvanceFragment extends BaseFragment {
             long finaltime= timeend-timeinit;
             int timesec = (int)finaltime/1000;
 
-            RequiredVisit req = new RequiredVisit(perfil.getValor(),Integer.toString(timesec),"contacto");
+            RequiredVisit req = new RequiredVisit(perfil.getValor(),Integer.toString(timesec),"catalogosadv");
             //   System.out.println("Se destruyo bandeja"+Long.toString(finaltime) + " para "+perfil.getValor());
 
             new Http(getActivity()).Visit(req);
@@ -148,7 +148,7 @@ public class CatalogosAdvanceFragment extends BaseFragment {
             long finaltime= timeend-timeinit;
             int timesec = (int)finaltime/1000;
 
-            RequiredVisit req = new RequiredVisit("",Integer.toString(timesec),"contacto");
+            RequiredVisit req = new RequiredVisit("",Integer.toString(timesec),"catalogosadv");
             //   System.out.println("Se destruyo bandeja"+Long.toString(finaltime) + " para "+perfil.getValor());
 
             new Http(getActivity()).Visit(req);

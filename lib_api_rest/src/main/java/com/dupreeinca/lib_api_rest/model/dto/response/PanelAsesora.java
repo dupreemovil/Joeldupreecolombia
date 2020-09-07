@@ -19,6 +19,10 @@ public class PanelAsesora {
     private List<Faltante> faltantes;
     private String campana;
 
+
+
+    private String activa_encuesta;
+
     public String getNombre_asesora() {
         return nombre_asesora;
     }
@@ -50,4 +54,13 @@ public class PanelAsesora {
     public String getCantidad_mensajes() {
         return cantidad_mensajes;
     }
+
+    public String getActiva_encuesta() {
+        return activa_encuesta;
+    }
+
+    public void setActiva_encuesta(String activa_encuesta) {
+        this.activa_encuesta = activa_encuesta;
+    }
+
 }

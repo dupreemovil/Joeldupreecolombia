@@ -23,7 +23,11 @@ import com.dupreinca.dupree.mh_dialogs.ListString;
 import com.dupreinca.dupree.mh_dialogs.SingleListDialog;
 import com.dupreinca.dupree.mh_fragments_menu.incorporaciones.Incorp_Nuevas_Fragment;
 import com.dupreinca.dupree.mh_holders.ListNuevasHolder;
+import com.dupreinca.dupree.mh_http.Http;
+import com.dupreinca.dupree.mh_required_api.RequiredVisit;
+import com.dupreinca.dupree.mh_utilities.mPreferences;
 import com.dupreinca.dupree.view.fragment.BaseFragment;
+import com.google.gson.Gson;
 
 import java.util.Arrays;
 import java.util.List;
@@ -43,6 +47,11 @@ public class PosiblesAsesorasFragment extends BaseFragment  implements ListNueva
     private List<ModelList> listTipoDoc;
     private LoadJsonFile jsonFile;
     private Profile perfil;
+
+    public long timeinit=0;
+    public long timeend=0;
+    public String userid="";
+
 
     public void loadData(Profile perfil){
         this.perfil=perfil;
@@ -70,6 +79,11 @@ public class PosiblesAsesorasFragment extends BaseFragment  implements ListNueva
         binding = (FragmentPosiblesAsesorasBinding) view;
         realm = Realm.getDefaultInstance();
         configView(binding);
+
+        timeinit = System.currentTimeMillis();
+        perfil = getPerfil();
+
+
     }
 
     private void configView(FragmentPosiblesAsesorasBinding binding){
@@ -174,4 +188,49 @@ public class PosiblesAsesorasFragment extends BaseFragment  implements ListNueva
     public void onDeleteRegistroId(int id) {
 
     }
+
+    public Profile getPerfil(){
+        String jsonPerfil = mPreferences.getJSON_TypePerfil(getActivity());
+        if(jsonPerfil!=null)
+            return new Gson().fromJson(jsonPerfil, Profile.class);
+
+        return null;
+    }
+
+    @Override
+    public void onDestroy() {
+
+        Log.i(TAG,"onDestroy()");
+
+        if(perfil!=null){
+
+            timeend = System.currentTimeMillis();
+            long finaltime= timeend-timeinit;
+            int timesec = (int)finaltime/1000;
+
+            RequiredVisit req = new RequiredVisit(perfil.getValor(),Integer.toString(timesec),"posiblesas");
+            //   System.out.println("Se destruyo bandeja"+Long.toString(finaltime) + " para "+perfil.getValor());
+
+            new Http(getActivity()).Visit(req);
+
+
+        }
+        else{
+            timeend = System.currentTimeMillis();
+            long finaltime= timeend-timeinit;
+            int timesec = (int)finaltime/1000;
+
+            RequiredVisit req = new RequiredVisit("",Integer.toString(timesec),"posiblesas");
+            //   System.out.println("Se destruyo bandeja"+Long.toString(finaltime) + " para "+perfil.getValor());
+
+            new Http(getActivity()).Visit(req);
+
+
+        }
+
+
+        super.onDestroy();
+    }
+
+
 }

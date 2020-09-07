@@ -12,6 +12,7 @@ import com.dupreeinca.lib_api_rest.model.dto.response.GenericDTO;
 import com.dupreeinca.lib_api_rest.model.dto.response.HistorialDTO;
 import com.dupreeinca.lib_api_rest.model.dto.response.ListCDR;
 import com.dupreeinca.lib_api_rest.model.dto.response.ListCupoSaldoConf;
+import com.dupreeinca.lib_api_rest.model.dto.response.ListEncuesta;
 import com.dupreeinca.lib_api_rest.model.dto.response.ListFactura;
 import com.dupreeinca.lib_api_rest.model.dto.response.ListPQR;
 import com.dupreeinca.lib_api_rest.model.dto.response.ListPagosRealizados;
@@ -177,6 +178,25 @@ public class ReportesDAO extends TTGenericDAO {
         },getRetrofit()));
     }
 
+    public void getEncuesta(String token,final TTResultListener<ListEncuesta> listener){
+        Rest userREST = getRetrofit().create(Rest.class);
+
+        Call<ListEncuesta> call = userREST.getEncuesta(new Gson().toJson(token));
+        call.enqueue(new TTCallback<ListEncuesta>(new TTResultListener<ListEncuesta>() {
+            @Override
+            public void success(ListEncuesta result) {
+                listener.success(result);
+            }
+
+            @Override
+            public void error(TTError error) {
+                listener.error(error);
+            }
+        },getRetrofit()));
+    }
+
+
+
     public void getPuntosAsesora(Identy data, final TTResultListener<PuntosAsesoraDTO> listener){
         Rest userREST = getRetrofit().create(Rest.class);
         Call<PuntosAsesoraDTO> call = userREST.getPuntosAsesora(new Gson().toJson(data));
@@ -270,6 +290,10 @@ public class ReportesDAO extends TTGenericDAO {
 
         @GET("reportes/panel_nuevo")
         Call<ListPanelGte> getPanelGerente(@Query("filters") String jsonUsuario);
+
+
+        @GET("reportes/consulta_encuesta")
+        Call<ListEncuesta> getEncuesta(@Query("filters") String jsonUsuario);
 
         @FormUrlEncoded
         @POST("reportes/factura")

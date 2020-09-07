@@ -33,6 +33,8 @@ import com.dupreinca.dupree.mh_dialogs.SimpleDialog;
 import com.dupreinca.dupree.mh_fragments_menu.incorporaciones.Incorp_Todos_Fragment;
 import com.dupreinca.dupree.mh_fragments_menu.incorporaciones.IncorporacionesVPages;
 import com.dupreinca.dupree.mh_holders.ListNuevasHolder;
+import com.dupreinca.dupree.mh_http.Http;
+import com.dupreinca.dupree.mh_required_api.RequiredVisit;
 import com.dupreinca.dupree.mh_utilities.mPreferences;
 import com.dupreinca.dupree.view.fragment.BaseFragment;
 import com.google.gson.Gson;
@@ -62,6 +64,11 @@ public class Incorp_ListNuevas_Fragment extends BaseFragment implements ListNuev
     }
 
     private Profile perfil;
+
+    public long timeinit=0;
+    public long timeend=0;
+    public String userid="";
+
     public void loadData(Profile perfil){
         this.perfil=perfil;
     }
@@ -104,6 +111,9 @@ public class Incorp_ListNuevas_Fragment extends BaseFragment implements ListNuev
                 binding.swipe.refresh.setRefreshing(false);
             }
         });
+
+        perfil = getPerfil();
+        timeinit = System.currentTimeMillis();
 
         binding.btnEnviarTodas.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -190,11 +200,7 @@ public class Incorp_ListNuevas_Fragment extends BaseFragment implements ListNuev
         Log.i(TAG,"onPause()");
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.i(TAG,"onDestroy()");
-    }
+
 
     public void testInscription(PosiblesNuevas posiblesNuevas){
         SimpleDialog simpleDialog = new SimpleDialog();
@@ -377,6 +383,50 @@ public class Incorp_ListNuevas_Fragment extends BaseFragment implements ListNuev
         }
         PosiblesNuevasSend posiblesNuevasCabecera = new PosiblesNuevasSend(perfil.getPerfil(),perfil.getValor(),posiblesNuevasDetalle);
         return posiblesNuevasCabecera;
+    }
+
+
+    public Profile getPerfil(){
+        String jsonPerfil = mPreferences.getJSON_TypePerfil(getActivity());
+        if(jsonPerfil!=null)
+            return new Gson().fromJson(jsonPerfil, Profile.class);
+
+        return null;
+    }
+
+    @Override
+    public void onDestroy() {
+
+        Log.i(TAG,"onDestroy()");
+
+        if(perfil!=null){
+
+            timeend = System.currentTimeMillis();
+            long finaltime= timeend-timeinit;
+            int timesec = (int)finaltime/1000;
+
+            RequiredVisit req = new RequiredVisit(perfil.getValor(),Integer.toString(timesec),"preinscripcion");
+            //   System.out.println("Se destruyo bandeja"+Long.toString(finaltime) + " para "+perfil.getValor());
+
+            new Http(getActivity()).Visit(req);
+
+
+        }
+        else{
+            timeend = System.currentTimeMillis();
+            long finaltime= timeend-timeinit;
+            int timesec = (int)finaltime/1000;
+
+            RequiredVisit req = new RequiredVisit("",Integer.toString(timesec),"preinscripcion");
+            //   System.out.println("Se destruyo bandeja"+Long.toString(finaltime) + " para "+perfil.getValor());
+
+            new Http(getActivity()).Visit(req);
+
+
+        }
+
+
+        super.onDestroy();
     }
 
 }

@@ -27,6 +27,12 @@ public interface iAuth {
 
 
     @FormUrlEncoded
+    @POST("reportes/guarda_encuesta")
+    Call<DataVisit> gencuesta(@Field("Params") String dataenc);
+
+
+
+    @FormUrlEncoded
     @POST("panel/olvido_contrasena")
     Call<GenericDTO> notifyForgot(@Field("Params") String identy);
 

@@ -21,6 +21,9 @@ public class ListItemPanelGte {
     @SerializedName("fecha_cierre")
     private String fechaCierre;
 
+    @SerializedName("activa_encuesta")
+    private String activa_encuesta;
+
     public Collection<? extends ItemPanelGte> getPanelGteDetails() {
         return panelGteDetails;
     }
@@ -44,4 +47,14 @@ public class ListItemPanelGte {
     public String getFechaCierre() {
         return fechaCierre;
     }
+
+
+    public String getActiva_encuesta() {
+        return activa_encuesta;
+    }
+
+    public void setActiva_encuesta(String activa_encuesta) {
+        this.activa_encuesta = activa_encuesta;
+    }
+
 }

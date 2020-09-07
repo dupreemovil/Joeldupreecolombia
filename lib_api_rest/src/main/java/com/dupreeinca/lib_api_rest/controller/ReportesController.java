@@ -13,6 +13,7 @@ import com.dupreeinca.lib_api_rest.model.dto.response.GenericDTO;
 import com.dupreeinca.lib_api_rest.model.dto.response.HistorialDTO;
 import com.dupreeinca.lib_api_rest.model.dto.response.ListCDR;
 import com.dupreeinca.lib_api_rest.model.dto.response.ListCupoSaldoConf;
+import com.dupreeinca.lib_api_rest.model.dto.response.ListEncuesta;
 import com.dupreeinca.lib_api_rest.model.dto.response.ListFactura;
 import com.dupreeinca.lib_api_rest.model.dto.response.ListItemPanelGte;
 import com.dupreeinca.lib_api_rest.model.dto.response.ListPQR;
@@ -167,6 +168,27 @@ public class ReportesController extends TTGenericController {
         dao.getPanelGrte(token, new TTResultListener<ListPanelGte>() {
             @Override
             public void success(ListPanelGte result) {
+                listener.success(result);
+            }
+
+            @Override
+            public void error(TTError error) {
+                listener.error(error);
+            }
+        });
+    }
+
+
+    public void getEncuesta(final String token, final TTResultListener<ListEncuesta> listener){
+        if(!this.isNetworkingOnline(getContext())){
+            listener.error(TTError.errorFromMessage(context.getResources().getString(R.string.http_datos_no_disponibles)));
+            return;
+        }
+
+        ReportesDAO dao = new ReportesDAO(getContext());
+        dao.getEncuesta(token, new TTResultListener<ListEncuesta>() {
+            @Override
+            public void success(ListEncuesta result) {
                 listener.success(result);
             }
 

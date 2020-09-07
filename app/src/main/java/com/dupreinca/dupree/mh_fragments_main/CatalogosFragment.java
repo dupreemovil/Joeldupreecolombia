@@ -116,6 +116,7 @@ public class CatalogosFragment extends BaseFragment {
         String jsonUrlCatalogos = dataStore.getJSON_UrlCatalodos();
 
 
+        timeinit = System.currentTimeMillis();
 
         binding.appBar.toolbar.setNavigationIcon(null);
         binding.appBar.toolbar.setTitle("");

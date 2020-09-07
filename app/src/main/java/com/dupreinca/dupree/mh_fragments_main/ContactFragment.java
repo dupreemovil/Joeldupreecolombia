@@ -10,10 +10,12 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import com.dupreeinca.lib_api_rest.model.view.Profile;
 import com.dupreinca.dupree.R;
 import com.dupreinca.dupree.mh_http.Http;
 import com.dupreinca.dupree.mh_required_api.RequiredVisit;
 import com.dupreinca.dupree.mh_utilities.mPreferences;
+import com.google.gson.Gson;
 
 
 /**
@@ -30,6 +32,8 @@ public class ContactFragment extends Fragment {
     public long timeend=0;
     public String userid="";
 
+    Profile perfil;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -39,6 +43,8 @@ public class ContactFragment extends Fragment {
         //webView.loadUrl("https://azzorti.bo");
 
         timeinit =System.currentTimeMillis();
+
+        perfil = getPerfil();
 
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setLoadWithOverviewMode(true);
@@ -77,19 +83,45 @@ public class ContactFragment extends Fragment {
         return fragment;
     }
 
+    public Profile getPerfil(){
+        String jsonPerfil = mPreferences.getJSON_TypePerfil(getActivity());
+        if(jsonPerfil!=null)
+            return new Gson().fromJson(jsonPerfil, Profile.class);
+
+        return null;
+    }
+
     @Override
     public void onDestroy() {
 
         Log.i(TAG,"onDestroy()");
 
-        timeend = System.currentTimeMillis();
-        long finaltime= timeend-timeinit;
-        int timesec = (int)finaltime/1000;
+        if(perfil!=null){
 
-        RequiredVisit req = new RequiredVisit("",Integer.toString(timesec),"contacto");
-        //   System.out.println("Se destruyo bandeja"+Long.toString(finaltime) + " para "+perfil.getValor());
+            timeend = System.currentTimeMillis();
+            long finaltime= timeend-timeinit;
+            int timesec = (int)finaltime/1000;
 
-        new Http(getActivity()).Visit(req);
+            RequiredVisit req = new RequiredVisit(perfil.getValor(),Integer.toString(timesec),"quejas");
+            //   System.out.println("Se destruyo bandeja"+Long.toString(finaltime) + " para "+perfil.getValor());
+
+            new Http(getActivity()).Visit(req);
+
+
+        }
+        else{
+            timeend = System.currentTimeMillis();
+            long finaltime= timeend-timeinit;
+            int timesec = (int)finaltime/1000;
+
+            RequiredVisit req = new RequiredVisit("",Integer.toString(timesec),"quejas");
+            //   System.out.println("Se destruyo bandeja"+Long.toString(finaltime) + " para "+perfil.getValor());
+
+            new Http(getActivity()).Visit(req);
+
+
+        }
+
 
         super.onDestroy();
     }

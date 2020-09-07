@@ -87,6 +87,7 @@ public class MainFragment extends Fragment {
         img.displayImage(mPreferences.getImageCatalogo(getActivity()), imgCatalogos);
 
 
+        timeinit = System.currentTimeMillis();
         imgLogin = (ImageView) v.findViewById(R.id.imgLogin);
 
         imgVuelveteAsesora.setOnClickListener(clickListener);

@@ -89,6 +89,7 @@ public class IncentivosRedimirFragment extends BaseFragment implements RedimirHo
         adapter_redimir = new RedimirListAdapter(list, listFilter, this);
         binding.recycler.setAdapter(adapter_redimir);
 
+
         perfil = getPerfil();
         timeinit = System.currentTimeMillis();
         binding.tvTotalPuntos.setText("");

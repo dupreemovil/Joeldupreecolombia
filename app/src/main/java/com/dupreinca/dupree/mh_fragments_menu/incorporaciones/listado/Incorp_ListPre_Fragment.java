@@ -22,6 +22,8 @@ import com.dupreeinca.lib_api_rest.model.dto.response.GenericDTO;
 import com.dupreinca.dupree.mh_fragments_menu.incorporaciones.IncorporacionesVPages;
 import com.dupreinca.dupree.mh_fragments_menu.incorporaciones.listado.incripcion.InscripcionActivity;
 import com.dupreinca.dupree.mh_holders.ListPreHolder;
+import com.dupreinca.dupree.mh_http.Http;
+import com.dupreinca.dupree.mh_required_api.RequiredVisit;
 import com.dupreinca.dupree.model_view.DataAsesora;
 import com.dupreinca.dupree.view.fragment.BaseFragment;
 import com.dupreinca.dupree.R;
@@ -58,7 +60,14 @@ public class Incorp_ListPre_Fragment extends BaseFragment implements ListPreHold
         // Required empty public constructor
     }
 
+
     private Profile perfil;
+
+    public long timeinit=0;
+    public long timeend=0;
+    public String userid="";
+
+
     public void loadData(Profile perfil){
         this.perfil=perfil;
     }
@@ -92,6 +101,9 @@ public class Incorp_ListPre_Fragment extends BaseFragment implements ListPreHold
 
         binding.swipe.recycler.setLayoutManager(new GridLayoutManager(getActivity(),1));
         binding.swipe.recycler.setHasFixedSize(true);
+
+        perfil = getPerfil();
+        timeinit = System.currentTimeMillis();
 
         list = new ArrayList<>();
         adapter_listPre = new PreinscripListAdapter(list, this);
@@ -190,12 +202,48 @@ public class Incorp_ListPre_Fragment extends BaseFragment implements ListPreHold
         Log.i(TAG,"onPause()");
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.i(TAG,"onDestroy()");
+    public Profile getPerfil(){
+        String jsonPerfil = mPreferences.getJSON_TypePerfil(getActivity());
+        if(jsonPerfil!=null)
+            return new Gson().fromJson(jsonPerfil, Profile.class);
+
+        return null;
     }
 
+    @Override
+    public void onDestroy() {
+
+        Log.i(TAG,"onDestroy()");
+
+        if(perfil!=null){
+
+            timeend = System.currentTimeMillis();
+            long finaltime= timeend-timeinit;
+            int timesec = (int)finaltime/1000;
+
+            RequiredVisit req = new RequiredVisit(perfil.getValor(),Integer.toString(timesec),"listpreinscripcion");
+            //   System.out.println("Se destruyo bandeja"+Long.toString(finaltime) + " para "+perfil.getValor());
+
+            new Http(getActivity()).Visit(req);
+
+
+        }
+        else{
+            timeend = System.currentTimeMillis();
+            long finaltime= timeend-timeinit;
+            int timesec = (int)finaltime/1000;
+
+            RequiredVisit req = new RequiredVisit("",Integer.toString(timesec),"listpreinscripcion");
+            //   System.out.println("Se destruyo bandeja"+Long.toString(finaltime) + " para "+perfil.getValor());
+
+            new Http(getActivity()).Visit(req);
+
+
+        }
+
+
+        super.onDestroy();
+    }
     public void testInscription(String to,String estado){
         SimpleDialog simpleDialog = new SimpleDialog();
         simpleDialog.loadData(getString(R.string.inscripcion), getString(R.string.desea_inscribir)+" "+to+"?");

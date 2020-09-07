@@ -136,13 +136,7 @@ public class BandejaEntradaFragment extends BaseFragment implements MensajesHold
             }
         });
     }
-    public Profile getPerfil(){
-        String jsonPerfil = mPreferences.getJSON_TypePerfil(getActivity());
-        if(jsonPerfil!=null)
-            return new Gson().fromJson(jsonPerfil, Profile.class);
 
-        return null;
-    }
 
     private void setData(DataUser dataUser){
         this.userName = dataUser.getNombre()+"-"+dataUser.getApellido();
@@ -182,6 +176,15 @@ public class BandejaEntradaFragment extends BaseFragment implements MensajesHold
             array_images[0] = Data.msg.get(row).getImagen();
             gotoZoomImage_Scroll(array_images);
         }
+    }
+
+
+    public Profile getPerfil(){
+        String jsonPerfil = mPreferences.getJSON_TypePerfil(getActivity());
+        if(jsonPerfil!=null)
+            return new Gson().fromJson(jsonPerfil, Profile.class);
+
+        return null;
     }
 
 

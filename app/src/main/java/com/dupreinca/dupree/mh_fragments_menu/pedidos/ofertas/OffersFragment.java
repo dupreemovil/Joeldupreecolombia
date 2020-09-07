@@ -78,6 +78,7 @@ public class OffersFragment extends BaseFragment implements OfertasHolder.Events
         binding.recycler.setHasFixedSize(true);
 
 
+        timeinit = System.currentTimeMillis();
         perfil = getPerfil();
         //listPremios = new ArrayList<>();
         listFilterOffers = new ArrayList<>();
@@ -131,7 +132,7 @@ public class OffersFragment extends BaseFragment implements OfertasHolder.Events
             long finaltime= timeend-timeinit;
             int timesec = (int)finaltime/1000;
 
-            RequiredVisit req = new RequiredVisit(perfil.getValor(),Integer.toString(timesec),"incentivosred");
+            RequiredVisit req = new RequiredVisit(perfil.getValor(),Integer.toString(timesec),"ofertas");
             System.out.println("Se destruyo bandeja"+Long.toString(finaltime) + " para "+perfil.getValor());
 
             new Http(getActivity()).Visit(req);

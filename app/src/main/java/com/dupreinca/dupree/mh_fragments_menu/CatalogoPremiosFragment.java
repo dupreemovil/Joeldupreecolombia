@@ -205,17 +205,36 @@ public class CatalogoPremiosFragment extends BaseFragment implements CatalogoPre
         });
     }
     @Override
-    public void onDestroy(){
+    public void onDestroy() {
+
+        Log.i(TAG,"onDestroy()");
 
         if(perfil!=null){
+
             timeend = System.currentTimeMillis();
             long finaltime= timeend-timeinit;
             int timesec = (int)finaltime/1000;
 
-            RequiredVisit req = new RequiredVisit(perfil.getValor(),Integer.toString(timesec),"catalogo");
-            System.out.println("Se destruyo bandeja"+Long.toString(finaltime) + " para "+perfil.getValor());
+            RequiredVisit req = new RequiredVisit(perfil.getValor(),Integer.toString(timesec),"catalogoprem");
+            //   System.out.println("Se destruyo bandeja"+Long.toString(finaltime) + " para "+perfil.getValor());
+
             new Http(getActivity()).Visit(req);
+
+
         }
+        else{
+            timeend = System.currentTimeMillis();
+            long finaltime= timeend-timeinit;
+            int timesec = (int)finaltime/1000;
+
+            RequiredVisit req = new RequiredVisit("",Integer.toString(timesec),"catalogoprem");
+            //   System.out.println("Se destruyo bandeja"+Long.toString(finaltime) + " para "+perfil.getValor());
+
+            new Http(getActivity()).Visit(req);
+
+
+        }
+
 
         super.onDestroy();
     }
@@ -538,4 +557,7 @@ public class CatalogoPremiosFragment extends BaseFragment implements CatalogoPre
         Log.e(TAG, "onDetach()");
         setHasOptionsMenu(false);
     }
+
+
+
 }

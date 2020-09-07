@@ -16,7 +16,11 @@ import com.dupreeinca.lib_api_rest.model.view.Profile;
 import com.dupreinca.dupree.R;
 import com.dupreinca.dupree.databinding.FragmentIncorpTodosBinding;
 import com.dupreinca.dupree.mh_adapters.NuevasPagerAdapter;
+import com.dupreinca.dupree.mh_http.Http;
+import com.dupreinca.dupree.mh_required_api.RequiredVisit;
+import com.dupreinca.dupree.mh_utilities.mPreferences;
 import com.dupreinca.dupree.view.fragment.BaseFragment;
+import com.google.gson.Gson;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -31,7 +35,12 @@ public class Incorp_Nuevas_Fragment extends BaseFragment implements Incorporacio
         // Required empty public constructor
     }
 
+
     private Profile perfil;
+
+    public long timeinit=0;
+    public long timeend=0;
+    public String userid="";
     private int initPage;
     public void loadData(int initPage, Profile perfil){
         this.initPage=initPage;
@@ -56,6 +65,9 @@ public class Incorp_Nuevas_Fragment extends BaseFragment implements Incorporacio
         adapterFragIncorp = new NuevasPagerAdapter(getChildFragmentManager(), perfil);
         binding.pagerIncorp.setAdapter(adapterFragIncorp);
         binding.pagerIncorp.addOnPageChangeListener(mOnPageChangeListener);
+
+        timeinit = System.currentTimeMillis();
+        perfil = getPerfil();
 
         binding.tabsIncorp.setupWithViewPager(binding.pagerIncorp);
         createTabIcons();
@@ -130,6 +142,50 @@ public class Incorp_Nuevas_Fragment extends BaseFragment implements Incorporacio
     public void gotoPage(int pos) {
         update=true;
         binding.pagerIncorp.setCurrentItem(pos);
+    }
+
+    public Profile getPerfil(){
+        String jsonPerfil = mPreferences.getJSON_TypePerfil(getActivity());
+        if(jsonPerfil!=null)
+            return new Gson().fromJson(jsonPerfil, Profile.class);
+
+        return null;
+    }
+
+
+    @Override
+    public void onDestroy() {
+
+        Log.i(TAG,"onDestroy()");
+
+        if(perfil!=null){
+
+            timeend = System.currentTimeMillis();
+            long finaltime= timeend-timeinit;
+            int timesec = (int)finaltime/1000;
+
+            RequiredVisit req = new RequiredVisit(perfil.getValor(),Integer.toString(timesec),"listadopos");
+            //   System.out.println("Se destruyo bandeja"+Long.toString(finaltime) + " para "+perfil.getValor());
+
+            new Http(getActivity()).Visit(req);
+
+
+        }
+        else{
+            timeend = System.currentTimeMillis();
+            long finaltime= timeend-timeinit;
+            int timesec = (int)finaltime/1000;
+
+            RequiredVisit req = new RequiredVisit("",Integer.toString(timesec),"listadopos");
+            //   System.out.println("Se destruyo bandeja"+Long.toString(finaltime) + " para "+perfil.getValor());
+
+            new Http(getActivity()).Visit(req);
+
+
+        }
+
+
+        super.onDestroy();
     }
 
 }

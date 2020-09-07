@@ -69,6 +69,7 @@ public class ReporteCDRFragment extends BaseFragment implements CDRHolder.Events
         binding.rcvCDR.setHasFixedSize(true);
 
         timeinit = System.currentTimeMillis();
+        perfil = getPerfil();
         listCDR = new ArrayList<>();
         listFilter = new ArrayList<>();
 

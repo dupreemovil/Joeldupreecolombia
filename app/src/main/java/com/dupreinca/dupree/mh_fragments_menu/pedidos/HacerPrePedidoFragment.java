@@ -743,7 +743,7 @@ public class HacerPrePedidoFragment extends TabManagerFragment implements BasePe
             long finaltime= timeend-timeinit;
             int timesec = (int)finaltime/1000;
 
-            RequiredVisit req = new RequiredVisit(perfil.getValor(),Integer.toString(timesec),"hacerpedidos");
+            RequiredVisit req = new RequiredVisit(perfil.getValor(),Integer.toString(timesec),"hacerduproyecta");
             System.out.println("Se destruyo bandeja"+Long.toString(finaltime) + " para "+perfil.getValor());
 
             new Http(getActivity()).Visit(req);

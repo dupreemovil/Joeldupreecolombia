@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="ENCUESTA"
+        android:layout_margin="10sp"
+        android:textSize="20sp"
+        android:textColor="#000"
+        android:gravity="center"
+        android:textStyle="bold"
+
+        >
+
+    </TextView>
+
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/layoutpreg"
+            android:layout_marginTop="50sp"
+            android:layout_marginBottom="50sp"
+            android:visibility="visible"
+            android:orientation="vertical" >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:layout_margin="20sp"
+                    android:id="@+id/txtpreguntac"
+                    android:textSize="20sp"
+                    android:textColor="#000"
+                    android:lines="2"
+                    android:text="Pregunta......"></TextView>
+
+            </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/layoutcheck"
+            android:visibility="gone"
+            android:orientation="horizontal"
+            >
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/listacheck"
+                >
+
+
+            </androidx.recyclerview.widget.RecyclerView>
+
+        </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/layoutcradio"
+                android:visibility="visible"
+                android:orientation="horizontal"
+                >
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/listaradio"
+                    >
+
+
+                </androidx.recyclerview.widget.RecyclerView>
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/layoutanswer"
+                android:visibility="gone"
+                android:orientation="horizontal"
+                >
+
+               <EditText
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:hint="Ingrese su respuesta"
+                   android:layout_gravity="center"
+                   android:layout_margin="20sp"
+                   android:gravity="center"
+                   android:id="@+id/edtrespuesta"
+                   ></EditText>
+
+
+
+
+            </LinearLayout>
+
+
+
+        </LinearLayout>
+
+
+
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        >
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:id="@+id/btnback"
+            android:text="Atras">
+
+        </Button>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnnext"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/rounded_background_gray"
+            android:layout_marginBottom="5sp"
+            android:text="Continuar">
+
+        </Button>
+
+    </RelativeLayout>
+
+</RelativeLayout>

@@ -1,13 +1,18 @@
 package com.dupreinca.dupree.mh_http;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Environment;
 import 	androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.dupreeinca.lib_api_rest.interceptors.AddCookiesInterceptor;
@@ -62,6 +67,8 @@ import com.dupreinca.dupree.mh_required_api.RequiredVisit;
 import com.dupreinca.dupree.mh_utilities.MyDialoges;
 import com.dupreeinca.lib_api_rest.util.alert.ProgressDialogHorizontal;
 import com.dupreinca.dupree.mh_utilities.mPreferences;
+import com.dupreinca.dupree.model_view.Respuesta;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
@@ -71,6 +78,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -606,6 +614,87 @@ public class Http {
                 //stopDialogoWait();
                 if(checkIdDataMovileAvailable(call.request().url().toString(), t)){
               //      toastMSG(myContext.getResources().getString(R.string.http_error_desconocido));
+                }
+            }
+
+
+        });
+
+    }
+
+    public void gencuesta(Activity act, List<Respuesta> listares){
+
+
+        final iAuth service = retrofit.create(iAuth.class);
+
+        Log.e(TAG+"JSON Auth", "Params: "+new Gson().toJson(listares));
+
+        System.out.println("El Json params "+new Gson().toJson(listares));
+        Call<DataVisit> call = service.gencuesta(
+                new Gson().toJson(listares)
+        );
+
+        // showDialogWait();
+        call.enqueue(new Callback<DataVisit>() {
+            @Override
+            public void onResponse(Call<DataVisit> call, Response<DataVisit> response) {
+//                stopDialogoWait();
+                Log.e(TAG+"onResponse", call.request().url().toString());
+
+                System.out.println("Respuesta visit"+response.body().getCode() +" result "+response.body().getResult());
+                String msgError=null;
+                int code=response.body().getCode();
+                Log.e("code", String.valueOf(code) );
+
+           //     Toast.makeText(act,response.body().getResult(),Toast.LENGTH_LONG).show();
+
+
+
+                AlertDialog.Builder builder1 = new AlertDialog.Builder(act);
+                builder1.setMessage(response.body().getResult());
+                builder1.setCancelable(true);
+
+                builder1.setPositiveButton(
+                        "Ok",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+                AlertDialog alert11 = builder1.create();
+                alert11.show();
+
+
+                if(code==200 || code==400 || code==401 || code==404 || code==501) {
+                    if (!response.isSuccessful()) {
+                        try {
+                            String jsonInString = response.errorBody().string();
+                            Log.e(TAG, "Retrofit Response : " + jsonInString);
+                            DataVisit resp = new Gson().fromJson(jsonInString, DataVisit.class);
+
+
+                            msgError = resp.getResult();
+                        } catch (IOException e) {
+                            msgError = myContext.getResources().getString(R.string.http_error_desconocido);
+                        }
+                    } else {
+                        Log.e(TAG+"onResponse", "-> " + new Gson().toJson(response.body()));
+                        //  ((MainActivity) myContext).successfulAuth(response.body());
+                    }
+                } else {
+                    msgError = myContext.getResources().getString(R.string.http_error_desconocido);
+                }
+
+                //   if(msgError!=null)
+                //       msgToast(msgError);
+            }
+
+            @Override
+            public void onFailure(Call<DataVisit> call, Throwable t) {
+                //stopDialogoWait();
+                if(checkIdDataMovileAvailable(call.request().url().toString(), t)){
+                    //      toastMSG(myContext.getResources().getString(R.string.http_error_desconocido));
                 }
             }
 
