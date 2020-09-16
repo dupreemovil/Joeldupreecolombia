@@ -12,6 +12,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 
 
+import com.dupreinca.dupree.mh_http.Http;
+import com.dupreinca.dupree.mh_required_api.RequiredVersion;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
@@ -31,6 +33,8 @@ import com.dupreinca.dupree.mh_dialogs.MH_Dialogs_Login;
 import com.dupreeinca.lib_api_rest.model.dto.response.DataAuth;
 import com.dupreeinca.lib_api_rest.model.dto.response.GenericDTO;
 import com.dupreinca.dupree.mh_utilities.mPreferences;
+
+
 
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static android.Manifest.permission_group.CAMERA;
@@ -59,6 +63,10 @@ public class MainActivity extends AppCompatActivity {
 
         //inflando view pager
         mViewPager = swipeRecycler.findViewById(R.id.pager);
+        String versionName = BuildConfig.VERSION_NAME;
+        RequiredVersion req = new RequiredVersion(versionName);
+        new Http(this).control(req,this);
+
 
         //mViewPager.setAdapter(avp);
         MainPagerAdapter pagerAdapter = new MainPagerAdapter(getSupportFragmentManager());

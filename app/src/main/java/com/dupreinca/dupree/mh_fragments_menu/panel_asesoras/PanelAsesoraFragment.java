@@ -28,6 +28,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -268,8 +269,12 @@ public class PanelAsesoraFragment extends TabManagerFragment {
 
 
 
-        if(data!=null && data.getCantidad_mensajes()!=null)
-            binding.fabMessages.setTitle(getString(R.string.concat_mensajes, data.getCantidad_mensajes()));
+        if(data!=null && data.getCantidad_mensajes()!=null){
+            String mensajes = data.getCantidad_mensajes();
+            binding.fabMessages.setTitle(mensajes +" Mensajes");
+
+        }
+           // binding.fabMessages.setTitle(getString(R.string.concat_mensajes, data.getCantidad_mensajes()));
 
         ///PÁGINAS
         binding.appBarLayout.setVisibility(isVisible ? View.VISIBLE : View.INVISIBLE);
@@ -286,7 +291,14 @@ public class PanelAsesoraFragment extends TabManagerFragment {
 
     private void updateTracking(PanelAsesora data){
         if(data!=null) {
-            pagerAdapter.getTrackingFragment().setData(data.getTracking());
+            if(data.getTracking()!=null){
+
+                if(pagerAdapter.getTrackingFragment()!=null){
+                    pagerAdapter.getTrackingFragment().setData(data.getTracking());
+                }
+
+            }
+
         }
     }
 
@@ -887,7 +899,9 @@ public class PanelAsesoraFragment extends TabManagerFragment {
         System.out.println("El heigth de window "+displayRectangle.height());
 
         int width = (int)(displayRectangle.width() * 7/8);
-        int heigth = (int)(displayRectangle.height() * 7/8);
+        int heigth = (int)(displayRectangle.height() * 5/8);
+
+        deleteDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
         deleteDialog.getWindow().setLayout(width, heigth);
 

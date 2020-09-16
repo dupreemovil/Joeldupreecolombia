@@ -25,6 +25,10 @@ public interface iAuth {
     @POST("reportes/visitas")
     Call<DataVisit> visit(@Field("Params") String dataVisit);
 
+    @FormUrlEncoded
+    @POST("reportes/control")
+    Call<DataVisit> controlf(@Field("Params") String dataControl);
+
 
     @FormUrlEncoded
     @POST("reportes/guarda_encuesta")

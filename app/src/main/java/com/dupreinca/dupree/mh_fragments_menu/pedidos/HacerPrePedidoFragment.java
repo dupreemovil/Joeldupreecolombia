@@ -5,6 +5,11 @@ import android.content.Intent;
 import androidx.databinding.ViewDataBinding;
 import android.os.Bundle;
 
+import com.dupreeinca.lib_api_rest.controller.BannerController;
+import com.dupreeinca.lib_api_rest.model.dto.response.BannerDTO;
+import com.dupreeinca.lib_api_rest.model.dto.response.ListProductCatalogoDTO;
+import com.dupreeinca.lib_api_rest.model.dto.response.ProductCatalogoDTO;
+import com.dupreeinca.lib_api_rest.model.dto.response.UrlsCatalogosDTO;
 import com.dupreinca.dupree.mh_http.Http;
 import com.dupreinca.dupree.mh_required_api.RequiredVisit;
 import com.dupreinca.dupree.mh_utilities.mPreferences;
@@ -22,6 +27,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 
 import com.dupreeinca.lib_api_rest.controller.PedidosController;
@@ -49,6 +56,7 @@ import com.dupreinca.dupree.mh_dialogs.SimpleDialog;
 import com.dupreinca.dupree.mh_holders.CatalogoHolder;
 import com.dupreinca.dupree.mh_utilities.KeyBoard;
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -93,7 +101,10 @@ public class HacerPrePedidoFragment extends TabManagerFragment implements BasePe
     public long timeinit=0;
     public long timeend=0;
     public String userid="";
+    Animation rotation;
+    private BannerController bannerController;
 
+    private String campana;
 
     public void loadData(Profile perfil){
         this.perfil = perfil;
@@ -101,6 +112,11 @@ public class HacerPrePedidoFragment extends TabManagerFragment implements BasePe
 
     private boolean productsEditable=false;
     private boolean offersEditable=false;
+
+    public Boolean conpedido=false;
+
+
+    ListProductCatalogoDTO listaProd_catalogo;
 
     public HacerPrePedidoFragment() {
         // Required empty public constructor
@@ -144,7 +160,7 @@ public class HacerPrePedidoFragment extends TabManagerFragment implements BasePe
         binding = (FragmentPrePedidosHacerBinding) view;
         Log.e(TAG, "initViews()");
         timeinit = System.currentTimeMillis();
-
+        bannerController =  new BannerController(getActivity());
         prePedidosPagerAdapter = new PrePedidosPagerAdapter(getChildFragmentManager());
         binding.pagerView.addOnPageChangeListener(mOnPageChangeListener);
         binding.pagerView.setOffscreenPageLimit(3);
@@ -416,21 +432,85 @@ public class HacerPrePedidoFragment extends TabManagerFragment implements BasePe
             String campanaActualServer = resultEdoPedido.getCampana();
             String campanaActualLocal = dataStore.getCampanaActual();
 
+            System.out.println("Hacerpre llego updateview result");
+
+
             if (campanaActualLocal == null) {
                 dataStore.setCampanaActualPre(campanaActualServer);// se respalda la campañ actual
             } else if (!campanaActualLocal.equals(campanaActualServer)) {//si cambio la campaña
                 // se borrar e pedido actual (prductos y ofertas) de la DB
-                dataStore.setCampanaActual(campanaActualServer);// se respalda la campañ actual
+                campana = campanaActualServer;
+                dataStore.setCampanaActual(campana);// se respalda la campañ actual
                 dataStore.setChangeCampana(true);
 
-                Intent intent = new Intent(getActivity(), FullscreenActivity.class);
-                intent.putExtra("campanaActual", campanaActualServer);
-                startActivity(intent);
-                getActivity().finish();
-                return;
+                if (conpedido) {
+
+
+                }
+                else{
+
+                    deleteCatalogo();
+                }
+
+
+                getBanner();
+
+
+                showProgress();
+            //    Intent intent = new Intent(getActivity(), FullscreenActivity.class);
+             //   intent.putExtra("campanaActual", campanaActualServer);
+             //   startActivity(intent);
+             //   getActivity().finish();
+              //  return;
+            }
+            else{
+
+                deleteCatalogo();
+                campana = campanaActualServer;
+                dataStore.setCampanaActual(campana);// se respalda la campañ actual
+                dataStore.setChangeCampana(true);
+                getBanner();
+
             }
             selectAction();
         }
+    }
+
+    public void deleteCatalogo(){
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm bgRealm) {
+                bgRealm.delete(Catalogo.class);
+            }
+        }, new Realm.Transaction.OnSuccess() {
+            @Override
+            public void onSuccess() {
+                // Transaction was a success.
+                Log.v(TAG,"deleteCatalogo... ---------------ok--------------");
+                //realm.close();
+            }
+        }, new Realm.Transaction.OnError() {
+            @Override
+            public void onError(Throwable error) {
+                // Transaction failed and was automatically canceled.
+                Log.e(TAG,"deleteCatalogo... ---------------error--------------");
+                Log.e(TAG,"deleteCatalogo... "+error.getMessage());
+                //realm.close();
+                dismissProgress();
+
+            }
+        });
+        //realm.beginTransaction();
+
+        //realm.commitTransaction();
+    }
+
+
+
+    public void startAnimation(){
+        rotation = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate);
+        rotation.setFillAfter(true);
+
     }
 
     private void selectAction(){
@@ -575,6 +655,13 @@ public class HacerPrePedidoFragment extends TabManagerFragment implements BasePe
                 dismissProgress();
                 resultEdoPedido = result.getResult();
 
+                if (result.getResult().getProductos().getProductos().size()>0) {
+                conpedido = true;
+
+                }
+
+                System.out.println("Hacerpre llego updateview");
+
                 updateView();
 
             }
@@ -582,7 +669,7 @@ public class HacerPrePedidoFragment extends TabManagerFragment implements BasePe
             @Override
             public void error(TTError error) {
                 setPageCurrent(prePedidosPagerAdapter.PAGE_CARRITO);
-
+                System.out.println("Hacerpre llego updateview erro "+error.getMessage());
                 dismissProgress();
                 checkSession(error);
 
@@ -808,5 +895,261 @@ public class HacerPrePedidoFragment extends TabManagerFragment implements BasePe
         super.onDetach();
         Log.e(TAG, "onDetach()");
         setHasOptionsMenu(false);
+    }
+
+
+
+    private void getBanner(){
+        startAnimation();
+        responseBanner = null;
+
+        bannerController.getBanner(new TTResultListener<BannerDTO>() {
+            @Override
+            public void success(BannerDTO result) {
+                Log.e(TAG, "getBanner() -> success(): " + new Gson().toJson(result));
+                responseBanner(result);
+            }
+
+            @Override
+            public void error(TTError error) {
+                Log.e(TAG, "getBanner() -> error(): " + new Gson().toJson(error));
+
+                dismissProgress();
+                msgToast("getBanner() -> error(): " + new Gson().toJson(error));
+
+                //     errorLoadInitData();
+            }
+        });
+    }
+    BannerDTO responseBanner;
+    public void responseBanner(BannerDTO responseBanner){
+        if(responseBanner!=null) {
+            this.responseBanner = responseBanner;
+            getFilesCatalogos();
+        }else{
+
+            dismissProgress();
+            msgToast("ResponseB() -> error(): " +  new Gson().toJson(responseBanner));
+
+
+            //  errorLoadInitData();
+        }
+    }
+
+    private void getFilesCatalogos(){
+        bannerController.getUrlCatalogos(new TTResultListener<UrlsCatalogosDTO>() {
+            @Override
+            public void success(UrlsCatalogosDTO result) {
+                Log.e(TAG, "getFilesCatalogos() -> success(): " + new Gson().toJson(result));
+                responseFileCatalogos(result);
+            }
+
+            @Override
+            public void error(TTError error) {
+                Log.e(TAG, "getFilesCatalogos() -> error(): " + new Gson().toJson(error));
+
+                dismissProgress();
+                msgToast("getFilesCatalogos() -> error(): " +  new Gson().toJson(error));
+
+                //    errorLoadInitData();
+            }
+        });
+    }
+
+    UrlsCatalogosDTO responseUrlCatalogos;
+    public void responseFileCatalogos(UrlsCatalogosDTO responseUrlCatalogos){
+        if(responseUrlCatalogos!=null) {
+            this.responseUrlCatalogos = responseUrlCatalogos;
+            //SE DECIDE SI SE DESCARGA LA LISTA DE PRODUCTOS O NO
+            /*if(updateOnlyBannerAndPDF)
+                terminatedProcess();
+            else*/
+            obtainCatalogo();
+        }else{
+            dismissProgress();
+            msgToast("responseUrlCatalogo() -> error():json " + responseUrlCatalogos.toString());
+
+            //   errorLoadInitData();
+        }
+    }
+
+    private void obtainCatalogo(){
+        bannerController.getProductos(campana, new TTResultListener<ProductCatalogoDTO>() {
+            @Override
+            public void success(ProductCatalogoDTO result) {
+                Log.e(TAG, "obtainCatalogo() -> success(): " + new Gson().toJson(result));
+                //un detalle envia 200 con error 404
+                if (result.getCode() == 404) {
+                    //     errorLoadInitData();
+                    dismissProgress();
+                    msgToast("obtainCatalogo() -> error():json " +  new Gson().toJson(result));
+
+
+                } else {
+                    responseCatalogo(result.getResult());
+                }
+            }
+
+            @Override
+            public void error(TTError error) {
+                Log.e(TAG, "obtainCatalogo() -> error(): " + new Gson().toJson(error));
+                //error de Backend
+                if(error!=null){
+                    if(error.getStatusCode()!=null){
+                        if(error.getStatusCode() == 404) {
+                            try {
+                                ProductCatalogoDTO resp = new Gson().fromJson(error.getErrorBody(), ProductCatalogoDTO.class);
+                                responseCatalogo(resp.getResult());
+                            } catch (JsonSyntaxException e) {
+                                //       errorLoadInitData();
+                                dismissProgress();
+                                msgToast("responseCatalogo() -> error():json " + e.getMessage());
+
+                            }
+                        } else {
+                            // errorLoadInitData();
+
+                            dismissProgress();
+                            msgToast("responseCatalogo() -> error():json " + error.getMessage());
+
+                        }
+                    }
+                    else{
+                        dismissProgress();
+                        msgToast("responseCatalogo() -> error():json " + error.getMessage());
+
+                        //errorLoadInitData();
+                    }
+                }
+
+
+            }
+        });
+
+
+//        new Http(FullscreenActivity.this).getProductosCatalogo(false);
+    }
+
+    public void responseCatalogo(ListProductCatalogoDTO listaProd_catalogo){
+        Log.e(TAG, "listaProd_catalogo.getOfertas(): "+new Gson().toJson(listaProd_catalogo.getOfertas()));
+        Log.e(TAG, "listaProd_catalogo.getPaquetones(): "+new Gson().toJson(listaProd_catalogo.getPaquetones()));
+        Log.e(TAG, "listaProd_catalogo.getProductos(): "+new Gson().toJson(listaProd_catalogo.getProductos()));
+
+        if(listaProd_catalogo.getProductos()!=null && listaProd_catalogo.getProductos().size()>0) {
+            this.listaProd_catalogo = listaProd_catalogo;
+            if(listaProd_catalogo.getOfertas()!=null && listaProd_catalogo.getOfertas().size()>0) {
+                writeOfertas();
+            } else if(listaProd_catalogo.getPaquetones()!=null &&
+                    listaProd_catalogo.getPaquetones().getLinea_1()!=null &&
+                    listaProd_catalogo.getPaquetones().getLinea_2()!=null &&
+                    listaProd_catalogo.getPaquetones().getLinea_3()!=null &&
+                    listaProd_catalogo.getPaquetones().getLinea_4()!=null){
+                writePaquetones();
+            } else {
+                writeCatalogo();
+            }
+        } else{
+            //     errorLoadInitData();
+        }
+    }
+
+    public void writeOfertas(){
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm bgRealm) {
+                bgRealm.insert(listaProd_catalogo.getOfertas());
+            }
+        }, new Realm.Transaction.OnSuccess() {
+            @Override
+            public void onSuccess() {
+                // Transaction was a success.
+                Log.v(TAG,"writeOfertas... ---------------ok--------------");
+                Log.v(TAG, ": " + new Gson().toJson(listaProd_catalogo.getOfertas()));
+                if(listaProd_catalogo.getPaquetones()!=null &&
+                        listaProd_catalogo.getPaquetones().getLinea_1()!=null  &&
+                        listaProd_catalogo.getPaquetones().getLinea_2()!=null &&
+                        listaProd_catalogo.getPaquetones().getLinea_3()!=null &&
+                        listaProd_catalogo.getPaquetones().getLinea_4()!=null){
+                    writePaquetones();
+                } else {
+                    writeCatalogo();
+                }
+                //realm.close();
+            }
+        }, new Realm.Transaction.OnError() {
+            @Override
+            public void onError(Throwable error) {
+                // Transaction failed and was automatically canceled.
+                Log.e(TAG,"writeOfertas... ---------------error--------------");
+                Log.e(TAG,"writeOfertas... "+error.getMessage());
+                //realm.close();
+                //       errorLoadInitData();
+            }
+        });
+    }
+
+    public void writePaquetones(){
+        mPreferences.setJASON_Paquetones(getActivity(), new Gson().toJson(listaProd_catalogo.getPaquetones()));
+        Log.v(TAG,"writePaquetones... ---------------ok--------------");
+        Log.v(TAG, ": " + new Gson().toJson(listaProd_catalogo.getPaquetones()));
+        writeCatalogo();
+    }
+
+    public void writeCatalogo(){
+        if(realm.isClosed())
+            realm = Realm.getDefaultInstance();
+
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm bgRealm) {
+                //RealmList<Catalogo> dm_list_catalogo = new RealmList<Catalogo>();
+                //dm_list_catalogo.addAll(listaProd_catalogo.getProductos());
+                //DM_List_Catalogo dm_list_catalogo = new DM_List_Catalogo(); // <-- create unmanaged
+                //RealmList<Catalogo> _catalList = new RealmList<>();
+                //_catalList.addAll(listaProd_catalogo.getProductos());
+                //dm_list_catalogo.setCatalogoList(_catalList);
+                bgRealm.insert(listaProd_catalogo.getProductos());
+            }
+        }, new Realm.Transaction.OnSuccess() {
+            @Override
+            public void onSuccess() {
+                // Transaction was a success.
+                Log.v(TAG,"writeCatalogo... ---------------ok--------------");
+                Log.v(TAG, ": " + new Gson().toJson(listaProd_catalogo.getProductos()));
+
+                terminatedProcess();
+                //realm.close();
+            }
+        }, new Realm.Transaction.OnError() {
+            @Override
+            public void onError(Throwable error) {
+                // Transaction failed and was automatically canceled.
+                Log.e(TAG,"writeCatalogo... ---------------error--------------");
+                Log.e(TAG,"writeCatalogo... "+error.getMessage());
+                msgToast("writeCatalogo... "+error.getMessage());
+                dismissProgress();
+                //realm.close();
+                //   errorLoadInitData();
+            }
+        });
+    }
+
+    private void terminatedProcess(){
+        mPreferences.setDataInit(getActivity(), responseBanner, responseUrlCatalogos);
+
+//        updateOnlyBannerAndPDF =false;
+
+        mPreferences.setVersionCatalogo(getActivity(), responseBanner.getVersion());
+        Log.e(TAG, "ResponseVersion de catalogo: "+ responseBanner.getVersion());
+
+        mPreferences.setChangeCampana(getActivity(), false);
+        mPreferences.setUpdateBannerAndPDF(getActivity(), false);
+
+        dismissProgress();
+        if(mPreferences.isLoggedIn(getActivity())){
+            // gotoPanel();//si esta ya logueado, es solo una actualizacion y regresa al panel
+        } else {
+            //gotoMain();
+        }
     }
 }

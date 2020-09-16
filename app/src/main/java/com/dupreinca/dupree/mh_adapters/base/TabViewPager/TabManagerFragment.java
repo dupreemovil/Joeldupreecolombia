@@ -74,10 +74,18 @@ public abstract class TabManagerFragment extends BaseFragment {
         Log.e(TAG, "setTabIcons");
         TextView view = (TextView) setTabs().getTabAt(i).getCustomView();
         if(view!=null) {
-            view.setText(setItems().get(i).getName());
-            view.setTextColor(getResources().getColor(isVisible ? R.color.azulDupree : R.color.gray_4));
 
-            Drawable icon = getResources().getDrawable(setItems().get(i).getId());
+            List<ModelList> items = setItems();
+            if(items.get(i)!=null){
+                if(items.get(i).getName().length()>0){
+                    view.setText(items.get(i).getName());
+                    view.setTextColor(getResources().getColor(isVisible ? R.color.azulDupree : R.color.gray_4));
+
+                }
+
+            }
+
+            Drawable icon = getResources().getDrawable(items.get(i).getId());
             if (icon != null) {
                 icon.setColorFilter(new
                         PorterDuffColorFilter(getResources().getColor(isVisible ? R.color.azulDupree : R.color.gray_4), PorterDuff.Mode.MULTIPLY));

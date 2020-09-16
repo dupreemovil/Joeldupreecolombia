@@ -69,6 +69,7 @@ public class DetalleFacturaFragment extends BaseFragment implements DetailFactur
 
         if(data.getProductos().size()>0){
 
+
         }
         else{
 

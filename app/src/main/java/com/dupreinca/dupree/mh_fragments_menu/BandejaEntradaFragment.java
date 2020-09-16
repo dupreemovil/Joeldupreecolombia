@@ -273,7 +273,13 @@ public class BandejaEntradaFragment extends BaseFragment implements MensajesHold
                 dismissProgress();
                 checkSession(error);
 
-                ((MenuActivity)getActivity()).showbottomsheet();
+                if((MenuActivity)getActivity()!=null){
+
+                    
+                    ((MenuActivity)getActivity()).showbottomsheet();
+                }
+
+
                 System.out.println("El result erro ");
             }
         });

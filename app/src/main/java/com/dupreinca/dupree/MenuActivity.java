@@ -12,6 +12,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import androidx.annotation.NonNull;
+
+import com.dupreinca.dupree.mh_required_api.RequiredVersion;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
@@ -68,6 +70,7 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.List;
 
+
 import io.realm.Realm;
 import io.realm.RealmResults;
 import io.realm.Sort;
@@ -111,6 +114,12 @@ public class MenuActivity extends BaseActivity implements NavigationView.OnNavig
 
         binding.appBarMenu.toolbar.setTitle("Panel");
         setSupportActionBar(binding.appBarMenu.toolbar);
+
+        String versionName = BuildConfig.VERSION_NAME;
+
+        RequiredVersion req = new RequiredVersion(versionName);
+        new Http(getApplicationContext()).control(req,this);
+
 
         binding.appBarMenu.fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -550,14 +559,18 @@ public class MenuActivity extends BaseActivity implements NavigationView.OnNavig
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode){
             case REQUEST_CODE_ASK_PERMISSIONS:
-                if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                    // El usuario acepto los permisos.
-                    Toast.makeText(this, R.string.gps_permission_granted, Toast.LENGTH_SHORT).show();
-                    showMessageGPSNoEnabled("Tu servicio de ubicación está desactivado, debes habilitarlo para poder recibir servicios, ¿Desea activarlo?");
-                }else{
-                    // Permiso denegado.
-                    Toast.makeText(this, R.string.no_gps_permissions, Toast.LENGTH_SHORT).show();
+                if(grantResults.length>0){
+                    if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                        // El usuario acepto los permisos.
+                        Toast.makeText(this, R.string.gps_permission_granted, Toast.LENGTH_SHORT).show();
+                        showMessageGPSNoEnabled("Tu servicio de ubicación está desactivado, debes habilitarlo para poder recibir servicios, ¿Desea activarlo?");
+                    }else{
+                        // Permiso denegado.
+                        Toast.makeText(this, R.string.no_gps_permissions, Toast.LENGTH_SHORT).show();
+                    }
                 }
+
+
             default:
                 super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }

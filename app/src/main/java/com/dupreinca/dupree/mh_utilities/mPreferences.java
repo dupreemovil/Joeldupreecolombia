@@ -128,6 +128,8 @@ public class mPreferences {
      * @return
      */
     private static Boolean getBoolean(String key, Context context) {
+
+
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         return preferences.getBoolean(key, false);
     }
@@ -200,13 +202,17 @@ public class mPreferences {
     //Guardar toda la data inicial
     public static void setDataInit(Context ctxt, BannerDTO responseBanner, UrlsCatalogosDTO responseUrlCatalogos){
         Log.e(TAG, "setDataInit");
-        setBoolean(IS_NOT_NEW_APP_ON,true,ctxt);
-        setString(JSON_IMG_BANNER, new Gson().toJson(responseBanner.getBanner().get(0).getResoluction2()),ctxt);
-        setString(JSON_DPTO, new Gson().toJson(responseBanner.getDepartamentos()),ctxt);
-        setString(JSON_TYPO_VIA, new Gson().toJson(responseBanner.getTipo_via()),ctxt);
-        setString(IMG_CATALOGO, responseBanner.getImg_catalogo(),ctxt);
-        setString(URL_EMBEDDED_CHAT, responseBanner.getUrl_chat(), ctxt);
-        setString(JSON_URL_CATALOGOS, new Gson().toJson(responseUrlCatalogos),ctxt);
+        if(ctxt!=null){
+            setBoolean(IS_NOT_NEW_APP_ON,true,ctxt);
+            setString(JSON_IMG_BANNER, new Gson().toJson(responseBanner.getBanner().get(0).getResoluction2()),ctxt);
+            setString(JSON_DPTO, new Gson().toJson(responseBanner.getDepartamentos()),ctxt);
+            setString(JSON_TYPO_VIA, new Gson().toJson(responseBanner.getTipo_via()),ctxt);
+            setString(IMG_CATALOGO, responseBanner.getImg_catalogo(),ctxt);
+            setString(URL_EMBEDDED_CHAT, responseBanner.getUrl_chat(), ctxt);
+            setString(JSON_URL_CATALOGOS, new Gson().toJson(responseUrlCatalogos),ctxt);
+        }
+
+
     }
 
     //get urlchat

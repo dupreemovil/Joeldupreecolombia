@@ -8,11 +8,18 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Rect;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
 import 	androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dupreeinca.lib_api_rest.interceptors.AddCookiesInterceptor;
@@ -63,6 +70,7 @@ import com.dupreinca.dupree.mh_required_api.RequiredTerminsGerente;
 import com.dupreeinca.lib_api_rest.model.dto.response.DataAuth;
 import com.dupreeinca.lib_api_rest.model.dto.response.GenericDTO;
 import com.dupreeinca.lib_api_rest.util.alert.DownloadFileAsyncTask;
+import com.dupreinca.dupree.mh_required_api.RequiredVersion;
 import com.dupreinca.dupree.mh_required_api.RequiredVisit;
 import com.dupreinca.dupree.mh_utilities.MyDialoges;
 import com.dupreeinca.lib_api_rest.util.alert.ProgressDialogHorizontal;
@@ -77,6 +85,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -559,6 +568,88 @@ public class Http {
                     toastMSG(myContext.getResources().getString(R.string.http_error_desconocido));
                 }
             }
+        });
+
+    }
+
+    public void control(final RequiredVersion requiredVersion,Activity act){
+
+        final iAuth service = retrofit.create(iAuth.class);
+
+        Call<DataVisit> call = service.controlf(
+                new Gson().toJson(requiredVersion)
+        );
+
+        System.out.println("Se envia control "+new Gson().toJson(requiredVersion));
+        // showDialogWait();
+        call.enqueue(new Callback<DataVisit>() {
+            @Override
+            public void onResponse(Call<DataVisit> call, Response<DataVisit> response) {
+//                stopDialogoWait();
+
+
+                System.out.println("Respuesta "+response.toString());
+                String msgError=null;
+                int code=response.body().getCode();
+                Log.e("code", String.valueOf(code) );
+
+                if(!response.body().isValid()){
+                    //  ColorDrawable cd = new ColorDrawable(0xFFe3e3e3);
+                    LayoutInflater factory = LayoutInflater.from(act);
+                    final View deleteDialogView = factory.inflate(R.layout.version_layout, null);
+
+
+                    final AlertDialog deleteDialog = new AlertDialog.Builder(act).create();
+                    deleteDialog.setView(deleteDialogView);
+                    Rect displayRectangle = new Rect();
+                    Window window = act.getWindow();
+
+
+                    deleteDialog.setCancelable(false);
+
+
+                    TextView txtmessage = (TextView)deleteDialogView.findViewById(R.id.txtmessage);
+
+                    txtmessage.setText(response.body().getResult());
+
+                    Button btnnext = deleteDialogView.findViewById(R.id.btnnext);
+
+                    btnnext.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+
+                            Intent intent = new Intent(Intent.ACTION_VIEW)
+                                    .setData(Uri.parse("https://play.google.com/store/apps/details?id=com.dupreinca.dupree" ));
+                            try {
+                                act.startActivity(new Intent(intent)
+                                        .setPackage("com.android.vending"));
+                            } catch (android.content.ActivityNotFoundException exception) {
+                                act.startActivity(intent);
+                            }
+
+                        }
+                    });
+
+                    deleteDialog.show();
+
+
+                }
+
+
+                //   if(msgError!=null)
+                //       msgToast(msgError);
+            }
+
+            @Override
+            public void onFailure(Call<DataVisit> call, Throwable t) {
+                //stopDialogoWait();
+                if(checkIdDataMovileAvailable(call.request().url().toString(), t)){
+                    //      toastMSG(myContext.getResources().getString(R.string.http_error_desconocido));
+                }
+            }
+
+
         });
 
     }

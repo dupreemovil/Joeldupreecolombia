@@ -19,6 +19,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -820,8 +821,9 @@ public class PanelGerenteFragment extends BaseFragment implements PanelGteHolder
         System.out.println("El heigth de window "+displayRectangle.height());
 
         int width = (int)(displayRectangle.width() * 7/8);
-        int heigth = (int)(displayRectangle.height() * 7/8);
+        int heigth = (int)(displayRectangle.height() * 5/8);
 
+        deleteDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         deleteDialog.getWindow().setLayout(width, heigth);
 
 

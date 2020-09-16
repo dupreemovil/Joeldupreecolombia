@@ -31,7 +31,7 @@ import com.dupreinca.dupree.mh_utilities.mPreferences;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.iid.FirebaseInstanceId;
+
 import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.Gson;
@@ -138,23 +138,6 @@ public class FullscreenActivity extends AppCompatActivity  {
 
 
 
-        FirebaseInstanceId.getInstance().getInstanceId()
-                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                        if (!task.isSuccessful()) {
-                            Log.w(TAG, "getInstanceId failed", task.getException());
-                            return;
-                        }
-
-                        // Get new Instance ID token
-                        String token = task.getResult().getToken();
-
-                        System.out.println("El token "+token);
-                        // Log and toast
-
-                    }
-                });
 
         //API rest
         bannerController =  new BannerController(FullscreenActivity.this);
@@ -198,7 +181,7 @@ public class FullscreenActivity extends AppCompatActivity  {
         }
         //hasta tanto todos se hayan suscrito, el lugar ieal de hacerlo es la primera vez que se instala
         Log.e(TAG, "FirebaseMessaging.getInstance().subscribeToTopic(\"all_devices\")");
-        FirebaseMessaging.getInstance().subscribeToTopic("all_devices");
+    //    FirebaseMessaging.getInstance().subscribeToTopic("all_devices");
        // irHacerPrePedido();
     }
 
