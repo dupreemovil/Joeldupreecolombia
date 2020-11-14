@@ -67,6 +67,22 @@ public class ContactFragment extends Fragment {
         });
 
         String url = mPreferences.getUrlEmbeddedChat(getActivity());
+
+        String user_name= mPreferences.getNameUser(getActivity());
+        String user_ced = mPreferences.getCedUser(getActivity());
+        String user_tel = mPreferences.getTelUser(getActivity());
+
+        if(user_name!=null && user_ced!=null && user_tel!=null){
+            if(user_name.length()>0 && user_ced.length()>0){
+                url = url + "?cedula="+user_ced+"&asesora="+user_name+"&celular="+user_tel;
+
+            }
+        }
+
+
+
+
+        System.out.println("El url "+url);
         webView.loadUrl(url != null && !url.isEmpty() ? url : "https://azzorti.bo/dupreeWS/chatAPP/chat.html");
 
 

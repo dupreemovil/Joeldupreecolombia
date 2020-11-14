@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="VALIDACION SMS"
+        android:layout_margin="5sp"
+        android:textSize="16sp"
+        android:textColor="#000"
+        android:gravity="center"
+        android:textStyle="bold"
+
+        >
+
+    </TextView>
+
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/layoutpreg"
+        android:layout_marginTop="50sp"
+        android:layout_marginBottom="50sp"
+        android:visibility="visible"
+        android:orientation="vertical" >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:layout_margin="10sp"
+                android:id="@+id/txtpreguntac"
+                android:textSize="15sp"
+                android:textColor="#000"
+
+
+                android:text="Codigo"></TextView>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/layoutresp"
+            android:visibility="visible"
+            android:orientation="horizontal"
+            >
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/name_text_input"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_margin="5sp"
+                android:layout_height="wrap_content"
+                >
+
+                <EditText
+                    android:id="@+id/datos_sms"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5sp"
+                    android:hint="Ingrese Codigo SMS" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+
+        </LinearLayout>
+
+
+
+
+
+
+
+
+
+
+
+
+    </LinearLayout>
+
+
+
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/layoutpreg"
+        >
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnresend"
+            android:layout_alignParentLeft="true"
+            android:background="@drawable/rounded_background_gray"
+            android:layout_marginBottom="5sp"
+            android:text="Reenviar codigo">
+
+        </Button>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnnext"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/rounded_background_gray"
+            android:layout_marginBottom="5sp"
+            android:text="Continuar">
+
+        </Button>
+
+    </RelativeLayout>
+
+</RelativeLayout>

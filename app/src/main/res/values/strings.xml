@@ -312,7 +312,7 @@
     <string name="cupo_saldo_y_conferencia_asesora">Cupo, saldo y conferencia asesora</string>
     <string name="pedidos_retenidos">Pedidos retenidos</string>
     <string name="servicios">Servicios</string>
-    <string name="peticiones_quejas_y_reclamos_pqr">Peticiones, quejas y reclamos (PQR)</string>
+    <string name="peticiones_quejas_y_reclamos_pqr">Chat en linea </string>
     <string name="pagos_en_l_nea">Pagos en línea</string>
     <string name="configuracion">Configuración</string>
 
@@ -498,10 +498,10 @@
     <string name="minimo_publico_two_points">Minimo público:</string>
     <string name="total_two_points">Total:</string>
     <string name="conferencia_two_points">Conferencia:</string>
-    <string name="concat_efectivos">Efectivos: $%1$s</string>
-    <string name="concat_redimidos">Redimidos: $%1$s</string>
-    <string name="concat_disponibles">Disponibles: $%1$s</string>
-    <string name="concat_pendientes">Pendientes: $%1$s</string>
+    <string name="concat_efectivos">Efectivos: %1$s</string>
+    <string name="concat_redimidos">Redimidos: %1$s</string>
+    <string name="concat_disponibles">Disponibles: %1$s</string>
+    <string name="concat_pendientes">Pendientes: %1$s</string>
     <string name="error_leyendo_archivo">Error! leyendo el archivo… Intente nuevamente</string>
     <string name="c_i_two_point">C.I.: %1$s</string>
     <string name="concat_telefo_two_point">Telef.: %1$s</string>

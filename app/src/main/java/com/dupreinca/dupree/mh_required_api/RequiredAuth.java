@@ -11,12 +11,25 @@ public class RequiredAuth {
 
     private String token_campana;
 
-    public RequiredAuth(String username, String password, String token,String token_campana) {
+    private String version;
+
+    public RequiredAuth(String username, String password, String token,String token_campana,String version) {
         this.username = username;
         this.password = password;
         this.token = token;
         this.token_campana = token_campana;
+        this.version = version;
     }
+
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
 
     public String getUsername() {
         return username;

@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="Gradle: com.huawei.hms:stats:5.0.0.300@aar">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/738060cd5510a220e42dc9da1579ffb7/jetified-stats-5.0.0.300/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/738060cd5510a220e42dc9da1579ffb7/jetified-stats-5.0.0.300/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/6f5137e955e9eaf491ba6d8635f8a5f3/jetified-stats-5.0.0.300/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/6f5137e955e9eaf491ba6d8635f8a5f3/jetified-stats-5.0.0.300/res" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.huawei.hms/stats/5.0.0.300/da39a3ee5e6b4b0d3255bfef95601890afd80709/stats-5.0.0.300-javadoc.jar!/" />

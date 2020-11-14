@@ -13,6 +13,7 @@ public class BannerDTO {
     private String img_catalogo;
     private String url_chat;
     private String version;
+    private String activa_celular;
 
     public List<ImgBannerDTO> getBanner() {
         return banner;
@@ -36,5 +37,13 @@ public class BannerDTO {
 
     public String getVersion() {
         return version;
+    }
+
+    public String getActiva_celular() {
+        return activa_celular;
+    }
+
+    public void setActiva_celular(String activa_celular) {
+        this.activa_celular = activa_celular;
     }
 }

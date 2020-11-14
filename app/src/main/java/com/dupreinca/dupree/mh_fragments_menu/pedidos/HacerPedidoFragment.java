@@ -63,6 +63,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -685,7 +686,7 @@ public class HacerPedidoFragment extends TabManagerFragment implements BasePedid
             }
 
             hideSearchView();
-            KeyBoard.hide(getActivity());
+            KeyBoard.hide(Objects.requireNonNull(getActivity()));
 
         }
 

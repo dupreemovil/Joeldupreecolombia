@@ -65,11 +65,13 @@ import com.dupreinca.dupree.mh_required_api.RequiredCode;
 import com.dupreeinca.lib_api_rest.model.dto.request.Identy;
 import com.dupreinca.dupree.mh_required_api.RequiredNewPwd;
 import com.dupreinca.dupree.mh_required_api.RequiredRegister;
+import com.dupreinca.dupree.mh_required_api.RequiredSms;
 import com.dupreinca.dupree.mh_required_api.RequiredTermins;
 import com.dupreinca.dupree.mh_required_api.RequiredTerminsGerente;
 import com.dupreeinca.lib_api_rest.model.dto.response.DataAuth;
 import com.dupreeinca.lib_api_rest.model.dto.response.GenericDTO;
 import com.dupreeinca.lib_api_rest.util.alert.DownloadFileAsyncTask;
+import com.dupreinca.dupree.mh_required_api.RequiredValida;
 import com.dupreinca.dupree.mh_required_api.RequiredVersion;
 import com.dupreinca.dupree.mh_required_api.RequiredVisit;
 import com.dupreinca.dupree.mh_utilities.MyDialoges;
@@ -633,6 +635,175 @@ public class Http {
 
                     deleteDialog.show();
 
+
+                }
+
+
+                //   if(msgError!=null)
+                //       msgToast(msgError);
+            }
+
+            @Override
+            public void onFailure(Call<DataVisit> call, Throwable t) {
+                //stopDialogoWait();
+                if(checkIdDataMovileAvailable(call.request().url().toString(), t)){
+                    //      toastMSG(myContext.getResources().getString(R.string.http_error_desconocido));
+                }
+            }
+
+
+        });
+
+    }
+
+
+
+
+    public void validac(final RequiredValida requiredvalida, Activity act){
+
+        final iAuth service = retrofit.create(iAuth.class);
+
+        Call<DataVisit> call = service.validacelular(
+                new Gson().toJson(requiredvalida)
+        );
+
+        System.out.println("Se envia control "+new Gson().toJson(requiredvalida));
+        // showDialogWait();
+        call.enqueue(new Callback<DataVisit>() {
+            @Override
+            public void onResponse(Call<DataVisit> call, Response<DataVisit> response) {
+//                stopDialogoWait();
+
+
+                System.out.println("Respuesta "+response.toString());
+                String msgError=null;
+                int code=response.body().getCode();
+                Log.e("code", String.valueOf(code) );
+
+                if(response.body().isValid()){
+                    //  ColorDrawable cd = new ColorDrawable(0xFFe3e3e3);
+
+                    Toast.makeText(act,"Se envio datos para validar",Toast.LENGTH_LONG).show();
+
+
+                    ((MainActivity)act).showentersms();
+                }
+                else{
+               //     Toast.makeText(act,"Se envio datos para validar",Toast.LENGTH_LONG).show();
+
+
+
+                }
+
+
+
+                //   if(msgError!=null)
+                //       msgToast(msgError);
+            }
+
+            @Override
+            public void onFailure(Call<DataVisit> call, Throwable t) {
+                //stopDialogoWait();
+                if(checkIdDataMovileAvailable(call.request().url().toString(), t)){
+                    //      toastMSG(myContext.getResources().getString(R.string.http_error_desconocido));
+                }
+            }
+
+
+        });
+
+    }
+
+
+    public void validac1(final RequiredValida requiredvalida, Activity act){
+
+        final iAuth service = retrofit.create(iAuth.class);
+
+        Call<DataVisit> call = service.validacelular(
+                new Gson().toJson(requiredvalida)
+        );
+
+        System.out.println("Se envia control "+new Gson().toJson(requiredvalida));
+        // showDialogWait();
+        call.enqueue(new Callback<DataVisit>() {
+            @Override
+            public void onResponse(Call<DataVisit> call, Response<DataVisit> response) {
+//                stopDialogoWait();
+
+
+                System.out.println("Respuesta "+response.toString());
+                String msgError=null;
+                int code=response.body().getCode();
+                Log.e("code", String.valueOf(code) );
+
+                if(response.body().isValid()){
+                    //  ColorDrawable cd = new ColorDrawable(0xFFe3e3e3);
+
+                    Toast.makeText(act,"Se reenvio codigo",Toast.LENGTH_LONG).show();
+
+
+
+                }
+                else{
+                    //     Toast.makeText(act,"Se envio datos para validar",Toast.LENGTH_LONG).show();
+
+
+
+                }
+
+
+
+                //   if(msgError!=null)
+                //       msgToast(msgError);
+            }
+
+            @Override
+            public void onFailure(Call<DataVisit> call, Throwable t) {
+                //stopDialogoWait();
+                if(checkIdDataMovileAvailable(call.request().url().toString(), t)){
+                    //      toastMSG(myContext.getResources().getString(R.string.http_error_desconocido));
+                }
+            }
+
+
+        });
+
+    }
+
+
+    public void validas(final RequiredSms requiredsms, Activity act){
+
+        final iAuth service = retrofit.create(iAuth.class);
+
+        Call<DataVisit> call = service.validamensaje(
+                new Gson().toJson(requiredsms)
+        );
+
+        System.out.println("Se envia control sms "+new Gson().toJson(requiredsms));
+        // showDialogWait();
+        call.enqueue(new Callback<DataVisit>() {
+            @Override
+            public void onResponse(Call<DataVisit> call, Response<DataVisit> response) {
+//                stopDialogoWait();
+
+
+                System.out.println("Respuesta sms "+response.toString());
+                String msgError=null;
+                int code=response.body().getCode();
+                Log.e("code", String.valueOf(code) );
+
+                if(response.body().getCode()==200){
+                    //  ColorDrawable cd = new ColorDrawable(0xFFe3e3e3);
+
+                    mPreferences.setValidSms("si",act);
+                    Toast.makeText(act,response.body().getResult(),Toast.LENGTH_LONG).show();
+
+
+                }
+                else{
+
+                    mPreferences.setValidSms("no",act);
+                    Toast.makeText(act,response.body().getStatus(),Toast.LENGTH_LONG).show();
 
                 }
 

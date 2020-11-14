@@ -384,7 +384,14 @@ public class DatosContactoFragment extends BaseFragment implements View.OnClickL
     public void RedimeRotarImagen(){
 
         bitmap = BitmapFactory.decodeFile(path);
-        Bitmap bitmapout = Bitmap.createScaledBitmap(bitmap, 512, 512, false);
+        Bitmap bitmapout=null;
+        if(bitmap!=null){
+            bitmapout = Bitmap.createScaledBitmap(bitmap, 512, 512, false);
+
+        }
+        else{
+            return;
+        }
 
         Matrix matrix = new Matrix();
         matrix.postRotate(90);

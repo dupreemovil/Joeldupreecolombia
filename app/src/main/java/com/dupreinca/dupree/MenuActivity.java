@@ -7,12 +7,14 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import androidx.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import androidx.annotation.NonNull;
 
+import com.dupreinca.dupree.mh_required_api.RequiredValida;
 import com.dupreinca.dupree.mh_required_api.RequiredVersion;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.navigation.NavigationView;
@@ -25,9 +27,14 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.core.view.GravityCompat;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -101,6 +108,8 @@ public class MenuActivity extends BaseActivity implements NavigationView.OnNavig
 
     public int origen = 0; // normal , 1 es zonal
 
+    String act_cel="";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,6 +128,44 @@ public class MenuActivity extends BaseActivity implements NavigationView.OnNavig
 
         RequiredVersion req = new RequiredVersion(versionName);
         new Http(getApplicationContext()).control(req,this);
+
+        String name_user=mPreferences.getNameUser(getApplicationContext());
+
+        String ced_user=mPreferences.getCedUser(getApplicationContext());
+        String tel_user=mPreferences.getTelUser(getApplicationContext());
+
+        act_cel = mPreferences.getActcel(getApplicationContext());
+
+        if(name_user!=null || ced_user!=null || tel_user!=null){
+            if(name_user.length()==0 || ced_user.length()==0 || tel_user.length()==0)  {
+
+                if(act_cel.contains("1")){
+
+                    System.out.println("Enter name");
+                    showentername();
+                }
+                else{
+
+                }
+
+
+            }
+            else{
+
+
+            }
+        }
+        else{
+            if(act_cel.contains("1")){
+                System.out.println("Enter name e");
+                showentername();
+            }
+            else{
+
+            }
+
+        }
+
 
 
         binding.appBarMenu.fab.setOnClickListener(new View.OnClickListener() {
@@ -273,6 +320,77 @@ public class MenuActivity extends BaseActivity implements NavigationView.OnNavig
 
 
     }
+
+
+    public void showentername(){
+
+
+        System.out.println("Enter name men");
+        LayoutInflater factory = LayoutInflater.from(MenuActivity.this);
+        final View deleteDialogView = factory.inflate(R.layout.datos_layout, null);
+
+
+        final android.app.AlertDialog deleteDialog = new AlertDialog.Builder(MenuActivity.this).create();
+        deleteDialog.setView(deleteDialogView);
+        Rect displayRectangle = new Rect();
+        Window window = MenuActivity.this.getWindow();
+
+
+        deleteDialog.setCancelable(false);
+
+
+        EditText edtname = (EditText)deleteDialogView.findViewById(R.id.datos_name);
+        EditText edtced = (EditText)deleteDialogView.findViewById(R.id.datos_cedula);
+        EditText edttel = (EditText)deleteDialogView.findViewById(R.id.datos_telefono);
+
+
+        Button btnnext = deleteDialogView.findViewById(R.id.btnnext);
+
+        btnnext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                if(edtname.getText().length()>0 && edtced.getText().length()>0){
+
+
+                    mPreferences.setCedUser(edtced.getText().toString(),MenuActivity.this);
+                    mPreferences.setNameUser(edtname.getText().toString(),MenuActivity.this);
+                    mPreferences.setTelUser(edttel.getText().toString(),MenuActivity.this);
+                    deleteDialog.dismiss();
+                    RequiredValida req = new RequiredValida(edtced.getText().toString(),edttel.getText().toString(),edtname.getText().toString());
+                    new Http(MenuActivity.this).validac(req,MenuActivity.this);
+
+
+                }
+                else{
+
+                    if(edtname.getText().length()==0){
+                        edtname.setError("Debe ingresar su Nombre");
+                    }
+
+                    if(edtced.getText().length()==0){
+
+                        edtced.setError("Debe ingresar cedula");
+                    }
+
+                }
+
+
+            }
+        });
+
+        deleteDialog.show();
+
+        int width = (int)(displayRectangle.width() * 7/8);
+        int heigth = (int)(displayRectangle.height() * 6/8);
+
+        deleteDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+
+
+
+    }
+
 
 
     public void showbottomsheet(){

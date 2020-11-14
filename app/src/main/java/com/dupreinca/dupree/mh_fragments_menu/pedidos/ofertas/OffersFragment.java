@@ -78,13 +78,34 @@ public class OffersFragment extends BaseFragment implements OfertasHolder.Events
         binding.recycler.setHasFixedSize(true);
 
 
-        timeinit = System.currentTimeMillis();
+
         perfil = getPerfil();
         //listPremios = new ArrayList<>();
         listFilterOffers = new ArrayList<>();
         adapter_catalogo = new OffersListAdapter(listFilterOffers, this);
 
         binding.recycler.setAdapter(adapter_catalogo);
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean visible) {
+        super.setUserVisibleHint(visible);
+        if (visible) {
+            timeinit = System.currentTimeMillis();
+        }
+        else{
+            if(perfil!=null){
+                timeend = System.currentTimeMillis();
+                long finaltime= timeend-timeinit;
+                int timesec = (int)finaltime/1000;
+
+                RequiredVisit req = new RequiredVisit(perfil.getValor(),Integer.toString(timesec),"ofertas");
+                System.out.println("Se destruyo bandeja"+Long.toString(finaltime) + " para "+perfil.getValor());
+
+                new Http(getActivity()).Visit(req);
+            }
+
+        }
     }
 
     //MARK: OfertasHolder.Events
@@ -127,16 +148,7 @@ public class OffersFragment extends BaseFragment implements OfertasHolder.Events
     @Override
     public void onDestroy(){
 
-        if(perfil!=null){
-            timeend = System.currentTimeMillis();
-            long finaltime= timeend-timeinit;
-            int timesec = (int)finaltime/1000;
 
-            RequiredVisit req = new RequiredVisit(perfil.getValor(),Integer.toString(timesec),"ofertas");
-            System.out.println("Se destruyo bandeja"+Long.toString(finaltime) + " para "+perfil.getValor());
-
-            new Http(getActivity()).Visit(req);
-        }
 
         super.onDestroy();
         realm.close();

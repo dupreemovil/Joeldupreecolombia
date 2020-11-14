@@ -57,6 +57,15 @@ public class mPreferences {
     private static final String VERSION_CATALOGO = "version_catalogo";
 
 
+    private static final String NAME_USER = "name_user";
+
+    private static final String VALID_SMS = "valid_sms";
+
+
+    private static final String CED_USER = "ced_user";
+
+    private static final String TEL_USER = "tel_user";
+    private static final String ACT_CEL = "activa_celular";
     /**
      * Guardar valores array
      * @param key
@@ -306,6 +315,56 @@ public class mPreferences {
         Log.e(TAG, "TOKEN_SESION");
         setString(TOKEN_SESION, jsonCampana,ctxt);
     }
+
+    public static void setNameUser(String name_user, Context ctxt){
+        Log.e(TAG, "NAME_USER");
+        setString(NAME_USER, name_user,ctxt);
+    }
+
+    public static String getNameUser(Context mycontext){
+        return getString(NAME_USER,mycontext);
+    }
+
+    public static void setValidSms(String valid_sms, Context ctxt){
+        Log.e(TAG, "NAME_USER");
+        setString(VALID_SMS, valid_sms,ctxt);
+    }
+
+    public static String getValidSms(Context mycontext){
+        return getString(VALID_SMS,mycontext);
+    }
+
+
+
+    public static void setCedUser(String ced_user, Context ctxt){
+        Log.e(TAG, "CED_USER");
+        setString(CED_USER, ced_user,ctxt);
+    }
+
+    public static String getCedUser(Context mycontext){
+        return getString(CED_USER,mycontext);
+    }
+
+    public static void setTelUser(String tel_user, Context ctxt){
+        Log.e(TAG, "TEL_USER");
+        setString(TEL_USER, tel_user,ctxt);
+    }
+
+    public static String getTelUser(Context mycontext){
+        return getString(TEL_USER,mycontext);
+    }
+
+
+
+    public static void setActCel(String act_cel, Context ctxt){
+        Log.e(TAG, "ACT_CEL");
+        setString(ACT_CEL, act_cel,ctxt);
+    }
+
+    public static String getActcel(Context mycontext){
+        return getString(ACT_CEL,mycontext);
+    }
+
 
     //get images banner
     public static String getTokenSesion(Context mycontext){

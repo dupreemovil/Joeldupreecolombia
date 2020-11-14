@@ -286,7 +286,10 @@ public class PanelAsesoraFragment extends TabManagerFragment {
         setData(true, data);
 
         updateTracking(data);
-        updateFaltanteConf(data);
+        if(data!=null){
+            updateFaltanteConf(data);
+        }
+
     }
 
     private void updateTracking(PanelAsesora data){
@@ -330,7 +333,13 @@ public class PanelAsesoraFragment extends TabManagerFragment {
 
     private void updateFaltanteConf(PanelAsesora data){
         if(data!=null) {
-            pagerAdapter.getFaltantesAsesoraFragment().setData(data.getFaltantes());
+            if(data.getFaltantes()!=null){
+
+                if(pagerAdapter.getFaltantesAsesoraFragment()!=null){
+                    pagerAdapter.getFaltantesAsesoraFragment().setData(data.getFaltantes());
+                }
+            }
+
         }
     }
 

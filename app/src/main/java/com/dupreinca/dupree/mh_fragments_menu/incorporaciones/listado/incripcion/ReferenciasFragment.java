@@ -64,8 +64,11 @@ public class ReferenciasFragment extends BaseFragment implements View.OnClickLis
         Bundle bundle;
         if((bundle = getArguments()) != null && (model = bundle.getParcelable(TAG)) != null) {
             isOnCreate = true;
-            modelRefPersonal = model.getReferencia().get(0);
-            modelRefFamiliar = model.getReferencia().get(1);
+            if(model.getReferencia().size()>1){
+                modelRefPersonal = model.getReferencia().get(0);
+                modelRefFamiliar = model.getReferencia().get(1);
+            }
+
         } else {
             onBack();
         }

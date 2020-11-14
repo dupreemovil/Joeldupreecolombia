@@ -9,8 +9,11 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <uses-permission android:name="android.permission.CAMERA" />
 
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.Manifest.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.FLASHLIGHT" />
     <uses-permission android:name="android.permission.FLAG_GRANT_WRITE_URI_PERMISSION" />
     <uses-permission android:name="android.permission.FLAG_GRANT_READ_URI_PERMISSION" />
@@ -29,9 +32,9 @@
     <application
         android:name=".BaseAPP"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher_dupree"
+        android:icon="@mipmap/ic_launcherf_dupree"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_dupree"
+        android:roundIcon="@mipmap/ic_launcherf_dupree"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
@@ -44,6 +47,14 @@
 
         <!-- Sincronización diaria de los datos del dispositivo -->
         <service android:name="com.indigitall.android.services.NightService"/>
+
+        <service
+            android:name="com.indigitall.android.services.HMSMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.huawei.push.action.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
 
         <!-- Para iniciar los servicios cuando reinicias el dispositivo -->
         <receiver android:name="com.indigitall.android.receivers.BootReceiver">

@@ -112,7 +112,8 @@ public class AuthFragment extends Fragment {
         }
 
         System.out.println("El fid es "+fid);
-        new Http(getActivity()).Auth(new RequiredAuth(txtUsername.getText().toString(), txtPwd.getText().toString(), tokenDevice,fid));
+        String versionName = BuildConfig.VERSION_NAME;
+        new Http(getActivity()).Auth(new RequiredAuth(txtUsername.getText().toString(), txtPwd.getText().toString(), tokenDevice,fid,versionName));
     }
 
     private void publishResult(String object){

@@ -38,7 +38,13 @@ public class TrackingListAdapter extends RecyclerView.Adapter<TrackingHolder> {
     @Override
     public void onBindViewHolder(@NonNull TrackingHolder holder, int position) {
         if(list.size() > position) {
-            holder.bindData(list.get(position));
+            if(holder!=null){
+
+                if(list.get(position)!=null){
+                    holder.bindData(list.get(position));
+                }
+            }
+
         }
     }
 

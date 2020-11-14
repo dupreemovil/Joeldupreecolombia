@@ -96,8 +96,12 @@ public class ReportePagosRealizadosFragment extends BaseFragment implements Pago
     private void updateView(ListPagos listaPagos){
         listPagos.clear();
         listFilter.clear();
-        listPagos.addAll(listaPagos.getPago());
-        listFilter.addAll(listaPagos.getPago());
+        if(listaPagos.getPago()!=null){
+            listPagos.addAll(listaPagos.getPago());
+            listFilter.addAll(listaPagos.getPago());
+        }
+
+
 
         binding.cardViewBackGround.setVisibility(View.VISIBLE);
         binding.tvNombreAsesora.setText(listaPagos.getAsesora());

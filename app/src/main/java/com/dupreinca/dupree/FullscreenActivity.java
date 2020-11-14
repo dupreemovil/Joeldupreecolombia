@@ -136,6 +136,11 @@ public class FullscreenActivity extends AppCompatActivity  {
             campanaActual = campana;
          }
 
+        if(mPreferences.getActcel(FullscreenActivity.this)==null || mPreferences.getActcel(FullscreenActivity.this).length()==0 ){
+
+            mPreferences.setActCel("0",FullscreenActivity.this);
+
+        }
 
 
 
@@ -289,6 +294,11 @@ public class FullscreenActivity extends AppCompatActivity  {
         bannerController.getBanner(new TTResultListener<BannerDTO>() {
             @Override
             public void success(BannerDTO result) {
+
+
+                System.out.println("El banner act "+result.getActiva_celular());
+                mPreferences.setActCel(result.getActiva_celular(),FullscreenActivity.this);
+
                 Log.e(TAG, "getBanner() -> success(): " + new Gson().toJson(result));
                 responseBanner(result);
             }

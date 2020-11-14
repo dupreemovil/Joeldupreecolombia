@@ -1,9 +1,12 @@
 package com.dupreinca.dupree.mh_fragments_menu.incorporaciones.Preinscripcion;
 
 
+import android.Manifest;
 import android.content.Intent;
 
 import androidx.databinding.ViewDataBinding;
+
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -11,6 +14,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Process;
 import android.provider.MediaStore;
 import androidx.annotation.NonNull;
 
@@ -617,21 +621,40 @@ public class PreinsciptionFragment extends BaseFragment implements PermissionCam
                 imagen.delete();
             }
 
-            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.N) {
-                String authorities="com.cloudemotion.lib_image"+".provider";
-                Uri imageUri= FileProvider.getUriForFile(getContext(),authorities,imagen);
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-            } else {
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(imagen));
+            if(hascamerapermission() && hasrexternal() && haswexternal()){
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.N) {
+                    String authorities="com.cloudemotion.lib_image"+".provider";
+                    Uri imageUri= FileProvider.getUriForFile(getContext(),authorities,imagen);
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+                } else {
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(imagen));
+                }
+                startActivityForResult(intent,COD_FOTO);
             }
-            startActivityForResult(intent,COD_FOTO);
+
+
         }
     }
 
     public void cargargaleria() {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(intent, COD_SELECCIONA);
+    }
+
+    private boolean hascamerapermission() {
+        return getActivity().checkPermission(Manifest.permission.CAMERA, Process.myPid(), Process.myUid())
+                == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private boolean hasrexternal() {
+        return getActivity().checkPermission(Manifest.permission.READ_EXTERNAL_STORAGE, Process.myPid(), Process.myUid())
+                == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private boolean haswexternal() {
+        return getActivity().checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, Process.myPid(), Process.myUid())
+                == PackageManager.PERMISSION_GRANTED;
     }
 
 

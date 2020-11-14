@@ -65,6 +65,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Objects;
 
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
@@ -573,8 +574,8 @@ public class CatalogosFragment extends BaseFragment {
                     binding.txtNameCampB.setText(nomb_cata_segu);
                     binding.txtNumCampA.setText(code_cata_prim);
                     binding.txtNumCampB.setText(code_cata_segu);
-                    img = ImageLoader.getInstance();
-                    img.init(PinchZoomImageView.configurarImageLoader(getActivity()));
+
+                    img.init(Objects.requireNonNull(PinchZoomImageView.configurarImageLoader(getActivity())));
 
                     img.displayImage(urls_port_prim, binding.imgCampA);
                     img.displayImage(urls_port_segu, binding.imgCampB);
