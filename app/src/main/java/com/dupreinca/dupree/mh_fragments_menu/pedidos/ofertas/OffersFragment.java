@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import android.util.Log;
+import android.view.View;
 
 import com.dupreeinca.lib_api_rest.model.dto.response.realm.Oferta;
 import com.dupreeinca.lib_api_rest.model.view.Profile;
@@ -143,6 +144,14 @@ public class OffersFragment extends BaseFragment implements OfertasHolder.Events
 
         return null;
     }
+
+    public void hidebtn(){
+        binding.layoutbtn.setVisibility(View.GONE);
+    }
+    public void showbtn(){
+        binding.layoutbtn.setVisibility(View.VISIBLE);
+    }
+
 
 
     @Override

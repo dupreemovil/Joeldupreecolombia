@@ -1,5 +1,8 @@
 package com.dupreeinca.lib_api_rest.model.dto.response.realm;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by marwuinh@gmail.com on 4/9/17.
  */
@@ -7,6 +10,7 @@ package com.dupreeinca.lib_api_rest.model.dto.response.realm;
 public class ItemCarrito{
     public final static int TYPE_CATALOGO = 1;
     public final static int TYPE_OFFERTS = 2;
+    public final static int TYPE_MADRUGON = 3;
     private String id;
     private String name;
     private String valor;
@@ -19,7 +23,16 @@ public class ItemCarrito{
     private int cantidadServer=0;
     private long time=0;//para control de fecha de item, agregado (o usar incremento), solo cataloog
     private int type=0;
+
+    public List<String> tallas;
+
+
+    public String talla;
+
+
+    public String tallasel;
     public ItemCarrito() {
+
     }
 
     public ItemCarrito(Oferta item){
@@ -47,6 +60,57 @@ public class ItemCarrito{
         setTime(item.getTime());
         setType(TYPE_CATALOGO);
     }
+
+    public ItemCarrito(Madrugon item){
+        setId(item.getCodi_vent());
+        setName(item.getName());
+        setValor(item.getPrec_vent());
+        setValor_descuento(item.getPrec_vent());
+        setUrl_img(item.getUrl_img());
+        setPage(item.getCampana());
+        setCantidad(item.getCantidadServer());
+        setCantidadServer(item.getCantidadServer());
+        setTime(item.getTime());
+        setType(TYPE_MADRUGON);
+        setTallas(item.getTallas());
+        setTalla(item.getTalla());
+        setTallasel(item.getTallasel());
+    }
+
+    public String getTallasel() {
+        return tallasel;
+    }
+
+    public void setTallasel(String tallasel) {
+        this.tallasel = tallasel;
+    }
+
+
+    public List<String> getTallas() {
+
+
+        return tallas;
+    }
+
+    public void setTallas(List<talla> tallas) {
+
+        List<String> lista = new ArrayList<>();
+        for(int i=0;i<tallas.size();i++){
+
+            lista.add(tallas.get(i).getTalla());
+        }
+
+        this.tallas = lista;
+    }
+    public String getTalla() {
+        return talla;
+    }
+
+    public void setTalla(String talla) {
+        this.talla = talla;
+    }
+
+
 
     public String getId() {
         return id;

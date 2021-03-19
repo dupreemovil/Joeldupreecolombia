@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
 import android.util.Log;
+import android.view.View;
 
 import com.dupreeinca.lib_api_rest.controller.ReportesController;
 import com.dupreeinca.lib_api_rest.model.base.TTError;
@@ -60,6 +61,14 @@ public class FacturasFragment extends BaseFragment implements FacturasHolder.Eve
         fragment.setArguments(args);
         return fragment;
     }
+
+    public void hidebtn(){
+        binding.layoutbtn.setVisibility(View.GONE);
+    }
+    public void showbtn(){
+        binding.layoutbtn.setVisibility(View.VISIBLE);
+    }
+
 
     @Override
     protected int getMainLayout() {

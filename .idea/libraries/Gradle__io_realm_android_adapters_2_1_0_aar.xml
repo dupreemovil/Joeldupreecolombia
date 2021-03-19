@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="Gradle: io.realm:android-adapters:2.1.0@aar">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/c58b2914709c96f2828c93dae0528d47/jetified-android-adapters-2.1.0/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/c58b2914709c96f2828c93dae0528d47/jetified-android-adapters-2.1.0/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/ff6542fdb88c605911c06049eb8eaaf2/jetified-android-adapters-2.1.0/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/ff6542fdb88c605911c06049eb8eaaf2/jetified-android-adapters-2.1.0/res" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.realm/android-adapters/2.1.0/b509bac2e0dacacdfe26f4046389f407ef34aa4d/android-adapters-2.1.0-javadoc.jar!/" />

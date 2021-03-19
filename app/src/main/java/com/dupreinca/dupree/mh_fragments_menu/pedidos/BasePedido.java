@@ -9,4 +9,7 @@ public interface BasePedido {
     void productsEditable(boolean productsEditable);
     void updateTotal();
     void updateCarrito();
+    void hidesearch();
+    void showsearch();
+    String id_pedido();
 }

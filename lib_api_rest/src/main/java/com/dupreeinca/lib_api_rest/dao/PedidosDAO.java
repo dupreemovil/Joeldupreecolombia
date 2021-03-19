@@ -8,6 +8,7 @@ import com.dupreeinca.lib_api_rest.model.base.TTError;
 import com.dupreeinca.lib_api_rest.model.base.TTResultListener;
 import com.dupreeinca.lib_api_rest.model.dto.request.Identy;
 import com.dupreeinca.lib_api_rest.model.dto.request.Index;
+import com.dupreeinca.lib_api_rest.model.dto.request.LiquidaSend;
 import com.dupreeinca.lib_api_rest.model.dto.request.LiquidarSend;
 import com.dupreeinca.lib_api_rest.model.dto.request.PrePedidoSend;
 import com.dupreeinca.lib_api_rest.model.dto.request.RedimirPremios;
@@ -15,6 +16,7 @@ import com.dupreeinca.lib_api_rest.model.dto.response.EstadoPedidoDTO;
 import com.dupreeinca.lib_api_rest.model.dto.response.EstadoPrePedidoDTO;
 import com.dupreeinca.lib_api_rest.model.dto.response.FaltantesDTO;
 import com.dupreeinca.lib_api_rest.model.dto.response.GenericDTO;
+import com.dupreeinca.lib_api_rest.model.dto.response.LiquidaDTO;
 import com.dupreeinca.lib_api_rest.model.dto.response.LiquidarDTO;
 import com.dupreeinca.lib_api_rest.model.dto.response.RedimirDTO;
 import com.google.gson.Gson;
@@ -38,6 +40,22 @@ public class PedidosDAO extends TTGenericDAO {
         call.enqueue(new TTCallback<LiquidarDTO>(new TTResultListener<LiquidarDTO>() {
             @Override
             public void success(LiquidarDTO result) {
+                listener.success(result);
+            }
+
+            @Override
+            public void error(TTError error) {
+                listener.error(error);
+            }
+        },getRetrofit()));
+    }
+
+    public void liquidaPedido(LiquidaSend data, final TTResultListener<LiquidaDTO> listener){
+        Rest userREST = getRetrofit().create(Rest.class);
+        Call<LiquidaDTO> call = userREST.liquidaPedido(new Gson().toJson(data));
+        call.enqueue(new TTCallback<LiquidaDTO>(new TTResultListener<LiquidaDTO>() {
+            @Override
+            public void success(LiquidaDTO result) {
                 listener.success(result);
             }
 
@@ -154,6 +172,10 @@ public class PedidosDAO extends TTGenericDAO {
         @FormUrlEncoded
         @POST("pedidos/liquida")
         Call<LiquidarDTO> liquidarPedido(@Field("Params") String jsonLiquidate);
+
+        @FormUrlEncoded
+        @POST("pedidos/liquida")
+        Call<LiquidaDTO> liquidaPedido(@Field("Params") String jsonLiquidate);
 
         @FormUrlEncoded
         @POST("pedidos/gprepedido")

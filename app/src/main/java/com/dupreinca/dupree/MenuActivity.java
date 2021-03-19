@@ -529,7 +529,7 @@ public class MenuActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
 
-    private void setFragment(MenuItem menuItem) {
+    public void setFragment(MenuItem menuItem) {
        FragmentManager fragmentManager = getSupportFragmentManager();
         switch (menuItem.getItemId()) {
             case R.id.menu_lat_home_asesoras:
@@ -658,6 +658,57 @@ public class MenuActivity extends BaseActivity implements NavigationView.OnNavig
 //            binding.appBarMenu.toolbar.setTitle(menuItem.getItemId()==R.id.menu_lat_hacer_pedidos ? "Ingrese código ->" : menuItem.getTitle());
               binding.appBarMenu.toolbar.setTitle(menuItem.getTitle());
         }
+    }
+
+    public void resethacerpedido(){
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentoGenerico = new HacerPedidoFragment();
+        ((HacerPedidoFragment) fragmentoGenerico).loadData(perfil);
+
+        if (fragmentoGenerico != null) {
+
+            if(bottomSheetBehavior!=null){
+
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            }
+
+            String title = "";
+            fragmentManager
+                    .beginTransaction()
+                    .replace(R.id.fragment, fragmentoGenerico, "Hacer pedidos")// se reconoce al fragment por el String
+                    .commit();
+
+//            binding.appBarMenu.toolbar.setTitle(menuItem.getItemId()==R.id.menu_lat_hacer_pedidos ? "Ingrese código ->" : menuItem.getTitle());
+            binding.appBarMenu.toolbar.setTitle("Hacer pedidos");
+        }
+
+    }
+
+
+    public void resetmenu(){
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentoGenerico = new PanelAsesoraFragment();
+        ((PanelAsesoraFragment) fragmentoGenerico).loadData(perfil);
+
+        if (fragmentoGenerico != null) {
+
+            if(bottomSheetBehavior!=null){
+
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            }
+
+            String title = "";
+            fragmentManager
+                    .beginTransaction()
+                    .replace(R.id.fragment, fragmentoGenerico, "Panel asesora")// se reconoce al fragment por el String
+                    .commit();
+
+//            binding.appBarMenu.toolbar.setTitle(menuItem.getItemId()==R.id.menu_lat_hacer_pedidos ? "Ingrese código ->" : menuItem.getTitle());
+            binding.appBarMenu.toolbar.setTitle("Panel asesora");
+        }
+
     }
 
     private void requeridPermission() {

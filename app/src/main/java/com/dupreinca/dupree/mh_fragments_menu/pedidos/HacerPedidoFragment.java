@@ -1,15 +1,27 @@
 package com.dupreinca.dupree.mh_fragments_menu.pedidos;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import androidx.databinding.ViewDataBinding;
 
 import com.dupreeinca.lib_api_rest.controller.BannerController;
+import com.dupreeinca.lib_api_rest.model.dto.request.LiquidaSend;
+import com.dupreeinca.lib_api_rest.model.dto.request.LiquidarMadrugon;
 import com.dupreeinca.lib_api_rest.model.dto.response.BannerDTO;
+import com.dupreeinca.lib_api_rest.model.dto.response.LiquidaDTO;
 import com.dupreeinca.lib_api_rest.model.dto.response.ListProductCatalogoDTO;
+import com.dupreeinca.lib_api_rest.model.dto.response.ListProductMadrugonDTO;
 import com.dupreeinca.lib_api_rest.model.dto.response.ProductCatalogoDTO;
+import com.dupreeinca.lib_api_rest.model.dto.response.ProductMadrugonDTO;
 import com.dupreeinca.lib_api_rest.model.dto.response.UrlsCatalogosDTO;
+import com.dupreeinca.lib_api_rest.model.dto.response.realm.ItemCarritoM;
+import com.dupreeinca.lib_api_rest.model.dto.response.realm.MadCarrito;
+import com.dupreeinca.lib_api_rest.model.dto.response.realm.Madrugon;
+import com.dupreinca.dupree.MainActivity;
+import com.dupreinca.dupree.MenuActivity;
 import com.dupreinca.dupree.mh_http.Http;
+import com.dupreinca.dupree.mh_required_api.RequiredValida;
 import com.dupreinca.dupree.mh_required_api.RequiredVisit;
 import com.dupreinca.dupree.mh_utilities.mPreferences;
 import 	com.google.android.material.tabs.TabLayout;
@@ -19,15 +31,23 @@ import androidx.viewpager.widget.ViewPager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.appcompat.widget.SearchView;
+
+import android.graphics.Rect;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.Animation;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dupreeinca.lib_api_rest.controller.PedidosController;
@@ -67,6 +87,7 @@ import java.util.Objects;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
+import io.realm.Sort;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -82,7 +103,7 @@ public class HacerPedidoFragment extends TabManagerFragment implements BasePedid
     public final static String PEDIDO_MODIFICAR = "1";
     public static final String BROACAST_DATA="broacast_data";
 
-    private ResultEdoPedido resultEdoPedido;
+    public ResultEdoPedido resultEdoPedido;
     private boolean enable = true;
     String dato_corr="", dato_celu="";
     int bandera=1;
@@ -111,7 +132,7 @@ public class HacerPedidoFragment extends TabManagerFragment implements BasePedid
     private String campana;
 
     ListProductCatalogoDTO listaProd_catalogo;
-
+    ListProductMadrugonDTO listaProd_madrugon;
 
     public void loadData(Profile perfil){
         this.perfil=perfil;
@@ -171,8 +192,12 @@ public class HacerPedidoFragment extends TabManagerFragment implements BasePedid
         bannerController =  new BannerController(getActivity());
 
         pedidosPagerAdapter = new PedidosPagerAdapter(getChildFragmentManager());
+
+        binding.pagerView.beginFakeDrag();
         binding.pagerView.addOnPageChangeListener(mOnPageChangeListener);
-        binding.pagerView.setOffscreenPageLimit(3);
+        binding.pagerView.setPagingEnabled(false);
+        binding.pagerView.setOffscreenPageLimit(1);
+
         binding.fabSendPedido.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -225,8 +250,8 @@ public class HacerPedidoFragment extends TabManagerFragment implements BasePedid
         checkEdoPedido();
     }
 
-    private MenuItem searchItem;
-    private SearchView searchView;
+    public MenuItem searchItem;
+    public SearchView searchView;
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_pedidos, menu);
@@ -340,7 +365,8 @@ public class HacerPedidoFragment extends TabManagerFragment implements BasePedid
         simpleDialog.show(getActivity().getSupportFragmentManager(),"mDialog");
     }
 
-    private void sendToServer(){
+
+    public void sendtoServerP(){
         showProgress();
 
         LiquidarSend send = obtainProductsLiquidate();
@@ -348,7 +374,20 @@ public class HacerPedidoFragment extends TabManagerFragment implements BasePedid
         pedidosController.liquidarPedido(send, new TTResultListener<LiquidarDTO>() {
             @Override
             public void success(LiquidarDTO result) {
+
+                System.out.println("El result pedido "+result.getActiva_premio());
+
+
                 dismissProgress();
+
+                if(result.getActiva_premio().contains("1")){
+
+                    System.out.println("El result pedido act ");
+
+                    //          showpremio(result.getMensaje_premio());
+
+                }
+
                 if(result != null && result.getCodigo() != null){
                     if(result.getCodigo().equals(EnumLiquidar.OK.getKey())){
                         NumberFormat formatter = NumberFormat.getInstance(Locale.US);
@@ -374,13 +413,184 @@ public class HacerPedidoFragment extends TabManagerFragment implements BasePedid
 
 
                         showSnackBarDuration(msg,15000);
+                        pedidosPagerAdapter.getCarritoFragment().setvisiblemad();
 
-                        pedidosPagerAdapter.getCarritoFragment().pedidoEndviadoexitosamente();
-                        pedidosPagerAdapter.getOffersFragment().ofertaEndviadoexitosamente();
+                        System.out.println("Set visible mad");
+                        //         pedidosPagerAdapter.getCarritoFragment().pedidoEndviadoexitosamente();
+                        //       pedidosPagerAdapter.getOffersFragment().ofertaEndviadoexitosamente();
 
-                        initFAB();
+                        //       initFAB();
 
-                        clearAllData();
+                        //         clearAllData();
+                        pedidosPagerAdapter.getCarritoFragment().updateCarritoM();
+
+
+
+                    } else if(result.getCodigo().equals(EnumLiquidar.DEBAJO_MONTO.getKey())){
+                        NumberFormat formatter = NumberFormat.getInstance(Locale.US);
+
+                        String  msg = "Total: "
+                                .concat("$".concat(formatter.format(Float.parseFloat(result.getTotal_pedido()))))
+                                .concat(". ")
+                                .concat(result.getMensaje());
+
+                        showSnackBarDuration(msg,15000);
+                    }
+                }
+            }
+
+            @Override
+            public void error(TTError error) {
+                dismissProgress();
+                checkSession(error);
+            }
+        });
+    }
+
+    private void sendToServer(){
+        showProgress();
+
+        LiquidarSend send = obtainProductsLiquidate();
+        Log.e(TAG, "sendToServer() -> send: "+new Gson().toJson(send));
+        pedidosController.liquidarPedido(send, new TTResultListener<LiquidarDTO>() {
+            @Override
+            public void success(LiquidarDTO result) {
+
+                System.out.println("El result pedido "+result.getActiva_premio());
+
+
+                dismissProgress();
+
+                if(result.getActiva_premio().contains("1")){
+
+                    System.out.println("El result pedido act ");
+
+          //          showpremio(result.getMensaje_premio());
+
+                }
+
+                if(result != null && result.getCodigo() != null){
+                    if(result.getCodigo().equals(EnumLiquidar.OK.getKey())){
+                        NumberFormat formatter = NumberFormat.getInstance(Locale.US);
+                        String  msg = "";
+                        if(result.getTotal_pedido()!=null){
+
+                            try {
+                                msg = "Total: "
+                                        .concat("$".concat(formatter.format(Float.parseFloat(result.getTotal_pedido()))))
+                                        .concat(". ")
+                                        .concat(result.getMensaje());
+                            } catch (NumberFormatException e) {
+
+                                Toast.makeText(getActivity(),"Error al obtener Total",Toast.LENGTH_LONG).show();
+                            }
+
+
+                        }
+                        else{
+
+                            msg = "Total: ";
+                        }
+
+
+                        showSnackBarDuration(msg,15000);
+                        pedidosPagerAdapter.getCarritoFragment().setvisiblemad();
+
+                        System.out.println("Set visible mad");
+               //         pedidosPagerAdapter.getCarritoFragment().pedidoEndviadoexitosamente();
+                 //       pedidosPagerAdapter.getOffersFragment().ofertaEndviadoexitosamente();
+
+                 //       initFAB();
+
+               //         clearAllData();
+                        pedidosPagerAdapter.getCarritoFragment().updateCarritoM();
+
+
+
+                    } else if(result.getCodigo().equals(EnumLiquidar.DEBAJO_MONTO.getKey())){
+                        NumberFormat formatter = NumberFormat.getInstance(Locale.US);
+
+                        String  msg = "Total: "
+                                .concat("$".concat(formatter.format(Float.parseFloat(result.getTotal_pedido()))))
+                                .concat(". ")
+                                .concat(result.getMensaje());
+
+                        showSnackBarDuration(msg,15000);
+                    }
+                }
+            }
+
+            @Override
+            public void error(TTError error) {
+                dismissProgress();
+                checkSession(error);
+            }
+        });
+//        new Http(getActivity()).liquidarPedido(obtainProductsLiquidate(), TAG, BROACAST_LIQUIDATE_PRODUCTS);
+    }
+
+
+    private void sendServer(){
+        showProgress();
+
+
+        LiquidaSend send = obtainProductsL();
+        Log.e(TAG, "sendToServer() -> send: "+new Gson().toJson(send));
+        pedidosController.liquidaPedido(send, new TTResultListener<LiquidaDTO>() {
+            @Override
+            public void success(LiquidaDTO result) {
+
+                System.out.println("El result pedido "+result.getActiva_premio());
+
+
+                dismissProgress();
+
+                if(result.getActiva_premio().contains("1")){
+
+                    System.out.println("El result pedido act ");
+
+                    //          showpremio(result.getMensaje_premio());
+
+                }
+
+                if(result != null && result.getCodigo() != null){
+                    if(result.getCodigo().equals(EnumLiquidar.OK.getKey())){
+                        NumberFormat formatter = NumberFormat.getInstance(Locale.US);
+                        String  msg = "";
+                        if(result.getTotal_pedido()!=null){
+
+                            try {
+                                msg = "Total: "
+                                        .concat("$".concat(formatter.format(Float.parseFloat(result.getTotal_pedido()))))
+                                        .concat(". ")
+                                        .concat(result.getMensaje());
+                            } catch (NumberFormatException e) {
+
+                                Toast.makeText(getActivity(),"Error al obtener Total",Toast.LENGTH_LONG).show();
+                            }
+
+
+                        }
+                        else{
+
+                            msg = "Total: ";
+                        }
+
+
+                        showSnackBarDuration(msg,15000);
+                        pedidosPagerAdapter.getCarritoFragment().setvisiblemad();
+
+                        System.out.println("Set visible mad");
+                                 pedidosPagerAdapter.getCarritoFragment().pedidoEndviadoexitosamente();
+                               pedidosPagerAdapter.getOffersFragment().ofertaEndviadoexitosamente();
+
+                        //       initFAB();
+
+                        //         clearAllData();
+                        pedidosPagerAdapter.getCarritoFragment().updateCarritoM();
+
+
+
                     } else if(result.getCodigo().equals(EnumLiquidar.DEBAJO_MONTO.getKey())){
                         NumberFormat formatter = NumberFormat.getInstance(Locale.US);
 
@@ -430,6 +640,28 @@ public class HacerPedidoFragment extends TabManagerFragment implements BasePedid
         return new LiquidarSend(id_pedido, paquetones, productos, ofertas);
     }
 
+    public LiquidaSend obtainProductsL(){
+        String id_pedido = resultEdoPedido!=null ? resultEdoPedido.getId_pedido() : "";
+        List<String> paquetones= new ArrayList<>();
+        List<LiquidarProducto> ofertas = new ArrayList<>();
+        List<LiquidarProducto> productos = new ArrayList<>();
+        List<ItemCarritoM> lista = filterCatalogoDBMAD("");
+        List<LiquidarMadrugon> madrugon = new ArrayList<>();
+        for(int j=0;j<lista.size();j++){
+
+
+            LiquidarMadrugon liq = new LiquidarMadrugon(id_pedido,lista.get(j).getCantidad(),lista.get(j).getValor(),lista.get(j).getTallasel());
+            madrugon.add(liq);
+
+
+        }
+
+
+        total_pedido = 0;
+
+        return new LiquidaSend(id_pedido,productos, madrugon,ofertas,"MOVIL","721652");
+    }
+
     private void checkEdoPedido(){
         Log.e(TAG,"checkEdoPedido(A)");
         if(perfil != null){
@@ -455,8 +687,35 @@ public class HacerPedidoFragment extends TabManagerFragment implements BasePedid
         binding.ctxNameAsesora.setVisibility(isVisible && !TextUtils.isEmpty(text) ? View.VISIBLE : View.GONE);
         enableSearch(isVisible);
 
-        fabShow(isVisible);
+        //fabShow(isVisible);
+        fabShow(false);
+    }
 
+    public List<ItemCarritoM> filterCatalogoDBMAD(final String textFilter){
+        List<ItemCarritoM> listCarritos = new ArrayList<>();
+        Log.v(TAG,"filterCatalogoDBM... ---------------filterCatalogoDBM--------------");
+        try {
+            realm.beginTransaction();
+            RealmResults<MadCarrito> query = realm.where(MadCarrito.class)
+                    .beginGroup()
+
+                    .endGroup()
+                    .contains("id",textFilter)
+                    .findAllSorted("id").sort("id", Sort.DESCENDING);
+            realm.commitTransaction();
+            for (MadCarrito item : query) {
+                listCarritos.add(new ItemCarritoM(item));
+            }
+
+        } catch(Throwable e) {
+            Log.v(TAG,"filterCatalogoDBM... ---------------error--------------");
+            if(realm.isInTransaction()) {
+                realm.cancelTransaction();
+            }
+            throw e;
+        }
+
+        return listCarritos;
     }
 
     private void fabTitle(String title){
@@ -496,6 +755,8 @@ public class HacerPedidoFragment extends TabManagerFragment implements BasePedid
             }
             else{
                 deleteCatalogo();
+                deleteMadrugon();
+                deleteMadcarrito();
             }
 
          //   deleteCatalogo();
@@ -521,6 +782,7 @@ public class HacerPedidoFragment extends TabManagerFragment implements BasePedid
             }
             else{
                 deleteCatalogo();
+                deleteMadrugon();
             }
 
             getBanner();
@@ -531,6 +793,68 @@ public class HacerPedidoFragment extends TabManagerFragment implements BasePedid
         }
 
         selectAction();
+    }
+
+    public void deleteMadrugon(){
+
+        System.out.println("Delete Madr");
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm bgRealm) {
+                bgRealm.delete(Madrugon.class);
+            }
+        }, new Realm.Transaction.OnSuccess() {
+            @Override
+            public void onSuccess() {
+                // Transaction was a success.
+                Log.v(TAG,"deleteMadrugon... ---------------ok--------------");
+                //realm.close();
+            }
+        }, new Realm.Transaction.OnError() {
+            @Override
+            public void onError(Throwable error) {
+                // Transaction failed and was automatically canceled.
+                Log.e(TAG,"deleteMadrugon... ---------------error--------------");
+                Log.e(TAG,"deleteMadrugon... "+error.getMessage());
+                //realm.close();
+                dismissProgress();
+
+            }
+        });
+        //realm.beginTransaction();
+
+        //realm.commitTransaction();
+    }
+
+    public void deleteMadcarrito(){
+
+        System.out.println("Delete Madr");
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm bgRealm) {
+                bgRealm.delete(MadCarrito.class);
+            }
+        }, new Realm.Transaction.OnSuccess() {
+            @Override
+            public void onSuccess() {
+                // Transaction was a success.
+                Log.v(TAG,"deleteMadrugon... ---------------ok--------------");
+                //realm.close();
+            }
+        }, new Realm.Transaction.OnError() {
+            @Override
+            public void onError(Throwable error) {
+                // Transaction failed and was automatically canceled.
+                Log.e(TAG,"deleteMadrugon... ---------------error--------------");
+                Log.e(TAG,"deleteMadrugon... "+error.getMessage());
+                //realm.close();
+                dismissProgress();
+
+            }
+        });
+        //realm.beginTransaction();
+
+        //realm.commitTransaction();
     }
 
     public void deleteCatalogo(){
@@ -575,8 +899,14 @@ public class HacerPedidoFragment extends TabManagerFragment implements BasePedid
                 pedidosPagerAdapter.getOffersFragment().setEnable(true);
                 pedidosPagerAdapter.getOffersFragment().sincOfertasDB(resultEdoPedido.getOfertas().getProductos(), false);//prevalece la oferta local;
 
+                pedidosPagerAdapter.getCarritoFragment().clearCartDBM();
+                pedidosPagerAdapter.getCarritoFragment().sincCatalogoDBM(resultEdoPedido.getMadrugon().getProductos(), false);//prevalece la oferta local;
+
+                pedidosPagerAdapter.getCarritoFragment().binding.layoutbtn.setVisibility(View.VISIBLE);
 
                 pedidosPagerAdapter.getCarritoFragment().sincCatalogoDB(resultEdoPedido.getProductos().getProductos(), false);//Se da prioridad al pedido local
+
+
                 pedidosPagerAdapter.getCarritoFragment().clearEditable();
                 pedidosPagerAdapter.getCarritoFragment().setEnable(true);
 
@@ -592,12 +922,15 @@ public class HacerPedidoFragment extends TabManagerFragment implements BasePedid
                 Log.e(TAG, "Ofertas: "+new Gson().toJson(resultEdoPedido.getOfertas().getProductos()));
                 pedidosPagerAdapter.getOffersFragment().sincOfertasDB(resultEdoPedido.getOfertas().getProductos(), true);//prevalece la oferta del server
                 //enableEdit(true);
-
+                Log.e(TAG, "Sinc Mad: "+new Gson().toJson(resultEdoPedido.getMadrugon().getProductos()));
+                pedidosPagerAdapter.getCarritoFragment().sincCatalogoDBM(resultEdoPedido.getMadrugon().getProductos(), true);//prevalece la oferta local;
+                pedidosPagerAdapter.getCarritoFragment().binding.layoutbtn.setVisibility(View.VISIBLE);
                 pedidosPagerAdapter.getCarritoFragment().sincCatalogoDB(resultEdoPedido.getProductos().getProductos(), true);//Se borra el pedido local
                 pedidosPagerAdapter.getCarritoFragment().clearEditable();
                 pedidosPagerAdapter.getCarritoFragment().setEnable(true);
 
                 pedidosPagerAdapter.getCarritoFragment().updateCarrito();//actualiza el carrito
+
                 break;
             case PEDIDO_FACTURADO:
                 //ya el pedido fue facturado, no se puede hacer otro o editar, no debe haber nada local
@@ -652,7 +985,9 @@ public class HacerPedidoFragment extends TabManagerFragment implements BasePedid
             switch (position){
                 case PedidosPagerAdapter.PAGE_CARRITO:
                     enableSearch(true);
-                    fabShow(true);
+                    fabShow(false);
+                    System.out.println("Show Btn");
+                    pedidosPagerAdapter.getCarritoFragment().showbtn();
                     if(pedidosPagerAdapter.getCarritoFragment()!=null){
                         pedidosPagerAdapter.getCarritoFragment().setEnable(isEnable());
                         pedidosPagerAdapter.getOffersFragment().setEnable(isEnable());
@@ -660,15 +995,27 @@ public class HacerPedidoFragment extends TabManagerFragment implements BasePedid
                         pedidosPagerAdapter.getCarritoFragment().updateCarrito();
                     }
 
+                    if(pedidosPagerAdapter.getCarritoFragment().carritoM){
+                        pedidosPagerAdapter.getCarritoFragment().showbtn();
+                    }
+
+                    if(pedidosPagerAdapter.getCarritoFragment().resumenM){
+                        pedidosPagerAdapter.getCarritoFragment().showbtn();
+                        pedidosPagerAdapter.getCarritoFragment().showresumen();
+                    }
+
 
                     break;
                 case PedidosPagerAdapter.PAGE_OFFERS:
                     enableSearch(true);
                     fabShow(false);
+                    System.out.println("Hide Btn");
+                    pedidosPagerAdapter.getOffersFragment().hidebtn();
                     if(pedidosPagerAdapter.getCarritoFragment()!=null) {
                         pedidosPagerAdapter.getCarritoFragment().setEnable(isEnable());
                         pedidosPagerAdapter.getOffersFragment().setEnable(isEnable());
 
+                        pedidosPagerAdapter.getCarritoFragment().hidebtn();
                         pedidosPagerAdapter.getOffersFragment().filterOffersDB("");
                     }
 
@@ -677,6 +1024,7 @@ public class HacerPedidoFragment extends TabManagerFragment implements BasePedid
                 case PedidosPagerAdapter.PAGE_HISTORICAL:
                     enableSearch(false);
                     fabShow(false);
+                    pedidosPagerAdapter.getHistorialFragment().hidebtn();
                     if(pedidosPagerAdapter.getHistorialFragment()!=null){
                         pedidosPagerAdapter.getHistorialFragment().setIdentyFacturas(cedula);
                     }
@@ -694,6 +1042,7 @@ public class HacerPedidoFragment extends TabManagerFragment implements BasePedid
         public void onPageScrollStateChanged(int state) {
 
         }
+
     };
 
 
@@ -728,11 +1077,11 @@ public class HacerPedidoFragment extends TabManagerFragment implements BasePedid
 
         //EN ESTE CASO SE ESTA MODO GERENTE, SE LIMPIA TODITO EL PEDIDO AL CAMBIAR DE ASESORA
         pedidosPagerAdapter.getOffersFragment().deleteOferta();
-        //pedidosPagerAdapter.getOffersFragment().filterOffersDB("");
+        pedidosPagerAdapter.getOffersFragment().filterOffersDB("");
         pedidosPagerAdapter.getCarritoFragment().clearCartDB();
         pedidosPagerAdapter.getCarritoFragment().updateCarrito();
 
-        pedidosPagerAdapter.getHistorialFragment().updateView(null);
+//        pedidosPagerAdapter.getHistorialFragment().updateView(null);
     }
 
     String cedula = "";
@@ -756,7 +1105,15 @@ public class HacerPedidoFragment extends TabManagerFragment implements BasePedid
                 if(result.getResult().getProductos().getProductos().size()>0){
                     conpedido=true;
                 }
-                System.out.println("El result "+new Gson().toJson(result.getResult()));
+
+                if(result.getResult().getMadrugon().getProductos().size()>0){
+
+                }
+                else{
+                    obtainMadrugon();
+                }
+
+                System.out.println("El result estado "+new Gson().toJson(result.getResult()));
 
                 updateView();
 
@@ -970,6 +1327,20 @@ public class HacerPedidoFragment extends TabManagerFragment implements BasePedid
     }
 
     @Override
+    public void hidesearch() {
+        searchView.setQuery("", false);
+        searchView.setIconified(true);
+        enableSearch(false);
+    }
+
+    @Override
+    public void showsearch() {
+        searchView.setQuery("", true);
+        searchView.setIconified(false);
+        enableSearch(true);
+    }
+
+    @Override
     public void updateTotal(){
         obtainProductsLiquidate();
         Log.e(TAG, "Update Total: "+total_pedido);
@@ -981,6 +1352,11 @@ public class HacerPedidoFragment extends TabManagerFragment implements BasePedid
     @Override
     public void updateCarrito() {
         pedidosPagerAdapter.getCarritoFragment().updateCarrito();
+    }
+
+    @Override
+    public String id_pedido() {
+        return resultEdoPedido.getId_pedido();
     }
 
     @Override
@@ -1129,6 +1505,72 @@ public class HacerPedidoFragment extends TabManagerFragment implements BasePedid
 //        new Http(FullscreenActivity.this).getProductosCatalogo(false);
     }
 
+
+    private void obtainMadrugon() {
+
+        deleteMadrugon();
+        System.out.println("Sinc write");
+    //    deleteMadcarrito();
+
+        showProgress();
+        System.out.println("La respuesta a madr");
+
+        bannerController.getProductosmad( new TTResultListener<ProductMadrugonDTO>() {
+            @Override
+            public void success(ProductMadrugonDTO result) {
+                Log.e(TAG, "obtainMadrugon()C -> success(): " + new Gson().toJson(result));
+                System.out.println("Prod Mad "+new Gson().toJson(result.getResult()));
+                //un detalle envia 200 con error 404
+                if (result.getCode() == 404) {
+                    //     errorLoadInitData();
+                    dismissProgress();
+                } else {
+
+                    responseMadrugon(result.getResult());
+
+                }
+            }
+
+            @Override
+            public void error(TTError error) {
+
+                Log.e(TAG, "obtainmadrugon() -> error(): " + new Gson().toJson(error));
+                //error de Backend
+                if(error!=null){
+                    if(error.getStatusCode()!=null){
+                        if(error.getStatusCode() == 404) {
+                            try {
+
+                            } catch (JsonSyntaxException e) {
+                                dismissProgress();
+                                msgToast("obtainMadrugon() -> error():json " + e.getMessage());
+
+                                //       errorLoadInitData();
+                            }
+                        } else {
+                            dismissProgress();
+                            msgToast("obtainMadrugon() -> error(): " + error.getMessage());
+
+                            // errorLoadInitData();
+                        }
+                    }
+                    else{
+                        dismissProgress();
+
+                        Log.e(TAG, "obtainmadrugon() -> error(): " + new Gson().toJson(error.getMessage()));
+                        msgToast("obtainCatalogo() -> errorstat null: " + error.getMessage());
+
+                        //errorLoadInitData();
+                    }
+                }
+
+
+            }
+        });
+
+
+    }
+
     public void responseCatalogo(ListProductCatalogoDTO listaProd_catalogo){
         Log.e(TAG, "listaProd_catalogo.getOfertas(): "+new Gson().toJson(listaProd_catalogo.getOfertas()));
         Log.e(TAG, "listaProd_catalogo.getPaquetones(): "+new Gson().toJson(listaProd_catalogo.getPaquetones()));
@@ -1151,6 +1593,28 @@ public class HacerPedidoFragment extends TabManagerFragment implements BasePedid
             dismissProgress();
             msgToast("responseCatalogo() -> error(): " + listaProd_catalogo.getProductos());
 
+
+            //     errorLoadInitData();
+        }
+    }
+
+
+    public void responseMadrugon(ListProductMadrugonDTO listaProd_madrugon){
+
+        Log.e(TAG, "listaProd_madrugon.getMadrugon(): "+new Gson().toJson(listaProd_madrugon.getProductos()));
+
+        if(listaProd_madrugon.getProductos()!=null ) {
+            this.listaProd_madrugon = listaProd_madrugon;
+            if(listaProd_madrugon.getProductos().size()>0) {
+                writeMadrugon();
+            }
+            else{
+
+            }
+        } else{
+            dismissProgress();
+            msgToast("responseMadrugon() -> error(): " + listaProd_madrugon.getProductos());
+            //obtainMadrugon();
 
             //     errorLoadInitData();
         }
@@ -1201,6 +1665,9 @@ public class HacerPedidoFragment extends TabManagerFragment implements BasePedid
     }
 
     public void writeCatalogo(){
+
+
+
         if(realm.isClosed())
             realm = Realm.getDefaultInstance();
 
@@ -1223,6 +1690,7 @@ public class HacerPedidoFragment extends TabManagerFragment implements BasePedid
                 Log.v(TAG, ": " + new Gson().toJson(listaProd_catalogo.getProductos()));
 
                 terminatedProcess();
+                obtainMadrugon();
                 //realm.close();
             }
         }, new Realm.Transaction.OnError() {
@@ -1233,6 +1701,48 @@ public class HacerPedidoFragment extends TabManagerFragment implements BasePedid
                 Log.e(TAG,"writeCatalogo... "+error.getMessage());
               //  msgToast("writeCatalogo... "+error.getMessage());
                 dismissProgress();
+                obtainMadrugon();
+                //realm.close();
+                //   errorLoadInitData();
+            }
+        });
+    }
+
+
+    public void writeMadrugon(){
+        if(realm.isClosed())
+            realm = Realm.getDefaultInstance();
+
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm bgRealm) {
+                //RealmList<Catalogo> dm_list_catalogo = new RealmList<Catalogo>();
+                //dm_list_catalogo.addAll(listaProd_catalogo.getProductos());
+                //DM_List_Catalogo dm_list_catalogo = new DM_List_Catalogo(); // <-- create unmanaged
+                //RealmList<Catalogo> _catalList = new RealmList<>();
+                //_catalList.addAll(listaProd_catalogo.getProductos());
+                //dm_list_catalogo.setCatalogoList(_catalList);
+                bgRealm.insert(listaProd_madrugon.getProductos());
+            }
+        }, new Realm.Transaction.OnSuccess() {
+            @Override
+            public void onSuccess() {
+                // Transaction was a success.
+                Log.v(TAG,"writeMadrugon... ---------------ok--------------");
+                Log.v(TAG, "madrugon: " + new Gson().toJson(listaProd_madrugon.getProductos()));
+
+                dismissProgress();
+                terminatedProcess();
+                //realm.close();
+            }
+        }, new Realm.Transaction.OnError() {
+            @Override
+            public void onError(Throwable error) {
+                // Transaction failed and was automatically canceled.
+                Log.e(TAG,"writeMadrugon... ---------------error--------------");
+                Log.e(TAG,"writeMadrugon... "+error.getMessage());
+                //  msgToast("writeCatalogo... "+error.getMessage());
+                dismissProgress();
                 //realm.close();
                 //   errorLoadInitData();
             }
@@ -1241,12 +1751,15 @@ public class HacerPedidoFragment extends TabManagerFragment implements BasePedid
 
     private void terminatedProcess(){
         if(getActivity()!=null){
-            mPreferences.setDataInit(getActivity(), responseBanner, responseUrlCatalogos);
+            if(responseBanner!=null && responseUrlCatalogos!=null){
+                mPreferences.setDataInit(getActivity(), responseBanner, responseUrlCatalogos);
 
 //        updateOnlyBannerAndPDF =false;
 
-            mPreferences.setVersionCatalogo(getActivity(), responseBanner.getVersion());
-            Log.e(TAG, "ResponseVersion de catalogo: "+ responseBanner.getVersion());
+                mPreferences.setVersionCatalogo(getActivity(), responseBanner.getVersion());
+                Log.e(TAG, "ResponseVersion de catalogo: "+ responseBanner.getVersion());
+            }
+
 
             mPreferences.setChangeCampana(getActivity(), false);
             mPreferences.setUpdateBannerAndPDF(getActivity(), false);
@@ -1255,6 +1768,79 @@ public class HacerPedidoFragment extends TabManagerFragment implements BasePedid
 
 
         dismissProgress();
+
+    }
+
+
+    public void showpremio(String descripcion){
+
+
+        System.out.println("Enter name men");
+        LayoutInflater factory = LayoutInflater.from(getActivity());
+        final View deleteDialogView = factory.inflate(R.layout.premio_layout, null);
+
+
+        final android.app.AlertDialog deleteDialog = new AlertDialog.Builder(getActivity()).create();
+        deleteDialog.setView(deleteDialogView);
+        Rect displayRectangle = new Rect();
+        Window window = getActivity().getWindow();
+
+
+        deleteDialog.setCancelable(false);
+
+
+        TextView edtdes = (TextView) deleteDialogView.findViewById(R.id.txtdescripcion);
+        edtdes.setText(descripcion);
+
+        Button btnclose = deleteDialogView.findViewById(R.id.buttonclose);
+
+        Button btncancel = deleteDialogView.findViewById(R.id.btncancel);
+
+        Button btnok = deleteDialogView.findViewById(R.id.btnok);
+
+        btncancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                ((MenuActivity)getActivity()).resetmenu();
+                deleteDialog.dismiss();
+            }
+        });
+
+        btnok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                ((MenuActivity)getActivity()).resethacerpedido();
+                deleteDialog.dismiss();
+
+            }
+        });
+
+
+
+        btnclose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                deleteDialog.dismiss();
+
+
+
+            }
+        });
+
+        deleteDialog.show();
+
+        int width = (int)(displayRectangle.width() * 7/8);
+        int heigth = (int)(displayRectangle.height() * 6/8);
+
+        deleteDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+
+
 
     }
 

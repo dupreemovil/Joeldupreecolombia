@@ -1,19 +1,651 @@
-<layout>
-    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto">
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/gray_2">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:id="@+id/layoutbtn"
+            android:visibility="gone"
+            android:weightSum="2"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal"
+            android:layout_height="wrap_content">
+
+
+            <Button
+                android:id="@+id/buttonback"
+                android:layout_width="wrap_content"
+                android:layout_height="35sp"
+             android:layout_weight="1"
+                android:layout_gravity="center"
+                android:gravity="center"
+
+                android:background="@drawable/button_round_black"
+                android:layout_marginTop="5sp"
+              android:layout_marginRight="10sp"
+                android:layout_marginLeft="10sp"
+                android:textColor="@color/white"
+                android:text="Atras" />
+
+            <Button
+                android:id="@+id/buttonnext"
+                android:layout_width="wrap_content"
+                android:layout_height="35sp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:background="@drawable/button_round_black"
+                android:layout_marginRight="10sp"
+                android:layout_marginTop="5sp"
+                android:layout_marginLeft="10sp"
+                android:textColor="@color/white"
+
+                android:text="Siguiente" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/resumen"
+            android:layout_marginTop="50sp"
+            android:visibility="gone"
+            android:orientation="vertical"
+            >
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" >
+
+                    <LinearLayout
+                        android:id="@+id/resumenpedidosm"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/txttitlem"
+                            android:layout_gravity="center"
+                            android:textStyle="bold"
+                            android:textColor="@color/black"
+                            android:gravity="center"
+                            android:text="Resumen Super Ofertas">
+
+                        </TextView>
+
+                    </LinearLayout>
+
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_margin="0.5dp"
+                        card_view:cardCornerRadius="6dp"
+                        card_view:cardUseCompatPadding="false"
+                        card_view:cardBackgroundColor="@color/gray_3"
+                        android:layout_width="match_parent"
+
+                        android:layout_height="wrap_content">
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:weightSum="1">
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_weight="0.20"
+                            android:orientation="horizontal"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:id="@+id/tv_cantidado"
+                                android:padding="5dp"
+                                android:textColor="@color/azulDupree"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textStyle="bold"
+                                android:textSize="12sp"
+                                android:gravity="fill_horizontal"
+                                android:maxLines="2"
+
+                                android:textAllCaps="true"
+                                android:ellipsize="end"
+                                tools:text="Cantidad"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_weight="0.50"
+                            android:orientation="horizontal"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:id="@+id/tv_detalleo"
+                                android:padding="5dp"
+                                android:textColor="@color/azulDupree"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textStyle="bold"
+                                android:textSize="12sp"
+                                android:gravity="fill_horizontal"
+                                android:maxLines="2"
+
+                                android:textAllCaps="true"
+                                android:ellipsize="end"
+                                tools:text="Detalle"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_weight="0.30"
+                            android:orientation="horizontal"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:id="@+id/tv_priceo"
+                                android:padding="5dp"
+                                android:textColor="@color/azulDupree"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textStyle="bold"
+                                android:textSize="12sp"
+                                android:gravity="fill_horizontal"
+                                android:maxLines="2"
+
+                                android:textAllCaps="true"
+                                android:ellipsize="end"
+                                tools:text="Precio"/>
+
+                        </LinearLayout>
+
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerm"
+                        android:layout_width="match_parent"
+                        android:layout_marginTop="5sp"
+
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:padding="5dp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right"
+                            android:gravity="right"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right"
+                            android:gravity="right"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <androidx.cardview.widget.CardView
+                                android:id="@+id/cardViewBackGround3"
+                                card_view:cardBackgroundColor="@color/gray_4"
+                                android:layout_margin="0dp"
+                                card_view:cardCornerRadius="6dp"
+                                card_view:cardElevation="2dp"
+                                card_view:cardUseCompatPadding="true"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent">
+                                <androidx.cardview.widget.CardView
+                                    android:layout_weight="1"
+                                    android:layout_margin="0.5dp"
+                                    card_view:cardCornerRadius="6dp"
+                                    card_view:cardUseCompatPadding="false"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="right"
+                                        android:gravity="right"
+
+                                        android:textColor="#000"
+                                        android:textSize="17sp"
+
+                                        android:textStyle="bold"
+                                        android:id="@+id/txttotal"
+                                        android:text="Total"
+                                        ></TextView>
+
+                                </androidx.cardview.widget.CardView>
+                            </androidx.cardview.widget.CardView>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/resumenpedidos"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="15sp"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/txttitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:text="Resumen Pedidos"
+                            android:textColor="@color/black"
+                            android:textStyle="bold">
+
+                        </TextView>
+
+                    </LinearLayout>
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_margin="0.5dp"
+                        card_view:cardCornerRadius="6dp"
+                        card_view:cardUseCompatPadding="false"
+                        card_view:cardBackgroundColor="@color/gray_3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:weightSum="1">
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_weight="0.20"
+                            android:orientation="horizontal"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:id="@+id/tv_cantidadtp"
+                                android:padding="5dp"
+                                android:textColor="@color/azulDupree"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textStyle="bold"
+                                android:textSize="12sp"
+                                android:gravity="fill_horizontal"
+                                android:maxLines="2"
+
+                                android:textAllCaps="true"
+                                android:ellipsize="end"
+                                tools:text="Cantidad"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_weight="0.50"
+                            android:orientation="horizontal"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:id="@+id/tv_detalletp"
+                                android:padding="5dp"
+                                android:textColor="@color/azulDupree"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textStyle="bold"
+                                android:textSize="12sp"
+                                android:gravity="fill_horizontal"
+                                android:maxLines="2"
+
+                                android:textAllCaps="true"
+                                android:ellipsize="end"
+                                tools:text="Detalle"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_weight="0.30"
+                            android:orientation="horizontal"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:id="@+id/tv_pricetp"
+                                android:padding="5dp"
+                                android:textColor="@color/azulDupree"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textStyle="bold"
+                                android:textSize="12sp"
+                                android:gravity="fill_horizontal"
+                                android:maxLines="2"
+
+                                android:textAllCaps="true"
+                                android:ellipsize="end"
+                                tools:text="Precio"/>
+
+                        </LinearLayout>
+
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerp"
+                        android:layout_width="match_parent"
+                        android:layout_marginTop="5sp"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:padding="5dp" />
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:gravity="right"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:gravity="right"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/cardViewBackGround"
+                            card_view:cardBackgroundColor="@color/gray_4"
+                            android:layout_margin="0dp"
+                            card_view:cardCornerRadius="6dp"
+                            card_view:cardElevation="2dp"
+                            card_view:cardUseCompatPadding="true"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+                        <androidx.cardview.widget.CardView
+                            android:layout_weight="1"
+                            android:layout_margin="0.5dp"
+                            card_view:cardCornerRadius="6dp"
+                            card_view:cardUseCompatPadding="false"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/txttotalp"
+                            android:layout_gravity="right"
+                            android:gravity="right"
+                            android:textColor="#000"
+                            android:textSize="17sp"
+
+                            android:textStyle="bold"
+                            android:text="Total"
+                            ></TextView>
+
+                        </androidx.cardview.widget.CardView>
+                        </androidx.cardview.widget.CardView>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/resumenofertas"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="15sp"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/txtofertas"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:text="Resumen Ofertas"
+                            android:textColor="@color/black"
+                            android:textStyle="bold">
+
+                        </TextView>
+
+                    </LinearLayout>
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_margin="0.5dp"
+                        card_view:cardCornerRadius="6dp"
+                        card_view:cardUseCompatPadding="false"
+                        card_view:cardBackgroundColor="@color/gray_3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_weight="0.20"
+                            android:orientation="horizontal"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:id="@+id/tv_cantidadt"
+                                android:padding="5dp"
+                                android:textColor="@color/azulDupree"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textStyle="bold"
+                                android:textSize="12sp"
+                                android:gravity="fill_horizontal"
+                                android:maxLines="2"
+
+                                android:textAllCaps="true"
+                                android:ellipsize="end"
+                                tools:text="Cantidad"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_weight="0.50"
+                        android:orientation="horizontal"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/tv_detallet"
+                            android:padding="5dp"
+                            android:textColor="@color/azulDupree"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textStyle="bold"
+                            android:textSize="12sp"
+                            android:gravity="fill_horizontal"
+                            android:maxLines="2"
+
+                            android:textAllCaps="true"
+                            android:ellipsize="end"
+                            tools:text="Detalle"/>
+
+                    </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_weight="0.30"
+                            android:orientation="horizontal"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:id="@+id/tv_pricet"
+                                android:padding="5dp"
+                                android:textColor="@color/azulDupree"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textStyle="bold"
+                                android:textSize="12sp"
+                                android:gravity="fill_horizontal"
+                                android:maxLines="2"
+
+                                android:textAllCaps="true"
+                                android:ellipsize="end"
+                                tools:text="Precio"/>
+
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclero"
+                        android:layout_width="match_parent"
+                        android:minHeight="200sp"
+                        android:layout_marginTop="5sp"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:padding="5dp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:gravity="right"
+                        android:orientation="vertical">
+
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/cardViewBackGround2"
+                            card_view:cardBackgroundColor="@color/gray_4"
+                            android:layout_margin="0dp"
+                            card_view:cardCornerRadius="6dp"
+                            card_view:cardElevation="2dp"
+                            card_view:cardUseCompatPadding="true"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+                        <androidx.cardview.widget.CardView
+                            android:layout_weight="1"
+                            android:layout_margin="0.5dp"
+                            card_view:cardCornerRadius="6dp"
+                            card_view:cardUseCompatPadding="false"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/txttotalo"
+                            android:layout_gravity="right"
+                            android:gravity="right"
+                            android:textColor="#000"
+                            android:textSize="17sp"
+
+                            android:textStyle="bold"
+                            android:text="Total"
+                            ></TextView>
+
+                        </androidx.cardview.widget.CardView>
+                        </androidx.cardview.widget.CardView>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+            </ScrollView>
+
+
+
+
+        </LinearLayout>
+
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/refresh"
+            android:visibility="visible"
+
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler"
-                android:padding="5dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50sp"
+            >
+
+            <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="wrap_content"
+                android:id="@+id/scroll1">
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:visibility="gone"
+                    android:id="@+id/layoutpage"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="24sp"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:text="1/1"
+                        android:id="@+id/txtpage">
+
+                    </TextView>
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler"
+
+
+                    android:padding="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler1"
+                    android:visibility="gone"
+
+
+                    android:padding="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+            </ScrollView>
+
+
+
+
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     </FrameLayout>
 </layout>

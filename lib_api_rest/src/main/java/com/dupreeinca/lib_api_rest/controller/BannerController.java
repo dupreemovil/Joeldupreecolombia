@@ -10,6 +10,7 @@ import com.dupreeinca.lib_api_rest.model.base.TTError;
 import com.dupreeinca.lib_api_rest.model.base.TTResultListener;
 import com.dupreeinca.lib_api_rest.model.dto.response.BannerDTO;
 import com.dupreeinca.lib_api_rest.model.dto.response.ProductCatalogoDTO;
+import com.dupreeinca.lib_api_rest.model.dto.response.ProductMadrugonDTO;
 import com.dupreeinca.lib_api_rest.model.dto.response.UrlsCatalogosDTO;
 import com.dupreeinca.lib_api_rest.model.dto.response.VersionDTO;
 
@@ -98,6 +99,44 @@ public class BannerController extends TTGenericController {
         dao.getProductos(campana,new TTResultListener<ProductCatalogoDTO>() {
             @Override
             public void success(ProductCatalogoDTO result) {
+                listener.success(result);
+            }
+
+            @Override
+            public void error(TTError error) {
+//                try {
+//                    String jsonInString = response.errorBody().string();
+//                    //Log.e(TAG, "Retrofit Response : " + jsonInString);
+//                    ProductCatalogoDTO resp = new Gson().fromJson(jsonInString, ProductCatalogoDTO.class);
+//
+//                    if(code==404){
+//                        ((FullscreenActivity) myContext).responseCatalogo(resp.getResult());
+//                    }else {
+//                        msgError = resp.getRaise().get(0).getField().concat(". ").concat(resp.getRaise().get(0).getError());
+//                    }
+//
+//                } catch (IOException | JsonSyntaxException e) {
+//                    msgError = myContext.getResources().getString(R.string.http_error_desconocido);
+//                }
+
+                listener.error(error);
+            }
+        });
+    }
+
+
+    public void getProductosmad(final TTResultListener<ProductMadrugonDTO> listener){
+
+        Log.e(TAG, "obtainVersion()");
+        if(!this.isNetworkingOnline(getContext())){
+            listener.error(TTError.errorFromMessage(context.getResources().getString(R.string.http_datos_no_disponibles)));
+            return;
+        }
+
+        BannerDAO dao = new BannerDAO(getContext());
+        dao.getProductosmadrugon(new TTResultListener<ProductMadrugonDTO>() {
+            @Override
+            public void success(ProductMadrugonDTO result) {
                 listener.success(result);
             }
 

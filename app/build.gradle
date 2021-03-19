@@ -27,8 +27,8 @@ android {
         defaultConfig.applicationId "com.dupreinca.dupree"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 78
-        versionName "7.5"
+        versionCode 79
+        versionName "7.6"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
@@ -108,7 +108,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
-
+    implementation "androidx.paging:paging-runtime:2.1.2"
     //multidex
     implementation 'androidx.multidex:multidex:2.0.0'
     implementation 'com.huawei.hms:push:4.0.3.301'

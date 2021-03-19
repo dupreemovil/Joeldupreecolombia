@@ -13,6 +13,11 @@ public class LiquidarDTO {
     private String mensaje;
     private String total_pedido;
     private String codigo;
+
+
+
+    private String mensaje_premio;
+    private String activa_premio;
     private int code;
 
     private List<RaiseDTO> raise;
@@ -61,4 +66,15 @@ public class LiquidarDTO {
     public List<RaiseDTO> getRaise() {
         return raise;
     }
+
+    public String getMensaje_premio() {
+        return mensaje_premio;
+    }
+
+
+    public String getActiva_premio() {
+        return activa_premio;
+    }
+
+
 }

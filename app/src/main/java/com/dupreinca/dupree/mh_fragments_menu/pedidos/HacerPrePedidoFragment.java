@@ -879,6 +879,21 @@ public class HacerPrePedidoFragment extends TabManagerFragment implements BasePe
     }
 
     @Override
+    public void hidesearch() {
+
+    }
+
+    @Override
+    public void showsearch() {
+
+    }
+
+    @Override
+    public String id_pedido() {
+        return resultEdoPedido.getId_pedido();
+    }
+
+    @Override
     public void onAttachFragment(Fragment childFragment) {
         super.onAttachFragment(childFragment);
     }

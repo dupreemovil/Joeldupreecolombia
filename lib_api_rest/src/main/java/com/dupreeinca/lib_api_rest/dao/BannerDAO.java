@@ -7,13 +7,16 @@ import com.dupreeinca.lib_api_rest.dao.base.TTGenericDAO;
 import com.dupreeinca.lib_api_rest.model.base.TTError;
 import com.dupreeinca.lib_api_rest.model.base.TTResultListener;
 import com.dupreeinca.lib_api_rest.model.dto.response.BannerDTO;
+import com.dupreeinca.lib_api_rest.model.dto.response.LiquidaDTO;
 import com.dupreeinca.lib_api_rest.model.dto.response.ProductCatalogoDTO;
+import com.dupreeinca.lib_api_rest.model.dto.response.ProductMadrugonDTO;
 import com.dupreeinca.lib_api_rest.model.dto.response.UrlsCatalogosDTO;
 import com.dupreeinca.lib_api_rest.model.dto.response.VersionDTO;
 import com.google.gson.Gson;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Query;
 
 public class BannerDAO extends TTGenericDAO {
@@ -87,6 +90,23 @@ public class BannerDAO extends TTGenericDAO {
     }
 
 
+    public void getProductosmadrugon(final TTResultListener<ProductMadrugonDTO> listener){
+        iRest rest = getRetrofit().create(iRest.class);
+        Call<ProductMadrugonDTO> call = rest.getProductosmadrugon();
+        call.enqueue(new TTCallback<ProductMadrugonDTO>(new TTResultListener<ProductMadrugonDTO>() {
+            @Override
+            public void success(ProductMadrugonDTO result) {
+                listener.success(result);
+            }
+
+            @Override
+            public void error(TTError error) {
+                listener.error(error);
+            }
+        },getRetrofit()));
+    }
+
+
 
     public interface iRest {
         @GET("panel/banner/")
@@ -100,5 +120,12 @@ public class BannerDAO extends TTGenericDAO {
 
         @GET("pedidos/productos")
         Call<ProductCatalogoDTO> getProductos(@Query("filters") String campana);
+
+        @POST("pedidos/productos_madrugon")
+        Call<ProductMadrugonDTO> getProductosmadrugon();
+
+        @POST("pedidos/liquida")
+        Call<LiquidaDTO> liquidapedido();
+
     }
 }

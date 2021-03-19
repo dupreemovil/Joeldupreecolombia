@@ -8,6 +8,9 @@ public class ResultEdoPedido {
     private String id_pedido;
     private ListaProductos productos;
     private ListaOfertas ofertas;
+
+
+    private ListaMadrugon madrugon;
     private String puntos;
     private String precio_total;
     private String estado_pedido;
@@ -46,4 +49,9 @@ public class ResultEdoPedido {
     public String getCampana() {
         return campana;
     }
+
+    public ListaMadrugon getMadrugon() {
+        return madrugon;
+    }
+
 }

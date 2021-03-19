@@ -6,7 +6,6 @@ import android.content.Context;
 import androidx.multidex.*;
 
 import com.crashlytics.android.Crashlytics;
-import com.firebase.client.Firebase;
 import com.indigitall.android.Indigitall;
 
 import io.fabric.sdk.android.Fabric;
@@ -21,6 +20,9 @@ public class BaseAPP extends Application {
 
     private static final String TAG = BaseAPP.class.getName();
     private static Context context;
+
+
+    private static RealmConfiguration context1;
     private static String campana;
 
     public String fcm = "625076487360";
@@ -38,6 +40,10 @@ public class BaseAPP extends Application {
 
     public static Context getContext() {
         return context;
+    }
+
+    public static RealmConfiguration getContext1() {
+        return context1;
     }
 
     @Override
@@ -67,6 +73,7 @@ public class BaseAPP extends Application {
                 .name("myrealm2.realm")
                 .build();
 
+        context1 = config;
 
         Realm.setDefaultConfiguration(config);
 
