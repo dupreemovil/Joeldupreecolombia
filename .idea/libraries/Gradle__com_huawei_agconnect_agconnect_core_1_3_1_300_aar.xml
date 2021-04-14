@@ -3,6 +3,7 @@
     <CLASSES>
       <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/7701a3728c1aaa7683c4138c2c7eba8f/jetified-agconnect-core-1.3.1.300/jars/classes.jar!/" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/7701a3728c1aaa7683c4138c2c7eba8f/jetified-agconnect-core-1.3.1.300/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/7701a3728c1aaa7683c4138c2c7eba8f/jetified-agconnect-core-1.3.1.300/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

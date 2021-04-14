@@ -24,16 +24,34 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <ImageView
-                    android:layout_alignParentTop="true"
-                    android:id="@+id/imagen"
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
-                    android:src="@drawable/ic_flor_white_180x180"/>
+                    android:id="@id/imagenp">
+                    <ImageView
+                        android:layout_alignParentTop="true"
+                        android:id="@+id/imagen"
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:src="@drawable/ic_flor_white_180x180"/>
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_remove_red_eye_white_24dp"
+                        android:tint="@color/gray_6"
+                        android:id="@+id/imagezoom"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentRight="true"
+
+                        ></ImageView>
+
+                </RelativeLayout>
+
 
                 <LinearLayout
                     android:id="@+id/ctnvalor"
-                    android:layout_below="@+id/imagen"
+                    android:layout_below="@+id/imagenp"
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="25sp">

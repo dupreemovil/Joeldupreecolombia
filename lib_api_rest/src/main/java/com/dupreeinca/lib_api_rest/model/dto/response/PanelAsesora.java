@@ -19,9 +19,9 @@ public class PanelAsesora {
     private List<Faltante> faltantes;
     private String campana;
 
-
-
     private String activa_encuesta;
+
+    private String activa_actualizacion;
 
     public String getNombre_asesora() {
         return nombre_asesora;
@@ -61,6 +61,13 @@ public class PanelAsesora {
 
     public void setActiva_encuesta(String activa_encuesta) {
         this.activa_encuesta = activa_encuesta;
+    }
+    public String getActiva_actualizacion() {
+        return activa_actualizacion;
+    }
+
+    public void setActiva_actualizacion(String activa_actualizacion) {
+        this.activa_actualizacion = activa_actualizacion;
     }
 
 }

@@ -5,12 +5,17 @@ import android.app.AlertDialog;
 import android.content.Context;
 import androidx.databinding.ViewDataBinding;
 
+import com.dupreeinca.lib_api_rest.controller.BannerController;
+import com.dupreeinca.lib_api_rest.model.dto.request.ActualizacionSend;
+import com.dupreeinca.lib_api_rest.model.dto.request.SuscripcionSend;
 import com.dupreeinca.lib_api_rest.model.dto.response.ItemEncuesta;
 import com.dupreeinca.lib_api_rest.model.dto.response.ListEncuesta;
+import com.dupreeinca.lib_api_rest.model.dto.response.SusDTO;
 import com.dupreeinca.lib_api_rest.util.preferences.DataStore;
 import com.dupreinca.dupree.mh_adapters.CheckAdapter;
 import com.dupreinca.dupree.mh_adapters.RadioAdapter;
 import com.dupreinca.dupree.mh_http.Http;
+import com.dupreinca.dupree.mh_utilities.mPreferences;
 import com.dupreinca.dupree.model_view.Opciones;
 import com.dupreinca.dupree.model_view.Respuesta;
 import com.google.android.material.tabs.TabLayout;
@@ -23,6 +28,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.content.DialogInterface;
 import android.graphics.Rect;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -61,6 +67,7 @@ public class PanelAsesoraFragment extends TabManagerFragment {
     private final String TAG = PanelAsesoraFragment.class.getName();
     private FragmentPanelAsesoraBinding binding;
     private ReportesController reportesController;
+    private BannerController bannerController;
     private PanelAsesoraPagerAdapter pagerAdapter;
 
 
@@ -161,6 +168,7 @@ public class PanelAsesoraFragment extends TabManagerFragment {
     protected void onLoadedView() {
         reportesController = new ReportesController(getContext());
 
+        bannerController = new BannerController(getContext());
         setData(false, null);
         checkDetailPanel();
     }
@@ -178,6 +186,10 @@ public class PanelAsesoraFragment extends TabManagerFragment {
                     if(result.getPanelAsesora().getActiva_encuesta().contains("1")){
 
                         getencuesta();
+                    }
+
+                    if(result.getPanelAsesora().getActiva_actualizacion().contains("1")){
+                        showactualizacion();
                     }
 
                 }
@@ -304,6 +316,118 @@ public class PanelAsesoraFragment extends TabManagerFragment {
 
         }
     }
+
+
+    public void showactualizacion(){
+
+        System.out.println("Enter name men");
+
+        String ced_user= mPreferences.getCedUser(getActivity());
+        LayoutInflater factory = LayoutInflater.from(getActivity());
+        final View deleteDialogView = factory.inflate(R.layout.actualizacion_layout, null);
+
+
+        final android.app.AlertDialog deleteDialog = new AlertDialog.Builder(getActivity()).create();
+        deleteDialog.setView(deleteDialogView);
+        Rect displayRectangle = new Rect();
+        Window window = getActivity().getWindow();
+
+
+        deleteDialog.setCancelable(false);
+
+
+
+
+        Button btnok = deleteDialogView.findViewById(R.id.btnok);
+
+
+        EditText edtcorreo = deleteDialogView.findViewById(R.id.txtcor);
+
+        EditText edtcelular = deleteDialogView.findViewById(R.id.txtcel);
+        EditText edtcedula = deleteDialogView.findViewById(R.id.txtced);
+
+        String cedula = mPreferences.getCedUser(getContext());
+
+        if(cedula!=null)
+        {
+            edtcedula.setText(cedula);
+        }
+        else{
+
+            edtcedula.setText("");
+        }
+
+
+
+        btnok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(edtcorreo.getText().toString().length()>0 && edtcelular.getText().toString().length()>0){
+                    System.out.println("La cedula "+ced_user);
+                    ActualizacionSend send = new ActualizacionSend(ced_user,edtcorreo.getText().toString(),edtcelular.getText().toString());
+
+
+                    bannerController.actualizacion(send, new TTResultListener<SusDTO>() {
+                        @Override
+                        public void success(SusDTO result) {
+
+                            AlertDialog.Builder builder1 = new AlertDialog.Builder(getActivity());
+                            builder1.setMessage(result.getResult());
+                            builder1.setCancelable(true);
+
+                            builder1.setPositiveButton(
+                                    "Ok",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            dialog.cancel();
+                                        }
+                                    });
+
+
+
+                            AlertDialog alert11 = builder1.create();
+                            alert11.show();
+
+                            System.out.println("El result sus "+new Gson().toJson(result));
+
+                        }
+
+                        @Override
+                        public void error(TTError error) {
+
+                            System.out.println("El error liq "+ error.getErrorBody());
+
+                        }
+                    });
+
+
+                    deleteDialog.dismiss();
+                }
+                else{
+
+
+                }
+
+
+
+            }
+        });
+
+
+
+
+
+        deleteDialog.show();
+
+        int width = (int)(displayRectangle.width() * 7/8);
+        int heigth = (int)(displayRectangle.height() * 6/8);
+
+        deleteDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+
+
+    }
+
 
     public void getencuesta(){
         DataStore dataStore  ;

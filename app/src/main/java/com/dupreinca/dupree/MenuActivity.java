@@ -1,6 +1,7 @@
 package com.dupreinca.dupree;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -14,6 +15,15 @@ import android.os.Bundle;
 import android.provider.Settings;
 import androidx.annotation.NonNull;
 
+import com.bumptech.glide.Glide;
+import com.dupreeinca.lib_api_rest.enums.EnumLiquidar;
+import com.dupreeinca.lib_api_rest.model.base.TTError;
+import com.dupreeinca.lib_api_rest.model.base.TTResultListener;
+import com.dupreeinca.lib_api_rest.model.dto.request.SuscripcionSend;
+import com.dupreeinca.lib_api_rest.model.dto.response.BannerDTO;
+import com.dupreeinca.lib_api_rest.model.dto.response.LiquidaDTO;
+import com.dupreeinca.lib_api_rest.model.dto.response.SusDTO;
+import com.dupreeinca.lib_api_rest.model.dto.response.SuscripcionDTO;
 import com.dupreinca.dupree.mh_required_api.RequiredValida;
 import com.dupreinca.dupree.mh_required_api.RequiredVersion;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
@@ -35,7 +45,9 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dupreeinca.lib_api_rest.model.dto.response.realm.Catalogo;
@@ -72,16 +84,18 @@ import com.dupreinca.dupree.mh_utilities.KeyBoard;
 import com.dupreinca.dupree.mh_utilities.mPreferences;
 import com.dupreinca.dupree.view.activity.BaseActivity;
 import com.google.gson.Gson;
+import com.dupreeinca.lib_api_rest.controller.BannerController;
 
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 
 import io.realm.Realm;
 import io.realm.RealmResults;
 import io.realm.Sort;
-
 
 public class MenuActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener, MenuListener {
     public static final String TAG = MenuActivity.class.getName();
@@ -109,7 +123,9 @@ public class MenuActivity extends BaseActivity implements NavigationView.OnNavig
     public int origen = 0; // normal , 1 es zonal
 
     String act_cel="";
+    private BannerController bannerController;
 
+    public Activity act;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,14 +133,46 @@ public class MenuActivity extends BaseActivity implements NavigationView.OnNavig
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_menu);
         perfil = getTypePerfil();
+       // System.out.println("El perfil "+perfil.);
+        act = this;
         //enable and disable
-
+        bannerController =  new BannerController(this);
         binding.navView.setNavigationItemSelectedListener(this);
 
         binding.appBarMenu.toolbar.setTitle("Panel");
         setSupportActionBar(binding.appBarMenu.toolbar);
 
         String versionName = BuildConfig.VERSION_NAME;
+
+        bannerController.getSuscripcion(new TTResultListener<SuscripcionDTO>() {
+            @Override
+            public void success(SuscripcionDTO result) {
+                Log.e(TAG, "getSus() -> success(): " + new Gson().toJson(result));
+
+                if(result.isValid()){
+                    if(result.getPanel_principal()==1)
+                    {
+
+                        showsuscripcion(result.getResult(),result.getImagen_suscripcion(),result.getUrl_suscribe());
+
+                    }
+                    else{
+
+
+                    }
+
+                }
+
+
+            }
+
+            @Override
+            public void error(TTError error) {
+
+
+            }
+        });
+
 
         RequiredVersion req = new RequiredVersion(versionName);
         new Http(getApplicationContext()).control(req,this);
@@ -136,7 +184,7 @@ public class MenuActivity extends BaseActivity implements NavigationView.OnNavig
 
         act_cel = mPreferences.getActcel(getApplicationContext());
 
-        if(name_user!=null || ced_user!=null || tel_user!=null){
+        if(name_user!=null && ced_user!=null && tel_user!=null){
             if(name_user.length()==0 || ced_user.length()==0 || tel_user.length()==0)  {
 
                 if(act_cel.contains("1")){
@@ -387,6 +435,194 @@ public class MenuActivity extends BaseActivity implements NavigationView.OnNavig
 
         deleteDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
+
+
+    }
+
+    public void showsuscripcion(String descripcion,String urlimage,String url){
+
+        System.out.println("Enter name men");
+
+        String ced_user=mPreferences.getCedUser(getApplicationContext());
+        LayoutInflater factory = LayoutInflater.from(act);
+        final View deleteDialogView = factory.inflate(R.layout.suscripcion_layout, null);
+
+
+        final android.app.AlertDialog deleteDialog = new AlertDialog.Builder(act).create();
+        deleteDialog.setView(deleteDialogView);
+        Rect displayRectangle = new Rect();
+        Window window = act.getWindow();
+
+
+        deleteDialog.setCancelable(false);
+
+
+        TextView edtdes = (TextView) deleteDialogView.findViewById(R.id.txtdescripcion);
+        edtdes.setText(descripcion);
+
+        Button btnclose = deleteDialogView.findViewById(R.id.buttonclose);
+
+        Button btncancel = deleteDialogView.findViewById(R.id.btncancel);
+
+        Button btnok = deleteDialogView.findViewById(R.id.btnok);
+
+        ImageView image = deleteDialogView.findViewById(R.id.imageViewlogo);
+        try {
+            Glide.with(BaseAPP.getContext())
+                    .load(urlimage)
+
+                    .fitCenter()
+
+                    .into(image);
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            System.out.println("Excsus "+e.getMessage());
+
+        }
+
+
+        btncancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                SuscripcionSend send = new SuscripcionSend(ced_user,"NO");
+
+
+                bannerController.setSuscripcion(send, new TTResultListener<SusDTO>() {
+                    @Override
+                    public void success(SusDTO result) {
+
+                        AlertDialog.Builder builder1 = new AlertDialog.Builder(MenuActivity.this);
+                        builder1.setMessage(result.getResult());
+                        builder1.setCancelable(true);
+
+                        builder1.setPositiveButton(
+                                "Ok",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        dialog.cancel();
+                                    }
+                                });
+
+
+
+                        AlertDialog alert11 = builder1.create();
+                        alert11.show();
+
+
+
+                    }
+
+                    @Override
+                    public void error(TTError error) {
+
+                        System.out.println("El error liq "+ error.getErrorBody());
+
+                    }
+                });
+
+
+                deleteDialog.dismiss();
+            }
+        });
+
+        btnok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                System.out.println("La cedula "+ced_user);
+                SuscripcionSend send = new SuscripcionSend(ced_user,"SI");
+
+
+                bannerController.setSuscripcion(send, new TTResultListener<SusDTO>() {
+                    @Override
+                    public void success(SusDTO result) {
+
+                        System.out.println("El result sus "+new Gson().toJson(result));
+
+
+
+                        AlertDialog.Builder builder1 = new AlertDialog.Builder(MenuActivity.this);
+                        builder1.setMessage(result.getResult());
+                        builder1.setCancelable(true);
+
+                        builder1.setPositiveButton(
+                                "Ok",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        dialog.cancel();
+                                    }
+                                });
+
+
+
+                        AlertDialog alert11 = builder1.create();
+                        alert11.show();
+
+                        if(url.length()>0){
+
+                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                            startActivity(browserIntent);
+                        }
+
+                    }
+
+                    @Override
+                    public void error(TTError error) {
+
+                        System.out.println("El error liq "+ error.getErrorBody());
+
+                    }
+                });
+
+
+                deleteDialog.dismiss();
+
+            }
+        });
+
+
+
+        btnclose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                SuscripcionSend send = new SuscripcionSend(ced_user,"NO");
+
+
+                bannerController.setSuscripcion(send, new TTResultListener<SusDTO>() {
+                    @Override
+                    public void success(SusDTO result) {
+
+                        System.out.println("El result pedido "+new Gson().toJson(result));
+
+                    }
+
+                    @Override
+                    public void error(TTError error) {
+
+                        System.out.println("El error liq "+ error.getErrorBody());
+
+                    }
+                });
+
+                deleteDialog.dismiss();
+
+
+
+            }
+        });
+
+        deleteDialog.show();
+
+        int width = (int)(displayRectangle.width() * 7/8);
+        int heigth = (int)(displayRectangle.height() * 6/8);
+
+        deleteDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
 
     }

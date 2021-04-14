@@ -8,9 +8,13 @@ import com.dupreeinca.lib_api_rest.controller.base.TTGenericController;
 import com.dupreeinca.lib_api_rest.dao.BannerDAO;
 import com.dupreeinca.lib_api_rest.model.base.TTError;
 import com.dupreeinca.lib_api_rest.model.base.TTResultListener;
+import com.dupreeinca.lib_api_rest.model.dto.request.ActualizacionSend;
+import com.dupreeinca.lib_api_rest.model.dto.request.SuscripcionSend;
 import com.dupreeinca.lib_api_rest.model.dto.response.BannerDTO;
 import com.dupreeinca.lib_api_rest.model.dto.response.ProductCatalogoDTO;
 import com.dupreeinca.lib_api_rest.model.dto.response.ProductMadrugonDTO;
+import com.dupreeinca.lib_api_rest.model.dto.response.SusDTO;
+import com.dupreeinca.lib_api_rest.model.dto.response.SuscripcionDTO;
 import com.dupreeinca.lib_api_rest.model.dto.response.UrlsCatalogosDTO;
 import com.dupreeinca.lib_api_rest.model.dto.response.VersionDTO;
 
@@ -161,4 +165,122 @@ public class BannerController extends TTGenericController {
             }
         });
     }
+
+    public void getSuscripcion(final TTResultListener<SuscripcionDTO> listener){
+
+        Log.e(TAG, "obtainSuscripcion()");
+        if(!this.isNetworkingOnline(getContext())){
+            listener.error(TTError.errorFromMessage(context.getResources().getString(R.string.http_datos_no_disponibles)));
+            return;
+        }
+
+        BannerDAO dao = new BannerDAO(getContext());
+        dao.getSuscripcion(new TTResultListener<SuscripcionDTO>() {
+            @Override
+            public void success(SuscripcionDTO result) {
+                listener.success(result);
+            }
+
+            @Override
+            public void error(TTError error) {
+//                try {
+//                    String jsonInString = response.errorBody().string();
+//                    //Log.e(TAG, "Retrofit Response : " + jsonInString);
+//                    ProductCatalogoDTO resp = new Gson().fromJson(jsonInString, ProductCatalogoDTO.class);
+//
+//                    if(code==404){
+//                        ((FullscreenActivity) myContext).responseCatalogo(resp.getResult());
+//                    }else {
+//                        msgError = resp.getRaise().get(0).getField().concat(". ").concat(resp.getRaise().get(0).getError());
+//                    }
+//
+//                } catch (IOException | JsonSyntaxException e) {
+//                    msgError = myContext.getResources().getString(R.string.http_error_desconocido);
+//                }
+
+                listener.error(error);
+            }
+        });
+    }
+
+
+
+    public void setSuscripcion(SuscripcionSend send,final TTResultListener<SusDTO> listener){
+
+        Log.e(TAG, "setSuscripcion()");
+        if(!this.isNetworkingOnline(getContext())){
+            listener.error(TTError.errorFromMessage(context.getResources().getString(R.string.http_datos_no_disponibles)));
+            return;
+        }
+
+        BannerDAO dao = new BannerDAO(getContext());
+
+
+        dao.suscripcion(send,new TTResultListener<SusDTO>() {
+            @Override
+            public void success(SusDTO result) {
+                listener.success(result);
+            }
+
+            @Override
+            public void error(TTError error) {
+//                try {
+//                    String jsonInString = response.errorBody().string();
+//                    //Log.e(TAG, "Retrofit Response : " + jsonInString);
+//                    ProductCatalogoDTO resp = new Gson().fromJson(jsonInString, ProductCatalogoDTO.class);
+//
+//                    if(code==404){
+//                        ((FullscreenActivity) myContext).responseCatalogo(resp.getResult());
+//                    }else {
+//                        msgError = resp.getRaise().get(0).getField().concat(". ").concat(resp.getRaise().get(0).getError());
+//                    }
+//
+//                } catch (IOException | JsonSyntaxException e) {
+//                    msgError = myContext.getResources().getString(R.string.http_error_desconocido);
+//                }
+
+                listener.error(error);
+            }
+        });
+    }
+
+    public void actualizacion(ActualizacionSend send, final TTResultListener<SusDTO> listener){
+
+        Log.e(TAG, "actualizacion()");
+        if(!this.isNetworkingOnline(getContext())){
+            listener.error(TTError.errorFromMessage(context.getResources().getString(R.string.http_datos_no_disponibles)));
+            return;
+        }
+
+        BannerDAO dao = new BannerDAO(getContext());
+
+
+        dao.actualizacion(send,new TTResultListener<SusDTO>() {
+            @Override
+            public void success(SusDTO result) {
+                listener.success(result);
+            }
+
+            @Override
+            public void error(TTError error) {
+//                try {
+//                    String jsonInString = response.errorBody().string();
+//                    //Log.e(TAG, "Retrofit Response : " + jsonInString);
+//                    ProductCatalogoDTO resp = new Gson().fromJson(jsonInString, ProductCatalogoDTO.class);
+//
+//                    if(code==404){
+//                        ((FullscreenActivity) myContext).responseCatalogo(resp.getResult());
+//                    }else {
+//                        msgError = resp.getRaise().get(0).getField().concat(". ").concat(resp.getRaise().get(0).getError());
+//                    }
+//
+//                } catch (IOException | JsonSyntaxException e) {
+//                    msgError = myContext.getResources().getString(R.string.http_error_desconocido);
+//                }
+
+                listener.error(error);
+            }
+        });
+    }
+
 }

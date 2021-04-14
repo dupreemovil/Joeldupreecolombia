@@ -3,6 +3,7 @@
     <CLASSES>
       <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/a1b559a528f82b942a5ad87a19ead86b/jetified-firebase-inappmessaging-19.1.0/jars/classes.jar!/" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/a1b559a528f82b942a5ad87a19ead86b/jetified-firebase-inappmessaging-19.1.0/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/a1b559a528f82b942a5ad87a19ead86b/jetified-firebase-inappmessaging-19.1.0/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.firebase/firebase-inappmessaging/19.1.0/6950f287d1ee097a68ec95cef8b7bacf0ec2d667/firebase-inappmessaging-19.1.0-javadoc.jar!/" />

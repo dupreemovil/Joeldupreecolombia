@@ -552,6 +552,8 @@ public class Http {
                             msgError = myContext.getResources().getString(R.string.http_error_desconocido);
                         }
                     } else {
+
+                        mPreferences.setCedUser(requiredAuth.getUsername().toString(),myContext);
                         Log.e(TAG+"onResponse", "-> " + new Gson().toJson(response.body()));
                         ((MainActivity) myContext).successfulAuth(response.body());
                     }

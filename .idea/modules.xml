@@ -2,10 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/DupreeColombiaJoel.iml" filepath="$PROJECT_DIR$/.idea/modules/DupreeColombiaJoel.iml" group="DupreeColombiaJoel" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="DupreeColombiaJoel/app" />
-      <module fileurl="file://$PROJECT_DIR$/lib_api_rest/lib_api_rest.iml" filepath="$PROJECT_DIR$/lib_api_rest/lib_api_rest.iml" group="DupreeColombiaJoel/lib_api_rest" />
-      <module fileurl="file://$PROJECT_DIR$/lib_image/lib_image.iml" filepath="$PROJECT_DIR$/lib_image/lib_image.iml" group="DupreeColombiaJoel/lib_image" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Joeldupreecolombia.iml" filepath="$PROJECT_DIR$/.idea/modules/Joeldupreecolombia.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Joeldupreecolombia.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Joeldupreecolombia.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/lib_api_rest/Joeldupreecolombia.lib_api_rest.iml" filepath="$PROJECT_DIR$/.idea/modules/lib_api_rest/Joeldupreecolombia.lib_api_rest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/lib_image/Joeldupreecolombia.lib_image.iml" filepath="$PROJECT_DIR$/.idea/modules/lib_image/Joeldupreecolombia.lib_image.iml" />
     </modules>
   </component>
 </project>

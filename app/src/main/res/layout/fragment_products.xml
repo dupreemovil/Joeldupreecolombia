@@ -231,8 +231,7 @@
                                         android:gravity="right"
 
                                         android:textColor="#000"
-                                        android:textSize="17sp"
-
+                                        
                                         android:textStyle="bold"
                                         android:id="@+id/txttotal"
                                         android:text="Total"
@@ -409,7 +408,7 @@
                             android:layout_gravity="right"
                             android:gravity="right"
                             android:textColor="#000"
-                            android:textSize="17sp"
+
 
                             android:textStyle="bold"
                             android:text="Total"
@@ -563,7 +562,7 @@
                             android:layout_gravity="right"
                             android:gravity="right"
                             android:textColor="#000"
-                            android:textSize="17sp"
+
 
                             android:textStyle="bold"
                             android:text="Total"
@@ -632,6 +631,30 @@
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycler1"
+                    android:visibility="gone"
+
+
+                    android:padding="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    android:visibility="gone"
+                    android:textColor="@color/black"
+                    android:id="@+id/titlepremios"
+                    android:text="PREMIOS"
+                    android:textStyle="bold"
+                    android:layout_margin="10sp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    >
+
+                </TextView>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerpremio"
                     android:visibility="gone"
 
 

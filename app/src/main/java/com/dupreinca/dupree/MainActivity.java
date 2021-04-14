@@ -651,7 +651,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
         msgToast(responseAuth.getStatus());
 
-        System.out.println("Mi informacion "+responseAuth.getPerfil().get(0).getValor());
+        System.out.println("Mi informacion ced"+responseAuth.getPerfil().get(0).toString());
+
+
         mPreferences.setJSON_TypePerfil(MainActivity.this, responseAuth.getPerfil().get(0));
         mPreferences.setLoggedIn(MainActivity.this, true);
 

@@ -3,6 +3,9 @@
     <CLASSES>
       <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/99f8bfc98259ab006e114e330b07f3a3/jetified-hellocharts-library-1.5.8/jars/classes.jar!/" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/99f8bfc98259ab006e114e330b07f3a3/jetified-hellocharts-library-1.5.8/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/6724a5a2fea7d100bc6d6b09ab7c0ba9/jetified-hellocharts-library-1.5.8/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/6724a5a2fea7d100bc6d6b09ab7c0ba9/jetified-hellocharts-library-1.5.8/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/6724a5a2fea7d100bc6d6b09ab7c0ba9/jetified-hellocharts-library-1.5.8/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.lecho/hellocharts-library/1.5.8/593fb22f70474038fe2a72f19e72060eb9f65db8/hellocharts-library-1.5.8-javadoc.jar!/" />

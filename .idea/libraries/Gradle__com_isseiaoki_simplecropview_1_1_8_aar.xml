@@ -3,6 +3,7 @@
     <CLASSES>
       <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/0e98be8d462d9bb0f7f5ce8bfd88f11e/jetified-simplecropview-1.1.8/jars/classes.jar!/" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/0e98be8d462d9bb0f7f5ce8bfd88f11e/jetified-simplecropview-1.1.8/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/0e98be8d462d9bb0f7f5ce8bfd88f11e/jetified-simplecropview-1.1.8/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.isseiaoki/simplecropview/1.1.8/6eea3d92d8ee0c5aa5882fe120636ad0869061cc/simplecropview-1.1.8-javadoc.jar!/" />

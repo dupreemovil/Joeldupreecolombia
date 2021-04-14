@@ -1,5 +1,7 @@
 package com.dupreinca.dupree;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
@@ -9,6 +11,8 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.dupreinca.dupree.R;
+
+import java.net.URL;
 
 
 public class CatalogoViewerActivity extends AppCompatActivity {
@@ -38,10 +42,16 @@ public class CatalogoViewerActivity extends AppCompatActivity {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 //progDailog.show();
-                Log.e(TAG,"Loading");
-                view.loadUrl(url);
+                if(url != null && url.startsWith("whatsapp://"))
+                {
+                    view.getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
 
-                return false;
+                    return true;
+
+                }else
+                {
+                    return false;
+                }
             }
             @Override
             public void onPageFinished(WebView view, final String url) {
@@ -67,4 +77,9 @@ public class CatalogoViewerActivity extends AppCompatActivity {
     }
 
 
+
+
+
+
 }
+

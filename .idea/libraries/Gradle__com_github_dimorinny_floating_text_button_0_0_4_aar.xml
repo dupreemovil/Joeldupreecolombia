@@ -3,6 +3,9 @@
     <CLASSES>
       <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/a141676b895454bfdcfbced867167db4/jetified-floating-text-button-0.0.4/jars/classes.jar!/" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/a141676b895454bfdcfbced867167db4/jetified-floating-text-button-0.0.4/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/bd06574e8f95c3b19490d3a9175adbd5/jetified-floating-text-button-0.0.4/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/bd06574e8f95c3b19490d3a9175adbd5/jetified-floating-text-button-0.0.4/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/bd06574e8f95c3b19490d3a9175adbd5/jetified-floating-text-button-0.0.4/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

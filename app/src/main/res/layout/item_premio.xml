@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <LinearLayout android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:background="@color/gray_2"
+        xmlns:tools="http://schemas.android.com/tools">
+
+        <androidx.cardview.widget.CardView
+            android:layout_margin="0dp"
+            card_view:cardCornerRadius="6dp"
+            card_view:cardElevation="2dp"
+            card_view:cardUseCompatPadding="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+
+
+        <RelativeLayout
+            android:background="@color/white"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_alignParentTop="true"
+                android:id="@+id/imagen"
+                android:layout_width="match_parent"
+                android:layout_height="158dp"
+                android:src="@drawable/ic_flor_white_180x180"/>
+
+            <LinearLayout
+                android:id="@+id/ctndescripcion"
+                android:layout_below="@+id/imagen"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/txtdescripcion"
+                android:layout_width="0dp"
+                android:layout_weight="0.5"
+                android:layout_height="match_parent"
+                android:gravity="center_horizontal|center_vertical"
+                android:textStyle="normal"
+                android:textSize="16sp"
+                android:padding="5dp"
+                android:textColor="@color/gray_5"
+                android:textAppearance="@style/Base.Widget.AppCompat.Spinner.Underlined"
+
+                tools:text="Descripcion"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ctnpuntos"
+                android:layout_below="@+id/ctndescripcion"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/txtpuntos"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    android:layout_height="match_parent"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:textStyle="normal"
+                    android:textSize="16sp"
+                    android:padding="5dp"
+                    android:textColor="@color/gray_5"
+                    android:textAppearance="@style/Base.Widget.AppCompat.Spinner.Underlined"
+                    tools:text="Puntos"/>
+
+            </LinearLayout>
+
+
+        </RelativeLayout>
+        </androidx.cardview.widget.CardView>
+
+</LinearLayout>
+
+</layout>

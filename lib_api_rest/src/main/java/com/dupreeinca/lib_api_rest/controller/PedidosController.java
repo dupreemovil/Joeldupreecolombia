@@ -8,11 +8,13 @@ import com.dupreeinca.lib_api_rest.dao.PedidosDAO;
 import com.dupreeinca.lib_api_rest.enums.EnumLiquidar;
 import com.dupreeinca.lib_api_rest.model.base.TTError;
 import com.dupreeinca.lib_api_rest.model.base.TTResultListener;
+import com.dupreeinca.lib_api_rest.model.dto.request.ConcursoSend;
 import com.dupreeinca.lib_api_rest.model.dto.request.Identy;
 import com.dupreeinca.lib_api_rest.model.dto.request.LiquidaSend;
 import com.dupreeinca.lib_api_rest.model.dto.request.LiquidarSend;
 import com.dupreeinca.lib_api_rest.model.dto.request.PrePedidoSend;
 import com.dupreeinca.lib_api_rest.model.dto.request.RedimirPremios;
+import com.dupreeinca.lib_api_rest.model.dto.response.ConcursosDTO;
 import com.dupreeinca.lib_api_rest.model.dto.response.EstadoPedidoDTO;
 import com.dupreeinca.lib_api_rest.model.dto.response.EstadoPrePedidoDTO;
 import com.dupreeinca.lib_api_rest.model.dto.response.FaltantesDTO;
@@ -97,6 +99,48 @@ public class PedidosController extends TTGenericController {
                             //Rechazado porque no cumple con monto minimo
                             listener.success(new LiquidaDTO(error.getMessage(), error.getTotal_pedido(), error.getCodigo()));
                         } else {
+                            listener.error(error);
+                        }
+                    }
+                    else {
+                        listener.error(error);
+                    }
+
+                }
+
+
+            }
+        });
+    }
+
+    public void concursopedido(ConcursoSend data, final TTResultListener<ConcursosDTO> listener){
+        if(!this.isNetworkingOnline(getContext())){
+            listener.error(TTError.errorFromMessage(context.getResources().getString(R.string.http_datos_no_disponibles)));
+            return;
+        }
+
+        PedidosDAO dao = new PedidosDAO(getContext());
+        dao.concursoPedido(data, new TTResultListener<ConcursosDTO>() {
+            @Override
+            public void success(ConcursosDTO result) {
+                //Errror de Backend
+                if(result.getCode() == 404 || result.getCode()==501){
+                    listener.error(TTError.errorFromMessage(result.getStatus()));
+                } else {
+                    listener.success(result);
+                }
+            }
+
+            @Override
+            public void error(TTError error) {
+
+                if(error!=null){
+
+                    if(error.getStatusCode()!=null && error.getCodigo()!=null){
+                        if(error.getStatusCode() == 404 && error.getCodigo().equals(EnumLiquidar.DEBAJO_MONTO.getKey())){
+                            //Rechazado porque no cumple con monto minimo
+                            listener.error(error);
+                       } else {
                             listener.error(error);
                         }
                     }

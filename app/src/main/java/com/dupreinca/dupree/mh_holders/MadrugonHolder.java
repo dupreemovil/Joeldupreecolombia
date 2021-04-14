@@ -1,19 +1,33 @@
 package com.dupreinca.dupree.mh_holders;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.res.Resources;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.graphics.Rect;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.dupreeinca.lib_api_rest.model.dto.response.realm.ItemCarrito;
 import com.dupreinca.dupree.BaseAPP;
+import com.dupreinca.dupree.MenuActivity;
 import com.dupreinca.dupree.R;
 import com.dupreinca.dupree.databinding.ItemCatalogoBinding;
 import com.dupreinca.dupree.databinding.ItemCatalogoMadrugonBindingImpl;
+import com.dupreinca.dupree.view.activity.BaseActivity;
 import com.google.gson.Gson;
 
 import java.text.NumberFormat;
@@ -152,6 +166,7 @@ public class MadrugonHolder extends RecyclerView.ViewHolder{
         }
 
 
+
         //validar si ya esta (o no) en el carrito.
         binding.ctnIncDecCant.setVisibility(item.getCantidad()>0 ? View.VISIBLE : View.GONE);
         binding.ctnAddCart.setVisibility(item.getCantidad()>0 ? View.GONE : View.VISIBLE);
@@ -219,6 +234,49 @@ public class MadrugonHolder extends RecyclerView.ViewHolder{
 
         }
 
+        binding.imagezoom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+                AlertDialog.Builder alertadd = new AlertDialog.Builder(view.getContext());
+                LayoutInflater factory = LayoutInflater.from(view.getContext());
+                final View view1 = factory.inflate(R.layout.image_zoom, null);
+                alertadd.setView(view1);
+
+                ImageView imgzoom = (ImageView)view1.findViewById(R.id.dialog_imageview);
+
+                try {
+                    Glide.with(BaseAPP.getContext())
+                            .load(item.getUrl_img())
+
+                            .fitCenter()
+
+                            .into(imgzoom);
+                } catch (Exception e) {
+                    e.printStackTrace();
+
+                    System.out.println("Exc img "+e.getMessage());
+
+                }
+
+                alertadd.setNegativeButton("Cerrar", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dlg, int sumthin) {
+
+                    }
+                });
+
+                AlertDialog alertDialog = alertadd.create();
+                alertDialog.show();
+
+
+
+
+
+
+
+            }
+        });
 
 
         Log.e(TAG, "num. Items editable= "+String.valueOf(idEditable.size()));

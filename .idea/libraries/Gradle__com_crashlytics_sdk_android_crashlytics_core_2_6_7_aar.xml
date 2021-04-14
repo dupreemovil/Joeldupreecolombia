@@ -3,6 +3,7 @@
     <CLASSES>
       <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/2e38b688acdffc97f75ef105052a959a/jetified-crashlytics-core-2.6.7/jars/classes.jar!/" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/2e38b688acdffc97f75ef105052a959a/jetified-crashlytics-core-2.6.7/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/2e38b688acdffc97f75ef105052a959a/jetified-crashlytics-core-2.6.7/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

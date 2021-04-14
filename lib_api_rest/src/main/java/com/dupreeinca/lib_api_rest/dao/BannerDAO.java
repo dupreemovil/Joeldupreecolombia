@@ -6,15 +6,22 @@ import com.dupreeinca.lib_api_rest.dao.base.TTCallback;
 import com.dupreeinca.lib_api_rest.dao.base.TTGenericDAO;
 import com.dupreeinca.lib_api_rest.model.base.TTError;
 import com.dupreeinca.lib_api_rest.model.base.TTResultListener;
+import com.dupreeinca.lib_api_rest.model.dto.request.ActualizacionSend;
+import com.dupreeinca.lib_api_rest.model.dto.request.LiquidaSend;
+import com.dupreeinca.lib_api_rest.model.dto.request.SuscripcionSend;
 import com.dupreeinca.lib_api_rest.model.dto.response.BannerDTO;
 import com.dupreeinca.lib_api_rest.model.dto.response.LiquidaDTO;
 import com.dupreeinca.lib_api_rest.model.dto.response.ProductCatalogoDTO;
 import com.dupreeinca.lib_api_rest.model.dto.response.ProductMadrugonDTO;
+import com.dupreeinca.lib_api_rest.model.dto.response.SusDTO;
 import com.dupreeinca.lib_api_rest.model.dto.response.UrlsCatalogosDTO;
 import com.dupreeinca.lib_api_rest.model.dto.response.VersionDTO;
+import com.dupreeinca.lib_api_rest.model.dto.response.SuscripcionDTO;
 import com.google.gson.Gson;
 
 import retrofit2.Call;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
@@ -107,6 +114,57 @@ public class BannerDAO extends TTGenericDAO {
     }
 
 
+    public void getSuscripcion(final TTResultListener<SuscripcionDTO> listener){
+        iRest rest = getRetrofit().create(iRest.class);
+        Call<SuscripcionDTO> call = rest.obtainSuscripcion();
+        call.enqueue(new TTCallback<SuscripcionDTO>(new TTResultListener<SuscripcionDTO>() {
+            @Override
+            public void success(SuscripcionDTO result) {
+                listener.success(result);
+            }
+
+            @Override
+            public void error(TTError error) {
+                listener.error(error);
+            }
+        },getRetrofit()));
+    }
+
+    public void suscripcion(SuscripcionSend data, final TTResultListener<SusDTO> listener){
+        iRest userREST = getRetrofit().create(iRest.class);
+        Call<SusDTO> call = userREST.suscripcionasesora(new Gson().toJson(data));
+        call.enqueue(new TTCallback<SusDTO>(new TTResultListener<SusDTO>() {
+            @Override
+            public void success(SusDTO result) {
+                listener.success(result);
+            }
+
+            @Override
+            public void error(TTError error) {
+                listener.error(error);
+            }
+        },getRetrofit()));
+    }
+
+
+    public void actualizacion(ActualizacionSend data, final TTResultListener<SusDTO> listener){
+        iRest userREST = getRetrofit().create(iRest.class);
+        Call<SusDTO> call = userREST.registracorreo(new Gson().toJson(data));
+        call.enqueue(new TTCallback<SusDTO>(new TTResultListener<SusDTO>() {
+            @Override
+            public void success(SusDTO result)
+            {
+                listener.success(result);
+            }
+
+            @Override
+            public void error(TTError error) {
+                listener.error(error);
+            }
+        },getRetrofit()));
+    }
+
+
 
     public interface iRest {
         @GET("panel/banner/")
@@ -118,14 +176,24 @@ public class BannerDAO extends TTGenericDAO {
         @GET("panel/version/")
         Call<VersionDTO> obtainVersion();
 
+        @GET("panel/obtiene_suscripcion/")
+        Call<SuscripcionDTO> obtainSuscripcion();
+
+
         @GET("pedidos/productos")
         Call<ProductCatalogoDTO> getProductos(@Query("filters") String campana);
 
         @POST("pedidos/productos_madrugon")
         Call<ProductMadrugonDTO> getProductosmadrugon();
 
-        @POST("pedidos/liquida")
-        Call<LiquidaDTO> liquidapedido();
+        @FormUrlEncoded
+        @POST("panel/suscripcion_asesora")
+        Call<SusDTO> suscripcionasesora(@Field("Params") String jsonSuscripcion);
+
+
+        @FormUrlEncoded
+        @POST("panel/registra_correo")
+        Call<SusDTO> registracorreo(@Field("Params") String jsonRegistro);
 
     }
 }

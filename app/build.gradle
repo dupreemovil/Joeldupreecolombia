@@ -79,6 +79,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.viewpager:viewpager:1.0.0'
+    implementation 'com.davemorrissey.labs:subsampling-scale-image-view-androidx:3.10.0'
     androidTestImplementation('androidx.test.espresso:espresso-core:3.1.0', {
         exclude group: 'com.android.support', module: 'support-annotations'
         //exclude module: 'jsr305'//para quitar error al agregar realm

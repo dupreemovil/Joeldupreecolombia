@@ -6,12 +6,14 @@ import com.dupreeinca.lib_api_rest.dao.base.TTCallback;
 import com.dupreeinca.lib_api_rest.dao.base.TTGenericDAO;
 import com.dupreeinca.lib_api_rest.model.base.TTError;
 import com.dupreeinca.lib_api_rest.model.base.TTResultListener;
+import com.dupreeinca.lib_api_rest.model.dto.request.ConcursoSend;
 import com.dupreeinca.lib_api_rest.model.dto.request.Identy;
 import com.dupreeinca.lib_api_rest.model.dto.request.Index;
 import com.dupreeinca.lib_api_rest.model.dto.request.LiquidaSend;
 import com.dupreeinca.lib_api_rest.model.dto.request.LiquidarSend;
 import com.dupreeinca.lib_api_rest.model.dto.request.PrePedidoSend;
 import com.dupreeinca.lib_api_rest.model.dto.request.RedimirPremios;
+import com.dupreeinca.lib_api_rest.model.dto.response.ConcursosDTO;
 import com.dupreeinca.lib_api_rest.model.dto.response.EstadoPedidoDTO;
 import com.dupreeinca.lib_api_rest.model.dto.response.EstadoPrePedidoDTO;
 import com.dupreeinca.lib_api_rest.model.dto.response.FaltantesDTO;
@@ -65,6 +67,26 @@ public class PedidosDAO extends TTGenericDAO {
             }
         },getRetrofit()));
     }
+
+
+    public void concursoPedido(ConcursoSend data, final TTResultListener<ConcursosDTO> listener){
+        Rest userREST = getRetrofit().create(Rest.class);
+        Call<ConcursosDTO> call = userREST.concursoPedido(new Gson().toJson(data));
+        call.enqueue(new TTCallback<ConcursosDTO>(new TTResultListener<ConcursosDTO>() {
+            @Override
+            public void success(ConcursosDTO result) {
+                listener.success(result);
+            }
+
+            @Override
+            public void error(TTError error) {
+
+                System.out.println("El re err con "+new Gson().toJson(error));
+                listener.error(error);
+            }
+        },getRetrofit()));
+    }
+
 
     public void prePedidoDAO(PrePedidoSend data, final TTResultListener<LiquidarDTO> listener){
         Rest userREST = getRetrofit().create(Rest.class);
@@ -172,6 +194,11 @@ public class PedidosDAO extends TTGenericDAO {
         @FormUrlEncoded
         @POST("pedidos/liquida")
         Call<LiquidarDTO> liquidarPedido(@Field("Params") String jsonLiquidate);
+
+        @FormUrlEncoded
+        @POST("pedidos/concursos")
+        Call<ConcursosDTO> concursoPedido(@Field("Params") String jsonConcurso);
+
 
         @FormUrlEncoded
         @POST("pedidos/liquida")

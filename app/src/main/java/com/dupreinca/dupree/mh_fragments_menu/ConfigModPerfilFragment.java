@@ -106,6 +106,7 @@ public class ConfigModPerfilFragment extends BaseFragment {
         String jsonPerfil = mPreferences.getJSON_PerfilUser(getActivity());
         if(jsonPerfil!=null){
             DataUser perfilUser = new Gson().fromJson(jsonPerfil, DataUser.class);
+
             if(perfilUser!=null) {
                 setData(perfilUser);
             }

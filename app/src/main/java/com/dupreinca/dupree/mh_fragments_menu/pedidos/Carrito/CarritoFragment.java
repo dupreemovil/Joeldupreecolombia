@@ -6,7 +6,10 @@ import androidx.databinding.ViewDataBinding;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Rect;
+import android.net.Uri;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -19,20 +22,31 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
 import com.dupreeinca.lib_api_rest.controller.PedidosController;
+import com.dupreeinca.lib_api_rest.controller.BannerController;
 import com.dupreeinca.lib_api_rest.enums.EnumLiquidar;
 import com.dupreeinca.lib_api_rest.model.base.TTError;
 import com.dupreeinca.lib_api_rest.model.base.TTResultListener;
+import com.dupreeinca.lib_api_rest.model.dto.request.ConcursoSend;
+import com.dupreeinca.lib_api_rest.model.dto.request.prod_send;
 import com.dupreeinca.lib_api_rest.model.dto.request.LiquidaSend;
 import com.dupreeinca.lib_api_rest.model.dto.request.LiquidarMadrugon;
 import com.dupreeinca.lib_api_rest.model.dto.request.LiquidarProducto;
 import com.dupreeinca.lib_api_rest.model.dto.request.LiquidarSend;
+import com.dupreeinca.lib_api_rest.model.dto.request.SuscripcionSend;
+import com.dupreeinca.lib_api_rest.model.dto.response.ConcursosDTO;
 import com.dupreeinca.lib_api_rest.model.dto.response.DetalleMadrugon;
 import com.dupreeinca.lib_api_rest.model.dto.response.DetalleProductos;
 import com.dupreeinca.lib_api_rest.model.dto.response.LiquidaDTO;
 import com.dupreeinca.lib_api_rest.model.dto.response.LiquidarDTO;
+import com.dupreeinca.lib_api_rest.model.dto.response.SusDTO;
+import com.dupreeinca.lib_api_rest.model.dto.response.SuscripcionDTO;
+import com.dupreeinca.lib_api_rest.model.dto.response.TipoConDTO;
 import com.dupreeinca.lib_api_rest.model.dto.response.realm.Catalogo;
 import com.dupreeinca.lib_api_rest.model.dto.response.realm.ItemCarritoM;
 import com.dupreeinca.lib_api_rest.model.dto.response.realm.MadCarrito;
@@ -40,6 +54,7 @@ import com.dupreeinca.lib_api_rest.model.dto.response.realm.Madrugon;
 import com.dupreeinca.lib_api_rest.model.dto.response.realm.ItemCarrito;
 import com.dupreeinca.lib_api_rest.model.dto.response.realm.Oferta;
 import com.dupreeinca.lib_api_rest.model.view.Profile;
+import com.dupreinca.dupree.BaseAPP;
 import com.dupreinca.dupree.MenuActivity;
 import com.dupreinca.dupree.R;
 import com.dupreinca.dupree.databinding.FragmentProductsBinding;
@@ -49,6 +64,7 @@ import com.dupreinca.dupree.mh_adapters.CarritoPListAdapter;
 import com.dupreinca.dupree.mh_adapters.DotsIndicatorDecoration;
 import com.dupreinca.dupree.mh_adapters.LinePagerIndicatorDecoration;
 import com.dupreinca.dupree.mh_adapters.MadrugonAdapter;
+import com.dupreinca.dupree.mh_adapters.PremioAdapter;
 import com.dupreinca.dupree.mh_dialogs.SimpleDialog;
 import com.dupreinca.dupree.mh_fragments_menu.pedidos.BasePedido;
 import com.dupreinca.dupree.mh_holders.CarritoHolder;
@@ -82,8 +98,10 @@ public class CarritoFragment extends BaseFragment implements CarritoHolder.Event
     private CarritoListAdapter listAdapter;
     private CarritoMListAdapter listMAdapter;
     private PedidosController pedidosController;
+    private BannerController bannerController;
 
     public Boolean carritoM=false;
+    public Boolean PremiosM=false;
     public Boolean resumenM=false;
 
     private CarritoPListAdapter listPAdapter;
@@ -93,6 +111,7 @@ public class CarritoFragment extends BaseFragment implements CarritoHolder.Event
 
     private Realm realm;
     private boolean enable=true;
+    public String campana="";
 
     public CarritoFragment() {
         // Required empty public constructor
@@ -119,10 +138,11 @@ public class CarritoFragment extends BaseFragment implements CarritoHolder.Event
         binding = (FragmentProductsBinding) view;
         realm = Realm.getDefaultInstance();
         pedidosController = new PedidosController(getContext());
-
+        bannerController = new BannerController(getContext());
         binding.refresh.setEnabled(false);
         binding.recycler.setLayoutManager(new GridLayoutManager(getActivity(),1));
         binding.recycler.setHasFixedSize(true);
+        campana = dataStore.getCampanaActual();
 
        // binding.layoutbtn.setVisibility(View.VISIBLE);
         listFilterCart = new ArrayList<>();
@@ -137,10 +157,11 @@ public class CarritoFragment extends BaseFragment implements CarritoHolder.Event
         binding.buttonback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(binding.refresh.getVisibility()==View.VISIBLE && carritoM){
+                if(binding.refresh.getVisibility()==View.VISIBLE && carritoM && !PremiosM){
 
-
+                    binding.txtpage.setVisibility(View.GONE);
                     binding.buttonnext.setText("SIGUIENTE");
+                    binding.titlepremios.setVisibility(View.GONE);
                     binding.recycler1.setVisibility(View.GONE);
                     binding.recycler.setVisibility(View.VISIBLE);
                     System.out.println("El scroll "+binding.scroll1.getScrollBarSize());
@@ -148,14 +169,30 @@ public class CarritoFragment extends BaseFragment implements CarritoHolder.Event
                     viewParent.showsearch();
                     returncarrito();
                     carritoM = false;
+                    PremiosM = false;
+                }
+                else if(binding.refresh.getVisibility()==View.VISIBLE && !carritoM && PremiosM){
+                    binding.txtpage.setVisibility(View.VISIBLE);
+                    binding.buttonnext.setText("SIGUIENTE");
+                    binding.titlepremios.setVisibility(View.GONE);
+                    binding.resumen.setVisibility(View.GONE);
+                    binding.recyclerpremio.setVisibility(View.GONE);
+                    binding.recycler1.setVisibility(View.VISIBLE);
+                    binding.refresh.setVisibility(View.VISIBLE);
+                    carritoM = true;
+                    PremiosM = false;
+                    viewParent.showsearch();
+                    sendtoServerP();
                 }
                 else if(resumenM==true){
+                    binding.txtpage.setVisibility(View.GONE);
                     resumenM=false;
                     binding.buttonnext.setText("SIGUIENTE");
                     binding.resumen.setVisibility(View.GONE);
+                    binding.titlepremios.setVisibility(View.VISIBLE);
+                    binding.recyclerpremio.setVisibility(View.VISIBLE);
                     binding.refresh.setVisibility(View.VISIBLE);
-                    viewParent.showsearch();
-                    sendtoServerP();
+
                 }
                 else{
 
@@ -168,23 +205,42 @@ public class CarritoFragment extends BaseFragment implements CarritoHolder.Event
         binding.buttonnext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(binding.refresh.getVisibility()==View.VISIBLE && carritoM){
+                if(binding.refresh.getVisibility()==View.VISIBLE && !carritoM && PremiosM){
                     showresumen();
-
+                    binding.txtpage.setVisibility(View.GONE);
+                    binding.titlepremios.setVisibility(View.GONE);
                 }
-                else if(binding.recycler.getVisibility()==View.VISIBLE && !carritoM){
+                else if(binding.recycler.getVisibility()==View.VISIBLE && !carritoM && !PremiosM){
 
                     System.out.println("El rec m!");
 
                     sendtoServerP();
+                    binding.txtpage.setVisibility(View.VISIBLE);
                     binding.recycler1.setVisibility(View.VISIBLE);
                     binding.recycler.setVisibility(View.GONE);
+                    binding.titlepremios.setVisibility(View.GONE);
+                    binding.recyclerpremio.setVisibility(View.GONE);
                     binding.buttonback.setVisibility(View.VISIBLE);
                 }
+                else if(binding.recycler1.getVisibility()==View.VISIBLE && carritoM && !PremiosM){
+
+                    System.out.println("El rec m!");
+                    binding.txtpage.setVisibility(View.GONE);
+                    carritoM = false;
+                    PremiosM = true;
+                    ShowPremios();
+                    binding.recycler1.setVisibility(View.GONE);
+                    binding.recycler.setVisibility(View.GONE);
+                    binding.titlepremios.setVisibility(View.VISIBLE);
+                    binding.recyclerpremio.setVisibility(View.VISIBLE);
+                    binding.buttonback.setVisibility(View.VISIBLE);
+                }
+
                 else{
                     System.out.println("El rec m");
                     sendServer();
-
+                    binding.titlepremios.setVisibility(View.GONE);
+                    binding.txtpage.setVisibility(View.GONE);
                 }
 
 
@@ -285,6 +341,47 @@ public class CarritoFragment extends BaseFragment implements CarritoHolder.Event
 
         LiquidaSend send = obtainProductsL();
         Log.e(TAG, "sendToServer() -> send: "+new Gson().toJson(send));
+        String ced = mPreferences.getCedUser(getContext());
+
+        List<prod_send> lista =new ArrayList<>();
+
+        for(int j=0;j<send.getProductos().size();j++){
+            prod_send prod = new prod_send(send.getProductos().get(j).getCantidad(),send.getProductos().get(j).getId());
+            lista.add(prod);
+
+        }
+
+        ConcursoSend consend = new ConcursoSend(campana,ced,ced,lista);
+        System.out.println("El result Con "+new Gson().toJson(consend));
+
+        pedidosController.concursopedido(consend, new TTResultListener<ConcursosDTO>() {
+            @Override
+            public void success(ConcursosDTO result) {
+
+                System.out.println("El result Concursos "+new Gson().toJson(result));
+
+
+
+
+
+
+
+
+
+
+            }
+
+            @Override
+            public void error(TTError error) {
+
+                System.out.println("El error liq "+ error.getErrorBody());
+                dismissProgress();
+                checkSession(error);
+            }
+        });
+
+
+
         pedidosController.liquidaPedido(send, new TTResultListener<LiquidaDTO>() {
             @Override
             public void success(LiquidaDTO result) {
@@ -301,6 +398,36 @@ public class CarritoFragment extends BaseFragment implements CarritoHolder.Event
                               showpremio(result.getMensaje_premio());
 
                 }
+
+                bannerController.getSuscripcion(new TTResultListener<SuscripcionDTO>() {
+                    @Override
+                    public void success(SuscripcionDTO result) {
+                        Log.e(TAG, "getSus() -> success(): " + new Gson().toJson(result));
+
+                        if(result.isValid()){
+                            if(result.getPedido()==1)
+                            {
+
+                                showsuscripcion(result.getResult(),result.getImagen_suscripcion(),result.getUrl_suscribe());
+
+                            }
+                            else{
+
+
+                            }
+
+                        }
+
+
+                    }
+
+                    @Override
+                    public void error(TTError error) {
+
+
+                    }
+                });
+
 
                 if(result != null && result.getCodigo() != null){
                     if(result.getCodigo().equals(EnumLiquidar.OK.getKey())){
@@ -359,8 +486,214 @@ public class CarritoFragment extends BaseFragment implements CarritoHolder.Event
                 checkSession(error);
             }
         });
+
+
 //        new Http(getActivity()).liquidarPedido(obtainProductsLiquidate(), TAG, BROACAST_LIQUIDATE_PRODUCTS);
     }
+
+    public void showsuscripcion(String descripcion,String urlimage,String url){
+
+        System.out.println("Enter name men");
+        LayoutInflater factory = LayoutInflater.from(getContext());
+        final View deleteDialogView = factory.inflate(R.layout.suscripcion_layout, null);
+
+
+        final android.app.AlertDialog deleteDialog = new AlertDialog.Builder(getContext()).create();
+        deleteDialog.setView(deleteDialogView);
+        Rect displayRectangle = new Rect();
+        Window window = getActivity().getWindow();
+
+
+        deleteDialog.setCancelable(false);
+        String ced_user=mPreferences.getCedUser(getContext());
+
+        TextView edtdes = (TextView) deleteDialogView.findViewById(R.id.txtdescripcion);
+        edtdes.setText(descripcion);
+
+        Button btnclose = deleteDialogView.findViewById(R.id.buttonclose);
+
+        Button btncancel = deleteDialogView.findViewById(R.id.btncancel);
+
+        Button btnok = deleteDialogView.findViewById(R.id.btnok);
+
+        ImageView image = deleteDialogView.findViewById(R.id.imageViewlogo);
+
+        try {
+            Glide.with(BaseAPP.getContext())
+                    .load(urlimage)
+
+                    .fitCenter()
+
+                    .into(image);
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            System.out.println("Excsus "+e.getMessage());
+
+        }
+
+        btncancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                SuscripcionSend send = new SuscripcionSend(ced_user,"NO");
+
+
+                bannerController.setSuscripcion(send, new TTResultListener<SusDTO>() {
+                    @Override
+                    public void success(SusDTO result) {
+
+                        System.out.println("El result pedido "+new Gson().toJson(result));
+
+                        AlertDialog.Builder builder1 = new AlertDialog.Builder(getContext());
+                        builder1.setMessage(result.getResult());
+                        builder1.setCancelable(true);
+
+                        builder1.setPositiveButton(
+                                "Ok",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        dialog.cancel();
+                                    }
+                                });
+
+
+
+                        AlertDialog alert11 = builder1.create();
+                        alert11.show();
+
+                    }
+
+                    @Override
+                    public void error(TTError error) {
+
+                        System.out.println("El error liq "+ error.getErrorBody());
+
+                    }
+                });
+
+
+                deleteDialog.dismiss();
+            }
+        });
+
+        btnok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+
+                deleteDialog.dismiss();
+
+                SuscripcionSend send = new SuscripcionSend(ced_user,"SI");
+
+
+                bannerController.setSuscripcion(send, new TTResultListener<SusDTO>() {
+                    @Override
+                    public void success(SusDTO result) {
+
+                        System.out.println("El result pedido "+new Gson().toJson(result));
+
+                        AlertDialog.Builder builder1 = new AlertDialog.Builder(getActivity());
+                        builder1.setMessage(result.getResult());
+                        builder1.setCancelable(true);
+
+                        builder1.setPositiveButton(
+                                "Ok",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        dialog.cancel();
+                                    }
+                                });
+
+
+
+                        AlertDialog alert11 = builder1.create();
+                        alert11.show();
+
+                        if(url.length()>0){
+
+                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                            startActivity(browserIntent);
+                        }
+
+                    }
+
+                    @Override
+                    public void error(TTError error) {
+
+                        System.out.println("El error liq "+ error.getErrorBody());
+
+                    }
+                });
+
+
+                deleteDialog.dismiss();
+
+            }
+        });
+
+
+
+        btnclose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                SuscripcionSend send = new SuscripcionSend(ced_user,"NO");
+
+
+                bannerController.setSuscripcion(send, new TTResultListener<SusDTO>() {
+                    @Override
+                    public void success(SusDTO result) {
+
+                        System.out.println("El result pedido "+new Gson().toJson(result));
+
+                        AlertDialog.Builder builder1 = new AlertDialog.Builder(getActivity());
+                        builder1.setMessage(result.getResult());
+                        builder1.setCancelable(true);
+
+                        builder1.setPositiveButton(
+                                "Ok",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        dialog.cancel();
+                                    }
+                                });
+
+
+
+                        AlertDialog alert11 = builder1.create();
+                        alert11.show();
+
+                    }
+
+                    @Override
+                    public void error(TTError error) {
+
+                        System.out.println("El error liq "+ error.getErrorBody());
+
+                    }
+                });
+
+                deleteDialog.dismiss();
+
+
+
+            }
+        });
+
+        deleteDialog.show();
+
+        int width = (int)(displayRectangle.width() * 7/8);
+        int heigth = (int)(displayRectangle.height() * 6/8);
+
+        deleteDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+
+
+    }
+
 
     private void clearAllData(){
         setEnable(false);
@@ -1575,6 +1908,61 @@ public class CarritoFragment extends BaseFragment implements CarritoHolder.Event
     public void sendtoServerP(){
 
         updateCarritoM();
+    }
+
+    public void ShowPremios(){
+
+        LiquidaSend send = obtainProductsL();
+        Log.e(TAG, "sendToServer() -> send: "+new Gson().toJson(send));
+        String ced = mPreferences.getCedUser(getContext());
+
+        List<prod_send> lista =new ArrayList<>();
+
+        for(int j=0;j<send.getProductos().size();j++){
+            prod_send prod = new prod_send(send.getProductos().get(j).getCantidad(),send.getProductos().get(j).getId());
+            lista.add(prod);
+
+        }
+
+        ConcursoSend consend = new ConcursoSend(campana,ced,ced,lista);
+        System.out.println("El result Con "+new Gson().toJson(consend));
+
+        pedidosController.concursopedido(consend, new TTResultListener<ConcursosDTO>() {
+            @Override
+            public void success(ConcursosDTO result) {
+
+                System.out.println("El result Concursos "+new Gson().toJson(result));
+
+
+                PremioAdapter adapter;
+
+                GridLayoutManager lm = new GridLayoutManager(getActivity(),4, GridLayoutManager.HORIZONTAL, false);
+                binding.recyclerpremio.setLayoutManager(lm);
+
+                List<TipoConDTO> lista = new ArrayList<>();
+                lista = result.getResult().getConcursos();
+
+                adapter = new PremioAdapter(lista);
+                binding.recyclerpremio.setAdapter(adapter);
+
+
+
+
+
+
+
+
+
+            }
+
+            @Override
+            public void error(TTError error) {
+
+                System.out.println("El error liq "+ error.getErrorBody());
+                dismissProgress();
+                checkSession(error);
+            }
+        });
     }
 
     @Override
