@@ -642,10 +642,26 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="15sp"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     android:textColor="@color/black"
                     android:id="@+id/titlepremios"
                     android:text="PREMIOS"
+                    android:textStyle="bold"
+                    android:layout_margin="10sp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    >
+
+                </TextView>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    android:visibility="gone"
+                    android:textColor="@color/black"
+                    android:id="@+id/titlepremiosmsg"
+                    android:text="NO SE TIENEN PREMIOS"
                     android:textStyle="bold"
                     android:layout_margin="10sp"
                     android:layout_gravity="center"

@@ -363,7 +363,7 @@ public class PanelAsesoraFragment extends TabManagerFragment {
             @Override
             public void onClick(View v) {
 
-                if(edtcorreo.getText().toString().length()>0 && edtcelular.getText().toString().length()>0){
+                if(edtcorreo.getText().toString().length()>0 ){
                     System.out.println("La cedula "+ced_user);
                     ActualizacionSend send = new ActualizacionSend(ced_user,edtcorreo.getText().toString(),edtcelular.getText().toString());
 

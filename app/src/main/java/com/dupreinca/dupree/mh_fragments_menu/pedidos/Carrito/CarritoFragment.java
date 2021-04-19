@@ -1942,6 +1942,16 @@ public class CarritoFragment extends BaseFragment implements CarritoHolder.Event
                 List<TipoConDTO> lista = new ArrayList<>();
                 lista = result.getResult().getConcursos();
 
+                if(lista.size()>0){
+                    binding.titlepremiosmsg.setVisibility(View.GONE);
+                }
+                else{
+                    binding.titlepremiosmsg.setVisibility(View.VISIBLE);
+
+                }
+
+
+
                 adapter = new PremioAdapter(lista);
                 binding.recyclerpremio.setAdapter(adapter);
 
