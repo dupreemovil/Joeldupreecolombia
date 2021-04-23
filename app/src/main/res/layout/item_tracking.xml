@@ -12,6 +12,7 @@
             android:layout_height="match_parent"
             android:gravity="center_horizontal">
             <ImageView
+                android:id="@+id/line"
                 android:layout_width="5dp"
                 android:layout_centerHorizontal="true"
                 android:layout_height="match_parent"
@@ -30,6 +31,7 @@
             android:orientation="vertical"
             android:layout_width="0dp"
             android:layout_weight="0.7"
+
             android:layout_height="match_parent">
 
             <TextView
@@ -57,6 +59,17 @@
                 android:paddingBottom="0dp"
                 tools:text="Tu pedido de C-201712, esta pendiente por cerrar"/>
 
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btnguia"
+                android:visibility="gone"
+                android:layout_margin="5sp"
+
+                android:background="@drawable/mb_button"
+                android:text="Ver Guia">
+
+            </Button>
         </LinearLayout>
 
     </LinearLayout>

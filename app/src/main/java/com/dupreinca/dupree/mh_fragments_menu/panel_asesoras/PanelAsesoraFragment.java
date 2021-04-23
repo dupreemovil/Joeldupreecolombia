@@ -191,6 +191,10 @@ public class PanelAsesoraFragment extends TabManagerFragment {
                     if(result.getPanelAsesora().getActiva_actualizacion().contains("1")){
                         showactualizacion();
                     }
+                    else
+                    {
+
+                    }
 
                 }
             }
@@ -308,7 +312,10 @@ public class PanelAsesoraFragment extends TabManagerFragment {
         if(data!=null) {
             if(data.getTracking()!=null){
 
+
                 if(pagerAdapter.getTrackingFragment()!=null){
+
+                    System.out.println("JSON track "+new Gson().toJson(data.getTracking()));
                     pagerAdapter.getTrackingFragment().setData(data.getTracking());
                 }
 
@@ -363,7 +370,7 @@ public class PanelAsesoraFragment extends TabManagerFragment {
             @Override
             public void onClick(View v) {
 
-                if(edtcorreo.getText().toString().length()>0 ){
+                if(edtcelular.getText().toString().length()>0 ){
                     System.out.println("La cedula "+ced_user);
                     ActualizacionSend send = new ActualizacionSend(ced_user,edtcorreo.getText().toString(),edtcelular.getText().toString());
 

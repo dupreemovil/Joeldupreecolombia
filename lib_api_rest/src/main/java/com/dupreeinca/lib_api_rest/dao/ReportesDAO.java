@@ -299,7 +299,11 @@ public class ReportesDAO extends TTGenericDAO {
         @POST("reportes/factura")
         Call<HistorialDTO> getHistorialPedido(@Field("Params") String jsonCedula);
 
-        @GET("reportes/panel_asesora")
+
+        //@GET("reportes/panel_asesora")
+       // Call<PanelAsesoraDTO> getPanelAsesora();
+
+        @GET("reportes/panel_asesoran")
         Call<PanelAsesoraDTO> getPanelAsesora();
 
         @GET("reportes/puntos")

@@ -112,6 +112,7 @@ public class CarritoFragment extends BaseFragment implements CarritoHolder.Event
     private Realm realm;
     private boolean enable=true;
     public String campana="";
+    public String cedulaasesora="";
 
     public CarritoFragment() {
         // Required empty public constructor
@@ -174,6 +175,8 @@ public class CarritoFragment extends BaseFragment implements CarritoHolder.Event
                 else if(binding.refresh.getVisibility()==View.VISIBLE && !carritoM && PremiosM){
                     binding.txtpage.setVisibility(View.VISIBLE);
                     binding.buttonnext.setText("SIGUIENTE");
+                    binding.titlepremiosmsg.setVisibility(View.GONE);
+
                     binding.titlepremios.setVisibility(View.GONE);
                     binding.resumen.setVisibility(View.GONE);
                     binding.recyclerpremio.setVisibility(View.GONE);
@@ -351,7 +354,28 @@ public class CarritoFragment extends BaseFragment implements CarritoHolder.Event
 
         }
 
-        ConcursoSend consend = new ConcursoSend(campana,ced,ced,lista);
+        String cedula = "";
+
+        if(dataStore.getTipoPerfil()!=null) {
+            boolean isAsesora = dataStore.getTipoPerfil().getPerfil().equals(Profile.ADESORA);
+
+            if(isAsesora){
+
+                cedula = ced;
+
+            }
+            else{
+                cedula = this.cedulaasesora;
+
+            }
+
+        } else {
+            cedula = this.cedulaasesora;
+
+
+        }
+
+        ConcursoSend consend = new ConcursoSend(campana,cedula,cedula,lista);
         System.out.println("El result Con "+new Gson().toJson(consend));
 
         pedidosController.concursopedido(consend, new TTResultListener<ConcursosDTO>() {
@@ -1924,7 +1948,30 @@ public class CarritoFragment extends BaseFragment implements CarritoHolder.Event
 
         }
 
-        ConcursoSend consend = new ConcursoSend(campana,ced,ced,lista);
+        String cedula = "";
+
+        if(dataStore.getTipoPerfil()!=null) {
+            boolean isAsesora = dataStore.getTipoPerfil().getPerfil().equals(Profile.ADESORA);
+
+            if(isAsesora){
+
+                cedula = ced;
+
+            }
+            else{
+                cedula = this.cedulaasesora;
+
+            }
+
+        } else {
+            cedula = this.cedulaasesora;
+
+
+        }
+
+        ConcursoSend consend = new ConcursoSend(campana,cedula,cedula,lista);
+
+
         System.out.println("El result Con "+new Gson().toJson(consend));
 
         pedidosController.concursopedido(consend, new TTResultListener<ConcursosDTO>() {

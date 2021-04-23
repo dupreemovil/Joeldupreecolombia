@@ -9,6 +9,9 @@ public enum EnumTracking {
     FACTURADO("Facturado"),
     EMBALADO("Embalado"),
     DESPACHADO("Despachado"),
+    PLATAFORMA("En Plataforma"),
+    REPARTO("En Reparto"),
+    PENTREGA("Entrega"),
     ENTREGADO("Entregado");
 
     private String key;

@@ -8,6 +8,7 @@ public class Tracking {
     private String nombre;
     private String fecha;
     private String check;
+    private String imagen;
 
     public String getNombre() {
         return nombre;
@@ -20,4 +21,11 @@ public class Tracking {
     public String getCheck() {
         return check;
     }
+
+
+    public String getImagen() {
+        return imagen;
+    }
+
+
 }

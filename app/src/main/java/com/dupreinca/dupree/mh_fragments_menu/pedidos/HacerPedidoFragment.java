@@ -910,6 +910,7 @@ public class HacerPedidoFragment extends TabManagerFragment implements BasePedid
                 pedidosPagerAdapter.getCarritoFragment().clearEditable();
                 pedidosPagerAdapter.getCarritoFragment().setEnable(true);
 
+                pedidosPagerAdapter.getCarritoFragment().cedulaasesora = this.cedula;
                 pedidosPagerAdapter.getCarritoFragment().updateCarrito();//actualiza el carrito
 
                 break;
@@ -922,7 +923,7 @@ public class HacerPedidoFragment extends TabManagerFragment implements BasePedid
                 Log.e(TAG, "Ofertas: "+new Gson().toJson(resultEdoPedido.getOfertas().getProductos()));
                 pedidosPagerAdapter.getOffersFragment().sincOfertasDB(resultEdoPedido.getOfertas().getProductos(), true);//prevalece la oferta del server
                 //enableEdit(true);
-
+                pedidosPagerAdapter.getCarritoFragment().cedulaasesora = this.cedula;
                 pedidosPagerAdapter.getCarritoFragment().sincCatalogoDBM(resultEdoPedido.getMadrugon().getProductos(), true);//prevalece la oferta local;
                 pedidosPagerAdapter.getCarritoFragment().binding.layoutbtn.setVisibility(View.VISIBLE);
                 pedidosPagerAdapter.getCarritoFragment().sincCatalogoDB(resultEdoPedido.getProductos().getProductos(), true);//Se borra el pedido local
