@@ -95,7 +95,7 @@ public class MainFragment extends Fragment {
         imgCatalogos.setOnClickListener(clickListener);
         imgLogin.setOnClickListener(clickListener);
 
-        Log.e(TAG,"Token: "+FirebaseInstanceId.getInstance().getToken());
+        //Log.e(TAG,"Token: "+FirebaseInstanceId.getInstance().getToken());
 
         return v;
     }

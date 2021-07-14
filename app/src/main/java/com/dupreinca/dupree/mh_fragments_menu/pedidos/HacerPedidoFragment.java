@@ -1019,14 +1019,13 @@ public class HacerPedidoFragment extends TabManagerFragment implements BasePedid
                         pedidosPagerAdapter.getCarritoFragment().hidebtn();
                         pedidosPagerAdapter.getOffersFragment().filterOffersDB("");
                     }
-
-
                     break;
                 case PedidosPagerAdapter.PAGE_HISTORICAL:
                     enableSearch(false);
                     fabShow(false);
-                    pedidosPagerAdapter.getHistorialFragment().hidebtn();
+
                     if(pedidosPagerAdapter.getHistorialFragment()!=null){
+                        pedidosPagerAdapter.getHistorialFragment().hidebtn();
                         pedidosPagerAdapter.getHistorialFragment().setIdentyFacturas(cedula);
                     }
 
@@ -1107,12 +1106,24 @@ public class HacerPedidoFragment extends TabManagerFragment implements BasePedid
                     conpedido=true;
                 }
 
-                if(result.getResult().getMadrugon().getProductos().size()>0){
+                if(result.getResult().getMadrugon()!=null){
+
+                    if(result.getResult().getMadrugon().getProductos()!=null){
+
+                        if(result.getResult().getMadrugon().getProductos().size()>0){
+
+                        }
+                        else{
+                            obtainMadrugon();
+                        }
+
+                    }
+
+
 
                 }
-                else{
-                    obtainMadrugon();
-                }
+
+
 
                 System.out.println("El result estado "+new Gson().toJson(result.getResult()));
 

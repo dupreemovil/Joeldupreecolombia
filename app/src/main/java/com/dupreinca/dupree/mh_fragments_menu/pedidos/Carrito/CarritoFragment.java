@@ -419,7 +419,11 @@ public class CarritoFragment extends BaseFragment implements CarritoHolder.Event
 
                     System.out.println("El result pedido act ");
 
-                              showpremio(result.getMensaje_premio());
+                    if(result.getMensaje_premio()!=null){
+                        showpremio(result.getMensaje_premio());
+
+                    }
+
 
                 }
 
@@ -783,71 +787,74 @@ public class CarritoFragment extends BaseFragment implements CarritoHolder.Event
 
     public void showpremio(String descripcion){
 
-
         System.out.println("Enter name men");
-        LayoutInflater factory = LayoutInflater.from(getActivity());
-        final View deleteDialogView = factory.inflate(R.layout.premio_layout, null);
+        if(getActivity()!=null){
+
+            LayoutInflater factory = LayoutInflater.from(getActivity());
+            final View deleteDialogView = factory.inflate(R.layout.premio_layout, null);
+            final android.app.AlertDialog deleteDialog = new AlertDialog.Builder(getActivity()).create();
+            deleteDialog.setView(deleteDialogView);
+            Rect displayRectangle = new Rect();
+            Window window = getActivity().getWindow();
 
 
-        final android.app.AlertDialog deleteDialog = new AlertDialog.Builder(getActivity()).create();
-        deleteDialog.setView(deleteDialogView);
-        Rect displayRectangle = new Rect();
-        Window window = getActivity().getWindow();
+            deleteDialog.setCancelable(false);
 
 
-        deleteDialog.setCancelable(false);
+            TextView edtdes = (TextView) deleteDialogView.findViewById(R.id.txtdescripcion);
+            edtdes.setText(descripcion);
+
+            Button btnclose = deleteDialogView.findViewById(R.id.buttonclose);
+
+            Button btncancel = deleteDialogView.findViewById(R.id.btncancel);
+
+            Button btnok = deleteDialogView.findViewById(R.id.btnok);
+
+            btncancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
 
-        TextView edtdes = (TextView) deleteDialogView.findViewById(R.id.txtdescripcion);
-        edtdes.setText(descripcion);
+                    ((MenuActivity)getActivity()).resetmenu();
+                    deleteDialog.dismiss();
+                }
+            });
 
-        Button btnclose = deleteDialogView.findViewById(R.id.buttonclose);
+            btnok.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-        Button btncancel = deleteDialogView.findViewById(R.id.btncancel);
+                    if(getActivity()!=null){
+                        ((MenuActivity)getActivity()).resethacerpedido();
+                        deleteDialog.dismiss();
+                    }
 
-        Button btnok = deleteDialogView.findViewById(R.id.btnok);
-
-        btncancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-                ((MenuActivity)getActivity()).resetmenu();
-                deleteDialog.dismiss();
-            }
-        });
-
-        btnok.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-                ((MenuActivity)getActivity()).resethacerpedido();
-                deleteDialog.dismiss();
-
-            }
-        });
-
-
-
-        btnclose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-                deleteDialog.dismiss();
+                }
+            });
 
 
 
-            }
-        });
+            btnclose.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-        deleteDialog.show();
 
-        int width = (int)(displayRectangle.width() * 7/8);
-        int heigth = (int)(displayRectangle.height() * 6/8);
+                    deleteDialog.dismiss();
 
-        deleteDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+
+
+                }
+            });
+
+            deleteDialog.show();
+
+            int width = (int)(displayRectangle.width() * 7/8);
+            int heigth = (int)(displayRectangle.height() * 6/8);
+
+            deleteDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+
+
+        }
 
 
 
@@ -1684,9 +1691,6 @@ public class CarritoFragment extends BaseFragment implements CarritoHolder.Event
                 });
 
             }
-
-
-
           //  updateTotal();
 
     }
@@ -1734,7 +1738,6 @@ public class CarritoFragment extends BaseFragment implements CarritoHolder.Event
                     }
 
                 }
-
                 //listFilter.addAll(querycat);
                 //adapter_cart.notifyDataSetChanged();
                 realm.commitTransaction();
@@ -1758,7 +1761,6 @@ public class CarritoFragment extends BaseFragment implements CarritoHolder.Event
                 realm.beginTransaction();
                 //listFilter.clear();
                 for (int i = 0; i < listServer.size(); i++) {
-
 
                     Madrugon mad = realm.where(Madrugon.class).equalTo("codi_vent", listServer.get(i).getId()).findFirst();// se busca el id
                     if (mad != null && mad.getCodi_vent().equals(listServer.get(i).getId())) {//se actualiza localmente lo que trae el API
@@ -1807,18 +1809,25 @@ public class CarritoFragment extends BaseFragment implements CarritoHolder.Event
 
                 for (int j = 0; j < querycat.size(); j++) {
 
-                    System.out.println("El query cat "+querycat.get(j).getCodi_vent());
+              //      System.out.println("El query cat "+querycat.get(j).getCodi_vent());
 
                     Boolean enc =false;
                     for (int i = 0; i < catalogoList.size(); i++) {
-                        if(querycat.get(j).getCodi_vent().equals(catalogoList.get(i).getCodi_vent())){
-                            enc=true;
+
+                        if(querycat.get(j).isValid()){
+
+                            if(querycat.get(j).getCodi_vent().equals(catalogoList.get(i).getCodi_vent())){
+                                enc=true;
+                            }
+
                         }
 
                     }
-
                     if(enc==false){
-                        querycat.get(j).deleteFromRealm();
+                        if(querycat.get(j).isValid()){
+                            querycat.get(j).deleteFromRealm();
+                        }
+
                     }
 
                 }
