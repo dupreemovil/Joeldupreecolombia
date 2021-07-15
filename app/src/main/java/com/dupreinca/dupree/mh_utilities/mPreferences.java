@@ -342,6 +342,8 @@ public class mPreferences {
     }
 
     public static String getCedUser(Context mycontext){
+
+
         return getString(CED_USER,mycontext);
     }
 

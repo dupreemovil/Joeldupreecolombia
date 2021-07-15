@@ -329,7 +329,12 @@ public class PanelAsesoraFragment extends TabManagerFragment {
 
         System.out.println("Enter name men");
 
-        String ced_user= mPreferences.getCedUser(getActivity());
+        String ced_user1 = "";
+        if(mPreferences.getCedUser(getActivity())!=null){
+            ced_user1= mPreferences.getCedUser(getActivity());
+        }
+
+        final String ced_user=ced_user1;
         LayoutInflater factory = LayoutInflater.from(getActivity());
         final View deleteDialogView = factory.inflate(R.layout.actualizacion_layout, null);
 
@@ -379,24 +384,29 @@ public class PanelAsesoraFragment extends TabManagerFragment {
                         @Override
                         public void success(SusDTO result) {
 
-                            AlertDialog.Builder builder1 = new AlertDialog.Builder(getActivity());
-                            builder1.setMessage(result.getResult());
-                            builder1.setCancelable(true);
+                            if(result.getResult()!=null){
 
-                            builder1.setPositiveButton(
-                                    "Ok",
-                                    new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int id) {
-                                            dialog.cancel();
-                                        }
-                                    });
+                                AlertDialog.Builder builder1 = new AlertDialog.Builder(getActivity());
+                                builder1.setMessage(result.getResult());
+                                builder1.setCancelable(true);
+
+                                builder1.setPositiveButton(
+                                        "Ok",
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                dialog.cancel();
+                                            }
+                                        });
 
 
 
-                            AlertDialog alert11 = builder1.create();
-                            alert11.show();
+                                AlertDialog alert11 = builder1.create();
+                                alert11.show();
 
-                            System.out.println("El result sus "+new Gson().toJson(result));
+                                System.out.println("El result sus "+new Gson().toJson(result));
+
+
+                            }
 
                         }
 

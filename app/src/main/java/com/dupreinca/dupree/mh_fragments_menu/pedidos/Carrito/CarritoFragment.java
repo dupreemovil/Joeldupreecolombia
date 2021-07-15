@@ -813,10 +813,11 @@ public class CarritoFragment extends BaseFragment implements CarritoHolder.Event
             btncancel.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if(((MenuActivity)getActivity())!=null){
+                        ((MenuActivity)getActivity()).resetmenu();
+                        deleteDialog.dismiss();
+                    }
 
-
-                    ((MenuActivity)getActivity()).resetmenu();
-                    deleteDialog.dismiss();
                 }
             });
 

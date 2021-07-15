@@ -679,13 +679,15 @@ public class HacerPedidoFragment extends TabManagerFragment implements BasePedid
 
     private void controlVisible(boolean isVisible, String text){
         //habilita tabs
-
-        setTabIcons(PedidosPagerAdapter.PAGE_CARRITO, isVisible);
-        setTabIcons(PedidosPagerAdapter.PAGE_OFFERS, isVisible);
-
-        binding.tvNombreAsesora.setText(text);
-        binding.ctxNameAsesora.setVisibility(isVisible && !TextUtils.isEmpty(text) ? View.VISIBLE : View.GONE);
-        enableSearch(isVisible);
+        if(pedidosPagerAdapter!=null){
+            setTabIcons(PedidosPagerAdapter.PAGE_CARRITO, isVisible);
+            setTabIcons(PedidosPagerAdapter.PAGE_OFFERS, isVisible);
+        }
+        if(text!=null){
+            binding.tvNombreAsesora.setText(text);
+            binding.ctxNameAsesora.setVisibility(isVisible && !TextUtils.isEmpty(text) ? View.VISIBLE : View.GONE);
+        }
+         enableSearch(isVisible);
 
         //fabShow(isVisible);
         fabShow(false);

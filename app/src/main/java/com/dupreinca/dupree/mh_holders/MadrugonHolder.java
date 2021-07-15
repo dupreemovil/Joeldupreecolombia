@@ -148,7 +148,14 @@ public class MadrugonHolder extends RecyclerView.ViewHolder{
         binding.tvDescription.setText(item.getName());
 
         NumberFormat formatter = NumberFormat.getInstance(Locale.US);
-        binding.tvValor.setText(resources.getString(R.string.concat_dolar, formatter.format(Float.parseFloat(item.getValor()))));
+        float tempvalor = 0 ;
+        try {
+            tempvalor = Float.parseFloat(item.getValor());
+        } catch (NumberFormatException ex) {
+            tempvalor =0;
+            // Not a float
+        }
+        binding.tvValor.setText(resources.getString(R.string.concat_dolar, formatter.format(tempvalor)));
 
         binding.tvCantidad.setText(String.valueOf(item.getCantidad()));
 

@@ -73,7 +73,7 @@ public class DetalleFacturaFragment extends BaseFragment implements DetailFactur
         }
         else{
 
-            ((MenuActivity)getActivity()).showbottomsheet();
+        //    ((MenuActivity)getActivity()).showbottomsheet();
         }
 
 
