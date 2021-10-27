@@ -1155,8 +1155,12 @@ public class HacerPrePedidoFragment extends TabManagerFragment implements BasePe
 //        updateOnlyBannerAndPDF =false;
 
         if(responseBanner.getVersion()!=null){
-            mPreferences.setVersionCatalogo(getActivity(), responseBanner.getVersion());
-            Log.e(TAG, "ResponseVersion de catalogo: "+ responseBanner.getVersion());
+            if(getActivity()!=null){
+                mPreferences.setVersionCatalogo(getActivity(), responseBanner.getVersion());
+                Log.e(TAG, "ResponseVersion de catalogo: "+ responseBanner.getVersion());
+            }
+
+
 
         }
 

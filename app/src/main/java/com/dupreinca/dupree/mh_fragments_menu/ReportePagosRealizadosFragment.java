@@ -122,15 +122,20 @@ public class ReportePagosRealizadosFragment extends BaseFragment implements Pago
                     if(result.getResult()!=null){
 
 
+                        if(result.getResult().getPago()!=null){
+
+                            if(result.getResult().getPago().size()>0){
 
 
-                        if(result.getResult().getPago().size()>0){
-
+                            }
+                            else{
+                                ((ReportesActivity)getActivity()).showbottomsheet();
+                            }
 
                         }
-                        else{
-                            ((ReportesActivity)getActivity()).showbottomsheet();
-                        }
+
+
+
 
 
 
@@ -154,9 +159,11 @@ public class ReportePagosRealizadosFragment extends BaseFragment implements Pago
             @Override
             public void error(TTError error) {
                 dismissProgress();
-                checkSession(error);
+                if(error!=null){
+                    checkSession(error);
+                    ((ReportesActivity)getActivity()).showbottomsheet();
+                }
 
-                ((ReportesActivity)getActivity()).showbottomsheet();
             }
         });
     }

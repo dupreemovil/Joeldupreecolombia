@@ -5,7 +5,7 @@
     <string name="url_empr">https://servicioweb.dupree.pe:443/hmvc/index.php/rest/</string>
     <!--<string name="url_empr">https://servicioweb2per.azzorti.co:443/hmvc/index.php/rest/</string>-->
 
-    <string name="app_name">Dupree</string>
+    <string name="app_name">Azzorti</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
@@ -13,7 +13,7 @@
     <string name="servicio_al_cliente">Servicio al cliente</string>
     <string name="catalogos">Catálogos</string>
     <string name="iniciar_sesion">Iniciar Sesion</string>
-    <string name="dupree_cap">Duprée</string>
+    <string name="dupree_cap">Azzorti</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->

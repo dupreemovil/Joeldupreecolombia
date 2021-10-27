@@ -98,10 +98,15 @@ public class mPreferences {
      * @param context
      */
     private static void setString(String key, String value, Context context) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putString(key, value);
-        editor.apply();
+        if(context!=null){
+            if(value!=null){
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putString(key, value);
+                editor.apply();
+            }
+        }
+
     }
 
     /**
@@ -151,7 +156,13 @@ public class mPreferences {
      */
     private static String getString(String key, Context context) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        return preferences.getString(key, null);
+        if(preferences.getString(key, "")!=null){
+            return preferences.getString(key, "");
+        }
+        else{
+            return "";
+        }
+
     }
 
     /**

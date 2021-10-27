@@ -92,11 +92,17 @@ public class OfertasHolder extends RecyclerView.ViewHolder{
         Resources resources = BaseAPP.getContext().getResources();
 
         //quitar la imagen que manda backend en caso de no disponibles
-        if(item.getUrl_img().contains("")) {
-            img = ImageLoader.getInstance();
-            img.init(configurarImageLoader());
-            img.displayImage(item.getUrl_img(), binding.imagen);
+        if(item.isValid()){
+            if(item.getUrl_img()!=null){
+                if(item.getUrl_img().contains("")) {
+                    img = ImageLoader.getInstance();
+                    img.init(configurarImageLoader());
+                    img.displayImage(item.getUrl_img(), binding.imagen);
+                }
+            }
+
         }
+
 
         binding.tvPage.setText(resources.getString(R.string.concat_pagina, item.getPage()));
         binding.tvCode.setText(resources.getString(R.string.concat_codigo, item.getId()));

@@ -180,9 +180,15 @@ public class ReporteCDRFragment extends BaseFragment implements CDRHolder.Events
             @Override
             public void error(TTError error) {
                 dismissProgress();
-                checkSession(error);
 
-                ((ReportesActivity)getActivity()).showbottomsheet();
+                if(error!=null){
+                    checkSession(error);
+                    if((ReportesActivity)getActivity()!=null){
+                        ((ReportesActivity)getActivity()).showbottomsheet();
+                    }
+                }
+
+
             }
         });
     }

@@ -470,7 +470,10 @@ public class CarritoFragment extends BaseFragment implements CarritoHolder.Event
                                         .concat(result.getMensaje());
                             } catch (NumberFormatException e) {
 
-                                Toast.makeText(getActivity(),"Error al obtener Total",Toast.LENGTH_LONG).show();
+                                if(getActivity()!=null){
+                                    Toast.makeText(getActivity(),"Error al obtener Total",Toast.LENGTH_LONG).show();
+                                }
+
                             }
 
 
@@ -760,6 +763,7 @@ public class CarritoFragment extends BaseFragment implements CarritoHolder.Event
     public void ofertaEndviadoexitosamente(){
 
             Log.v(TAG, "ofertaEndviadoexitosamente... ---------------ofertaEndviadoexitosamente--------------");
+            Realm realm=Realm.getDefaultInstance(); //2608
             realm.beginTransaction();
             try {
               //  listFilterOffers.clear();

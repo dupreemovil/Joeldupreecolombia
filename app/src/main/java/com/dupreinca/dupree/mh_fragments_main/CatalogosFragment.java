@@ -585,9 +585,22 @@ public class CatalogosFragment extends BaseFragment {
 
                     }
 
+                    if(urls_port_prim!=null){
+                        if(urls_port_prim.length()>0){
+                            Picasso.get().load(urls_port_prim).into(binding.imgCampA);
+                        }
 
-                    Picasso.get().load(urls_port_prim).into(binding.imgCampA);
-                    Picasso.get().load(urls_port_segu).into(binding.imgCampB);
+                    }
+
+                    if(urls_port_segu!=null){
+                        if(urls_port_segu.length()>0){
+                            Picasso.get().load(urls_port_segu).into(binding.imgCampB);
+                        }
+
+                    }
+
+
+
 
                 } catch (JSONException e) {
                     e.printStackTrace();

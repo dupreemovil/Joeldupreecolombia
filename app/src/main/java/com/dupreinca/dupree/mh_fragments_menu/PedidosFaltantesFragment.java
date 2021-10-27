@@ -159,8 +159,14 @@ public class PedidosFaltantesFragment extends BaseFragment implements FaltantesH
             @Override
             public void error(TTError error) {
                 dismissProgress();
-                checkSession(error);
-                ((MenuActivity)getActivity()).showbottomsheet();
+                if(error!=null){
+                    checkSession(error);
+                }
+                if(((MenuActivity)getActivity())!=null){
+                    ((MenuActivity)getActivity()).showbottomsheet();
+                }
+
+
             }
         });
     }
@@ -169,7 +175,7 @@ public class PedidosFaltantesFragment extends BaseFragment implements FaltantesH
         binding.cardViewBackGround.setVisibility(isVisible ? View.VISIBLE : View.INVISIBLE);
         binding.tvCamp.setVisibility(isVisible ? View.VISIBLE : View.INVISIBLE);
 
-        binding.tvCamp.setText(data!=null ? getString(R.string.concat_campana, data.getCampana()) : "");
+        binding.tvCamp.setText(data!=null ? getContext().getResources().getString(R.string.concat_campana, data.getCampana()) : "");
     }
 
     private void updateView(FaltantesDTO data){

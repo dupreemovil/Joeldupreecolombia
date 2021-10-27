@@ -201,8 +201,14 @@ public class ReporteFacturaPDFFragment extends BaseFragment implements FacturasP
             @Override
             public void error(TTError error) {
                 dismissProgress();
-                checkSession(error);
-                ((ReportesActivity)getActivity()).showbottomsheet();
+                if(error!=null){
+                    checkSession(error);
+                }
+                if((ReportesActivity)getActivity()!=null){
+                    ((ReportesActivity)getActivity()).showbottomsheet();
+                }
+
+
             }
         });
 

@@ -174,8 +174,14 @@ public class IncentivosReferidoFragment extends BaseFragment implements Incentiv
             @Override
             public void error(TTError error) {
                 dismissProgress();
-                ((MenuActivity)getActivity()).showbottomsheet();
-                checkSession(error);
+                if(error!=null){
+                    if((MenuActivity)getActivity()!=null){
+                        ((MenuActivity)getActivity()).showbottomsheet();
+                        checkSession(error);
+                    }
+
+                }
+
             }
         });
     }

@@ -268,10 +268,13 @@ public class PermissionCamera {
             //cropImage(uriOriginal);
             //los sansumg generan problemad de retacion
             Bitmap imageRotada = ConvertUtil.rotateSamsung((resultToFragment ? fragment.getActivity() : activity), imageUri);
-            Uri uriRotada = ConvertUtil.getImageUri((resultToFragment ? fragment.getActivity() : activity), imageRotada);
+            if(imageRotada!=null){
+                Uri uriRotada = ConvertUtil.getImageUri((resultToFragment ? fragment.getActivity() : activity), imageRotada);
+                imageUri = ((uriRotada != null) ? uriRotada : imageUri);
+                processImage(imageUri, crop);
+            }
 
-            imageUri = ((uriRotada != null) ? uriRotada : imageUri);
-            processImage(imageUri, crop);
+
         }
     }
 

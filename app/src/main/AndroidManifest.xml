@@ -32,9 +32,9 @@
     <application
         android:name=".BaseAPP"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcherf_dupree"
+        android:icon="@mipmap/ic_launcherf_dupree3"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcherf_dupree"
+        android:roundIcon="@mipmap/ic_launcherf_dupree1"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 

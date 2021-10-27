@@ -53,29 +53,35 @@ public class SingleListDialog extends DialogFragment {
     public AlertDialog createRadioListDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-        final CharSequence[] items = new CharSequence[data.size()];
-        for(int i=0;i<data.size();i++){
-            items[i]=data.get(i).getName();
-            if(data.get(i).getName().equals(itemSelected))
-                numItem=i;
-        }
+        if(data!=null){
+            final CharSequence[] items = new CharSequence[data.size()];
+            for(int i=0;i<data.size();i++){
+                items[i]=data.get(i).getName();
+                if(data.get(i).getName().equals(itemSelected))
+                    numItem=i;
+            }
 
-        builder.setTitle(title)
-                .setSingleChoiceItems(items, numItem, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(
-                                getActivity(),
-                                "Seleccionaste: " + items[which],
-                                Toast.LENGTH_SHORT)
-                                .show();
-                        if(response != null){
-                            response.result(data.get(which));
+            builder.setTitle(title)
+                    .setSingleChoiceItems(items, numItem, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Toast.makeText(
+                                    getActivity(),
+                                    "Seleccionaste: " + items[which],
+                                    Toast.LENGTH_SHORT)
+                                    .show();
+                            if(response != null){
+                                response.result(data.get(which));
+                            }
+
+                            dismiss();
                         }
+                    });
 
-                        dismiss();
-                    }
-                });
+        }
+        else{
+
+        }
 
         return builder.create();
     }

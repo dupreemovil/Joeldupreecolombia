@@ -169,9 +169,10 @@ public class HacerPedidoFragment extends TabManagerFragment implements BasePedid
     @Override
     protected List<ModelList> setItems() {
         List<ModelList> items = new ArrayList<>();
-        items.add(new ModelList(R.drawable.ic_shopping_cart_white_24dp, getString(R.string.carrito)));
-        items.add(new ModelList(R.drawable.ic_list_white_24dp, getString(R.string.ofertas)));
-        items.add(new ModelList(R.drawable.baseline_assignment_white_24, getString(R.string.historical)));
+
+        items.add(new ModelList(R.drawable.ic_shopping_cart_white_24dp, getContext().getResources().getString(R.string.carrito)));
+        items.add(new ModelList(R.drawable.ic_list_white_24dp, getContext().getResources().getString(R.string.ofertas)));
+        items.add(new ModelList(R.drawable.baseline_assignment_white_24, getContext().getResources().getString(R.string.historical)));
         return items;
     }
 
@@ -800,17 +801,20 @@ public class HacerPedidoFragment extends TabManagerFragment implements BasePedid
     public void deleteMadrugon(){
 
         System.out.println("Delete Madr");
+
         realm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm bgRealm) {
+
                 bgRealm.delete(Madrugon.class);
+                realm.close();
             }
         }, new Realm.Transaction.OnSuccess() {
             @Override
             public void onSuccess() {
                 // Transaction was a success.
                 Log.v(TAG,"deleteMadrugon... ---------------ok--------------");
-                //realm.close();
+                realm.close();
             }
         }, new Realm.Transaction.OnError() {
             @Override
@@ -818,7 +822,7 @@ public class HacerPedidoFragment extends TabManagerFragment implements BasePedid
                 // Transaction failed and was automatically canceled.
                 Log.e(TAG,"deleteMadrugon... ---------------error--------------");
                 Log.e(TAG,"deleteMadrugon... "+error.getMessage());
-                //realm.close();
+                realm.close();
                 dismissProgress();
 
             }
@@ -926,9 +930,14 @@ public class HacerPedidoFragment extends TabManagerFragment implements BasePedid
                 pedidosPagerAdapter.getOffersFragment().sincOfertasDB(resultEdoPedido.getOfertas().getProductos(), true);//prevalece la oferta del server
                 //enableEdit(true);
                 pedidosPagerAdapter.getCarritoFragment().cedulaasesora = this.cedula;
-                pedidosPagerAdapter.getCarritoFragment().sincCatalogoDBM(resultEdoPedido.getMadrugon().getProductos(), true);//prevalece la oferta local;
-                pedidosPagerAdapter.getCarritoFragment().binding.layoutbtn.setVisibility(View.VISIBLE);
-                pedidosPagerAdapter.getCarritoFragment().sincCatalogoDB(resultEdoPedido.getProductos().getProductos(), true);//Se borra el pedido local
+                if(resultEdoPedido.getMadrugon()!=null){
+                    if(resultEdoPedido.getMadrugon().getProductos()!=null){
+                        pedidosPagerAdapter.getCarritoFragment().sincCatalogoDBM(resultEdoPedido.getMadrugon().getProductos(), true);//prevalece la oferta local;
+                        pedidosPagerAdapter.getCarritoFragment().binding.layoutbtn.setVisibility(View.VISIBLE);
+                        pedidosPagerAdapter.getCarritoFragment().sincCatalogoDB(resultEdoPedido.getProductos().getProductos(), true);//Se borra el pedido local
+
+                    }
+                }
                 pedidosPagerAdapter.getCarritoFragment().clearEditable();
                 pedidosPagerAdapter.getCarritoFragment().setEnable(true);
 
@@ -1013,13 +1022,18 @@ public class HacerPedidoFragment extends TabManagerFragment implements BasePedid
                     enableSearch(true);
                     fabShow(false);
                     System.out.println("Hide Btn");
-                    pedidosPagerAdapter.getOffersFragment().hidebtn();
+                    if(pedidosPagerAdapter.getOffersFragment()!=null){
+                        pedidosPagerAdapter.getOffersFragment().hidebtn();
+                        pedidosPagerAdapter.getOffersFragment().setEnable(isEnable());
+                        pedidosPagerAdapter.getOffersFragment().filterOffersDB("");
+                    }
+
                     if(pedidosPagerAdapter.getCarritoFragment()!=null) {
                         pedidosPagerAdapter.getCarritoFragment().setEnable(isEnable());
-                        pedidosPagerAdapter.getOffersFragment().setEnable(isEnable());
+
 
                         pedidosPagerAdapter.getCarritoFragment().hidebtn();
-                        pedidosPagerAdapter.getOffersFragment().filterOffersDB("");
+
                     }
                     break;
                 case PedidosPagerAdapter.PAGE_HISTORICAL:
@@ -1036,7 +1050,10 @@ public class HacerPedidoFragment extends TabManagerFragment implements BasePedid
             }
 
             hideSearchView();
-            KeyBoard.hide(Objects.requireNonNull(getActivity()));
+            if(getActivity()!=null){
+                KeyBoard.hide(Objects.requireNonNull(getActivity()));
+
+            }
 
         }
 

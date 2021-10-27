@@ -124,10 +124,10 @@ public class IncentivosConsultaPtosFragment extends BaseFragment implements Punt
 
         NumberFormat formatter = NumberFormat.getInstance(Locale.US);
 
-        binding.ptsEfectivos.setText(getString(R.string.concat_efectivos, formatter.format(listaPuntos.getResume().getEfectivos())));
-        binding.ptsRedimidos.setText(getString(R.string.concat_redimidos, formatter.format(listaPuntos.getResume().getRedimidos())));
-        binding.ptsDisponibles.setText(getString(R.string.concat_disponibles, formatter.format(listaPuntos.getResume().getDisponibles())));
-        binding.ptsPendientes.setText(getString(R.string.concat_pendientes, formatter.format(Float.parseFloat(listaPuntos.getResume().getPendientes_Pago()))));
+        binding.ptsEfectivos.setText(getContext().getString(R.string.concat_efectivos, formatter.format(listaPuntos.getResume().getEfectivos())));
+        binding.ptsRedimidos.setText(getContext().getString(R.string.concat_redimidos, formatter.format(listaPuntos.getResume().getRedimidos())));
+        binding.ptsDisponibles.setText(getContext().getString(R.string.concat_disponibles, formatter.format(listaPuntos.getResume().getDisponibles())));
+        binding.ptsPendientes.setText(getContext().getString(R.string.concat_pendientes, formatter.format(Float.parseFloat(listaPuntos.getResume().getPendientes_Pago()))));
 
 
 
@@ -181,7 +181,10 @@ public class IncentivosConsultaPtosFragment extends BaseFragment implements Punt
             public void error(TTError error) {
                 dismissProgress();
                 checkSession(error);
-                ((MenuActivity)getActivity()).showbottomsheet();
+                if(((MenuActivity)getActivity())!=null){
+                    ((MenuActivity)getActivity()).showbottomsheet();
+                }
+
             }
         });
 

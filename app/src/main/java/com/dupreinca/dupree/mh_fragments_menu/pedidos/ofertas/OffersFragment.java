@@ -469,6 +469,7 @@ public class OffersFragment extends BaseFragment implements OfertasHolder.Events
         Log.e(TAG, "deleteOferta2()");
         if(showOffers) {
             Log.v(TAG, "deleteOferta2... ---------------filterOdeleteOferta2ffersDB--------------");
+            Realm realm = Realm.getDefaultInstance();
             realm.beginTransaction();
             try {
                 realm.delete(Oferta.class);

@@ -103,7 +103,10 @@ public class ReportesController extends TTGenericController {
 
             @Override
             public void error(TTError error) {
-                listener.error(error);
+                if(error!=null){
+                    listener.error(error);
+                }
+
             }
         });
     }
@@ -128,7 +131,10 @@ public class ReportesController extends TTGenericController {
 
             @Override
             public void error(TTError error) {
-                listener.error(error);
+                if(error!=null){
+                    listener.error(error);
+                }
+
             }
         });
     }
@@ -269,7 +275,10 @@ public class ReportesController extends TTGenericController {
 
             @Override
             public void error(TTError error) {
-                listener.error(error);
+                if(error!=null){
+                    listener.error(error);
+                }
+
             }
         });
     }

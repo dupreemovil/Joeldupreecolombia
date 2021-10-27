@@ -22,13 +22,13 @@ repositories {
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion '29.0.1'
+    buildToolsVersion '30.0.3'
     defaultConfig {
         defaultConfig.applicationId "com.dupreinca.dupree"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 81
-        versionName "7.8"
+        versionCode 86
+        versionName "8.3"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true

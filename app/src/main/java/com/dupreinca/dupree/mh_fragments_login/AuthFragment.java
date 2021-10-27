@@ -3,6 +3,8 @@ package com.dupreinca.dupree.mh_fragments_login;
 
 import android.content.Intent;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import android.util.Log;
@@ -20,8 +22,12 @@ import com.dupreinca.dupree.mh_http.Http;
 import com.dupreinca.dupree.mh_required_api.RequiredAuth;
 import com.dupreinca.dupree.mh_utilities.Validate;
 import com.dupreinca.dupree.mh_utilities.mPreferences;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.installations.FirebaseInstallations;
+import com.google.firebase.installations.InstallationTokenResult;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -103,17 +109,38 @@ public class AuthFragment extends Fragment {
     private void httpAuth(){
         tokenDevice = mPreferences.getTokenFirebase(getActivity());
 
-        String fid = FirebaseInstallations.getInstance().getId().getResult().toString();
-        if(tokenDevice==null) {//si no se ha generado un token nuevo
-            tokenDevice = FirebaseInstanceId.getInstance().getToken();//se  obtiene el anterior
-            Log.e("last tokenDevice","> "+tokenDevice);
-        } else {
-            Log.e("obtained tokenDevice","> "+tokenDevice);
-        }
 
-        System.out.println("El fid es "+fid);
-        String versionName = BuildConfig.VERSION_NAME;
-        new Http(getActivity()).Auth(new RequiredAuth(txtUsername.getText().toString(), txtPwd.getText().toString(), tokenDevice,fid,versionName));
+        FirebaseInstallations.getInstance().getId().addOnSuccessListener(new OnSuccessListener<String>() {
+            @Override
+            public void onSuccess(String s) {
+
+
+
+                FirebaseInstallations.getInstance().getToken(true).addOnCompleteListener(new OnCompleteListener<InstallationTokenResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstallationTokenResult> task) {
+
+                        tokenDevice = task.getResult().getToken();
+
+
+                        System.out.println("El fid es "+tokenDevice);
+                        String versionName = BuildConfig.VERSION_NAME;
+                        new Http(getActivity()).Auth(new RequiredAuth(txtUsername.getText().toString(), txtPwd.getText().toString(), tokenDevice,s,versionName));
+
+
+
+                    }
+                });
+
+            }
+        });
+
+
+
+
+    //    System.out.println("El fid es "+fid);
+    //    String versionName = BuildConfig.VERSION_NAME;
+    //    new Http(getActivity()).Auth(new RequiredAuth(txtUsername.getText().toString(), txtPwd.getText().toString(), tokenDevice,fid,versionName));
     }
 
     private void publishResult(String object){
