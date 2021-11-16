@@ -713,17 +713,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         else if(requestCode==REQUEST_ACCESS_FINE_LOCATION){
 
 
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-            {
-                TelephonyManager tMgr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 
-
-                System.out.println("El phone "+tMgr.getLine1Number());
-
-            } else
-            {
-
-            }
         }
     }
 

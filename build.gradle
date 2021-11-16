@@ -19,7 +19,7 @@ buildscript {
 }
 
 ext {
-    compileSdkVersion = 30
+    compileSdkVersion = 29
     targetSdkVersion = 30
     minSdkVersion = 21
     minSdkVersion_modern = 21
@@ -28,7 +28,7 @@ ext {
     //buildToolsVersion = "30.0.0 rc4"
 
 
-    androidSupportVersion = '30.0.0'
+    androidSupportVersion = '29.0.0'
 //    firebaseSupportVersion = '9.6.1'
     firebaseSupportVersion = '11.0.4'
     googleVersion = '17.0.0'
