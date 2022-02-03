@@ -88,7 +88,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:scaleType="fitXY"
-                            android:src="@drawable/img_main_vuelvete_asesora" />
+                            android:src="@drawable/img_main_vuelvete_asesora01" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -117,7 +117,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:scaleType="fitXY"
-                            android:src="@drawable/img_main_solicita_asesora" />
+                            android:src="@drawable/img_main_solicita_asesora01" />
 
                         <TextView
                             android:layout_width="match_parent"

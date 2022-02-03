@@ -27,8 +27,8 @@ android {
         defaultConfig.applicationId "com.dupreinca.dupree"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 87
-        versionName "8.4"
+        versionCode 88
+        versionName "8.5"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true

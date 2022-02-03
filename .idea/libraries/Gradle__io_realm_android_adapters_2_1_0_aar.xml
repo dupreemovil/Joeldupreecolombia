@@ -24,6 +24,9 @@
       <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/b914072676507986f261c47f92b02f4a/jetified-android-adapters-2.1.0/jars/classes.jar!/" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/b914072676507986f261c47f92b02f4a/jetified-android-adapters-2.1.0/res" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/b914072676507986f261c47f92b02f4a/jetified-android-adapters-2.1.0/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/5f503c76167c46d1fad1a8669a925e99/jetified-android-adapters-2.1.0/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/5f503c76167c46d1fad1a8669a925e99/jetified-android-adapters-2.1.0/AndroidManifest.xml" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/5f503c76167c46d1fad1a8669a925e99/jetified-android-adapters-2.1.0/res" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.realm/android-adapters/2.1.0/b509bac2e0dacacdfe26f4046389f407ef34aa4d/android-adapters-2.1.0-javadoc.jar!/" />
